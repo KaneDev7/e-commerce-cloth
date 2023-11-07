@@ -11,7 +11,7 @@ export default function Category() {
             <div className='w-full  grid category'>
                 {
                     categories.map((categorie, index) => (
-                        <div className={`relative category-card  bg-orange-400 ${index === 5 && 'lg:col-span-2 row-row-2'}
+                        <div className={`relative category-card  bg-gray-100 ${index === 5 && 'lg:col-span-2 row-row-2'}
                         ${index === 1 && 'lg:row-span-2 row-col-2'}
                         `}>
                         <img src={import.meta.env.VITE_API_UPLOAD+categorie?.attributes?.img?.data?.attributes?.url} alt="" />

@@ -19,6 +19,7 @@ import 'swiper/css/navigation';
 
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
+import ProductLoad from '../components/ProductLoad'
 
 // const images = [
 //   "https://images.pexels.com/photos/6311251/pexels-photo-6311251.jpeg?auto=compress&cs=tinysrgb&w=1600",
@@ -55,7 +56,13 @@ export default function Product() {
     window.scroll(0, 0)
   }, [])
 
-  if (isLoading) return <p>Chargement</p>
+  if (isLoading) {
+    return <div className='w-screen h-screen flex justify-center items-center'>
+      <ProductLoad />
+    </div>
+  }
+
+
 
   return (
     <div className='p-10 globalWidth'>
@@ -64,7 +71,7 @@ export default function Product() {
         <div className='lg:w-[50%] w-[100%] lg:min-w-[500px]  gap-4'>
           <div className='md:mb-20 w-full '>
             <Swiper
-          
+
               pagination={{
                 type: 'fraction',
               }}
@@ -108,7 +115,7 @@ export default function Product() {
               title: product?.attributes?.title,
               desc: product?.attributes?.desc,
               price: product?.attributes?.price,
-              img: product?.attributes?.img?.data?.attributes?.url,
+              img: product?.attributes?.img?.data[0]?.attributes?.url,
               quantity: quantity
             }))}
           >

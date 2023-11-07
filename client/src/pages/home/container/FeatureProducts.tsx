@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import Card from "../../../components/Card"
 import useFetch from "../../../hooks/useFetch"
 import {motion, useInView} from 'framer-motion'
+import ProductLoad from "../../../components/ProductLoad"
 
 type FetureType = { type: string }
 
@@ -53,7 +54,11 @@ export default function FeatureProducts({ type }: FetureType) {
   const {data : products, isLoading, error}= useFetch(`/products?populate=*&[filters][type][$eq]=${type}`)
 
 
-  if(isLoading) return <p>Chergement...</p>
+  if (isLoading) {
+    return <div className='w-screen h-screen flex justify-center items-center'>
+      <ProductLoad />
+    </div>
+  }
   if(error) return <p>{error} </p>
   
   return (

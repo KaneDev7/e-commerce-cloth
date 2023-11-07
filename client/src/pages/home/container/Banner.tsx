@@ -23,11 +23,11 @@ export default function Banner() {
     },[currentSlide])
     
   return (
-    <div className='overflow-hidden relative w-full select-none '>
+    <div className='overflow-hidden relative w-full select-none globalWidth '>
       <div className='flex w-[300vw] duration-300' style={{transform  : `translateX(-${100 * currentSlide}vw)`}}>
-        <img src="https://images.pexels.com/photos/1549200/pexels-photo-1549200.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" className='object-cover w-[100vw] h-[calc(100vh-90px)]'/>
-        <img src="https://images.pexels.com/photos/949670/pexels-photo-949670.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" className='object-cover w-[100vw] h-[calc(100vh-90px)]'/>
-        <img src="https://images.pexels.com/photos/7869562/pexels-photo-7869562.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" className='object-cover w-[100vw] h-[calc(100vh-90px)]'/>
+        <img src="https://images.pexels.com/photos/1549200/pexels-photo-1549200.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" className='object-cover w-[100vw] lg:h-[70vh] h-[calc(100vh-90px)]'/>
+        <img src="https://images.pexels.com/photos/949670/pexels-photo-949670.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" className='object-cover w-[100vw] lg:h-[70vh] h-[calc(100vh-90px)]'/>
+        <img src="https://images.pexels.com/photos/7869562/pexels-photo-7869562.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" className='object-cover w-[100vw] lg:h-[70vh] h-[calc(100vh-90px)]'/>
       </div>
 
       <div className='absolute flex gap-4 left-[50%] bottom-[50px] translate-x-[-50%] '>

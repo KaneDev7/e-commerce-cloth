@@ -17,14 +17,13 @@ export default function Navbar() {
   const { showCart, setShowCart } = useContext(GlobalContext)
   const { showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
 
-
   const products = useSelector(state => state.cart.products)
 
   return (
-    <div className='relative'>
+    <div className='relative mx-5'>
       {showMenuMobile && <NavBarMobile/>}
 
-      <div className='h-[80px] flex justify-between items-center pb-5 pt-3 px-5 globalWidth'>
+      <div className='h-[80px] flex justify-between items-center pb-5 pt-3  globalWidth'>
 
         {/* LEFT */}
         <div className='lg:flex items-center gap-4 hidden '>

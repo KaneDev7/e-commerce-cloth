@@ -15,10 +15,13 @@ import { addFilter, resetFilter } from "../redux/filterSlice";
 export default function Products() {
 
   const catId = parseInt(useParams().id)
-  const [maxPrice, setMaxPrice] = useState(1000)
   const [sort, setSort] = useState('desc')
   const filters = useSelector(state => state.filter)
   const [customFilters, setcustomFilters] = useState<string[]>([])
+  const [colorSelected, setColorSelected] = useState <string[]>([])
+  const [sizeSelected, setSizeSelected] = useState <string[]>([])
+  const [isMobile, setIsMobile] = useState(false)
+
   const [showClosefilterBtn, setShowClosefilterBtn] = useState(false)
 
   const { data: categorie, isLoading: isLoadingCat, error: catError } = useFetch(`/categories/${catId}?populate=*&`)
@@ -30,28 +33,40 @@ export default function Products() {
 
   const { showFilter, setShowFilter } = useContext(GlobalContext)
 
-
-  // const { data, isLoading, error } = useFetch(`/products?[filters][categories][id][$eq]=${catId}`)
-
-  const handleChangeMaxPrice = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setMaxPrice(Number(e.target.value))
-  }
-
   const handleAddFilter = (option) => {
+    const isFilterExist = customFilters.some(item => item.value === option.value)
 
-    const isFilterExist = customFilters.some(item => item.id === option.id)
     if (!isFilterExist) {
       setcustomFilters(prev => [...prev, option])
+      
+      if(option.type === 'colors'){
+        setColorSelected(prev => [...prev, option.value]) 
+      }else if(option.type === 'sizes'){
+        setSizeSelected(prev => [...prev, option.value]) 
+      }
     }
   }
 
-  const handleDeleteFilter = (id) => {
+  const handleDeleteFilter = (id, value) => {
     setcustomFilters(prev => prev.filter(item => item.id !== id))
+    setColorSelected(prev => prev.filter(item => item !== value))
+    setSizeSelected(prev => prev.filter(item => item !== value))
+  }
+
+  const handleResetFilter = () => {
+     dispatch(resetFilter())
+     setcustomFilters([]) 
+     setSizeSelected([]) 
+     setColorSelected([]) 
   }
 
   const updateFilter = () => {
+    
     const newFilter =  customFilters.map(item => `&[filters][${item.type}][${item.field}]=${item.value}` )
     dispatch(addFilter(newFilter))
+    if(isMobile){
+      setShowFilter(false)
+    }
   }
 
   useEffect(() => {
@@ -64,9 +79,11 @@ export default function Products() {
       if (lgScreen) {
         setShowFilter(false)
         setShowClosefilterBtn(true)
+        setIsMobile(true)
       } else {
         setShowFilter(true)
         setShowClosefilterBtn(false)
+        setIsMobile(false)
       }
     })
   })
@@ -76,13 +93,13 @@ export default function Products() {
   }, [])
 
   return (
-    <div className="w-full globalWidth">
+    <div className="w-full globalWidth mt-10 ">
       <div className="w-full flex ">
         {/* SIDEBAR CATEGORY */}
         {
           showFilter &&
           <motion.div initial={{ x: -500, opacity: .2 }} animate={{ x: 0, opacity: 1 }}
-            className="w-[25%] h-full p-10 lg:sticky lg:translate-x-[0] translate-x-[-500px] fixed top-[0] z-20  min-w-[400px] bg-white">
+            className="h-full lg:sticky pt-10 lg:translate-x-[0] translate-x-[-500px] fixed top-[0]  left-5 z-20  w-[500px] bg-white">
             {
               showClosefilterBtn &&
               <AiFillCloseCircle size={25} className='absolute right-5 top-10 text-primaryColor hover:text-primaryColorActif'
@@ -92,19 +109,24 @@ export default function Products() {
 
             {/* FILTER BY SIZE */}
             <div className="mb-10">
-              <h1 className="text-black/80 text-2xl mb-4">Filtrer par taille</h1>
+              <h1 className="text-black/80 mb-4 filterTitle">Filtrer par taille</h1>
 
               <div className="flex flex-wrap gap-5 cursor-pointer">
                 {sizes?.map(item => (
                   <div
+                  style={{
+                    background : sizeSelected.includes(item?.attributes?.size) && '#3378f0', 
+                    color : sizeSelected.includes(item?.attributes?.size) && '#fff' 
+
+                  }}
                     onClick={() => handleAddFilter({
                       id: item.id,
                       type: 'sizes',
                       field: 'size',
                       value: item?.attributes?.size
                     })}
-                    className="w-[40px] h-[40px] flex items-center justify-center border-2 border-black ">
-                    <p>{item?.attributes?.size} </p>
+                    className="w-[40px] h-[40px] flex items-center justify-center border hover:bg-primaryColor hover:text-white border-black/50 ">
+                    {item?.attributes?.size} 
                   </div>
                 ))}
               </div>
@@ -113,29 +135,33 @@ export default function Products() {
 
             {/* FILTER BY COLOR */}
             <div className="mb-10">
-              <h1 className="text-black/80 text-2xl mb-4">Filtrer par couleur</h1>
+              <h1 className="text-black/80 mb-4 filterTitle">Filtrer par couleur</h1>
 
               <div className="flex flex-wrap gap-2">
                 {colors?.map(item => (
                   <div
-                    style={{ background: item?.attributes?.color }}
+                    style={{
+                       background: item?.attributes?.color,
+                       opacity : colorSelected.includes(item?.attributes?.color) && '1' 
+                      
+                      }}
                     onClick={() => handleAddFilter({
                       id: item.id,
                       type: 'colors',
                       field: 'color',
                       value: item?.attributes?.color
                     })}
-                    className={`w-[30px] h-[30px] flex items-center justify-center border border-black rounded-full`} >
+                    className={`w-[25px] h-[25px] flex items-center justify-center border opacity-30 hover:opacity-100 border-black rounded-full`} >
                   </div>
                 ))}
               </div>
             </div>
 
 
-            {/* FILTER BY CATEGORY */}
+            {/* FILTER BY SUB CATEGORY */}
 
             <div className="mb-10">
-              <h1 className="text-black/80 text-2xl mb-4">Filtrer par sous categorie</h1>
+              <h1 className="text-black/80 mb-4 filterTitle">Filtrer par sous categorie</h1>
 
               <div className="flex flex-wrap gap-5 cursor-pointer">
                 {subCategories?.map(item => (
@@ -146,32 +172,25 @@ export default function Products() {
                     field: 'subCategory',
                     value: item?.attributes?.subCategory
                   })}
-                  className="flex items-center justify-center bg-black/10 rounded-md py-2 px-4">
-                    <p>{item?.attributes?.subCategory} </p>
+                  className="flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-black/75 text-[15px] py-2 px-4">
+                    {item?.attributes?.subCategory} 
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="mb-10">
-              <h1 className="text-black/80 text-2xl mb-4">Filter By Price</h1>
-              <div className="">
-                <span>0</span>
-                <input type="range" max={1000} onChange={handleChangeMaxPrice} />
-                <span>{maxPrice} </span>
-              </div>
-            </div>
+
 
             <div className="mb-10">
-              <h1 className="text-black/80 text-2xl mb-4">Sort By</h1>
+              <h1 className="text-black/80  mb-4 filterTitle">Trier par</h1>
               <div className="">
                 <input type="radio" name="price" id="lowPrice" onChange={() => setSort('asc')} />
-                <label htmlFor="lowPrice" className="ml-2">Price( Lower first)</label>
+                <label htmlFor="lowPrice" className="ml-2">Prix ​​(inférieur d'abord)</label>
               </div>
 
               <div className="">
                 <input type="radio" name="price" id="highestPrice" onChange={() => setSort('desc')} />
-                <label htmlFor="highestPrice" className="ml-2">Price( Highest first)</label>
+                <label htmlFor="highestPrice" className="ml-2">Prix ​​(superieur d'abord)</label>
               </div>
 
               <button
@@ -186,12 +205,12 @@ export default function Products() {
 
 
         {/* PRODUCT CATEGORY */}
-        <div className="lg:w-[75%] w-full p-10">
-          <div className="w-full h-[300px] mb-20" style={{
-            backgroundImage: `url(${import.meta.env.VITE_API_UPLOAD + categorie?.attributes?.img2?.data?.attributes?.url})`,
+        <div className="lg:w-[100%] w-full p-10">
+          <div className="w-full h-[400px] mb-20" style={{
+            backgroundImage: `url(${import.meta.env.VITE_API_UPLOAD + categorie?.attributes?.img?.data?.attributes?.url})`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
-            backgroundPosition: 'bottom'
+            backgroundPosition: 'center'
 
           }}>
             {/* <img src={import.meta.env.VITE_API_UPLOAD + categorie?.attributes?.img2?.data?.attributes?.url} className="w-full h-full object-cover" alt="" /> */}
@@ -203,23 +222,28 @@ export default function Products() {
             !showFilter &&
             <button
               onClick={() => setShowFilter(true)}
-              className="flex items-center gap-5 py-2 px-4 bg-black/10 hover:bg-black/20  cursor-pointer">
+              className="flex items-center gap-5 py-2 px-4 bg-gray-100 hover:bg-gray-200  cursor-pointer">
               <LuListFilter /> Filtrer
             </button>
           }
 
           <div className="flex flex-wrap gap-5 cursor-pointer mt-5">
             {customFilters?.map(item => (
-              <div className="flex items-center justify-center gap-3 bg-black/10 rounded-md py-2 px-2">
+              <div className="flex items-center justify-center gap-3 bg-gray-100 text-black/75 text-[15px] py-2 px-4">
                 <p>{item?.value} </p>
 
                 <AiFillCloseCircle size={23} className='text-gray-300 hover:text-gray-400'
-                  onClick={() => handleDeleteFilter(item.id)} />
+                  onClick={() => handleDeleteFilter(item.id,item.value)} />
               </div>
-
             ))}
+            {customFilters.length !== 0 &&
+            <button
+             onClick={handleResetFilter}
+             className="text-sm text-red-600 hover:underline">Effacer les filtres</button>
+            
+            }
           </div>
-          <List catId={catId} subCat={filters} maxPrice={maxPrice} sort={sort} />
+          <List catId={catId} subCat={filters}  sort={sort} />
 
         </div>
       </div>

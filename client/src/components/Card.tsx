@@ -26,12 +26,12 @@ export default function Card({ product }: TypeProps) {
 
    
     return (
-        <motion.div className="w-[280px] relative flex-auto duration-500"
+        <motion.div className="w-[250px] relative duration-500 flex-auto "
         onMouseEnter={handleMouseEnter}   
         onMouseLeave={handleMouseLeave}   
         >
             <Link to={`/product/${product.id}`}>
-            <img src={imgUrl} alt="" className="w-full h-[430px] object-cover"/>
+            <img src={imgUrl} alt="" className="w-full h-[400px] object-cover"/>
             </Link>
             {
               product?.attributes?.img2?.data?.attributes?.url &&
@@ -39,7 +39,7 @@ export default function Card({ product }: TypeProps) {
             
             <img src={imgUrl2} alt=""
                 ref={img2Ref}
-                    className="w-full h-[430px] object-cover absolute inset-0 z-[-1] "
+                    className="w-full h-[400px] object-cover absolute inset-0 z-[-1] "
                   />
             </Link>
 

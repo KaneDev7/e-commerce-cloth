@@ -17,13 +17,14 @@ export default function cart() {
   const dispatch = useDispatch()
 
   const totalPrice = () =>{
+    
     let total = 0
    return products.reduce((acc, item) => acc+=(item.price * item.quantity), 0).toFixed(2)
   }
 
   const image = "https://images.pexels.com/photos/6311251/pexels-photo-6311251.jpeg?auto=compress&cs=tinysrgb&w=1600"
   return (
-    <div className='w-[400px] absolute top-[80px] right-0 z-10 p-5 bg-white shadow-md '>
+    <div className='w-[400px] absolute top-[80px]  z-10 p-5 bg-white shadow-md cart'>
       <div className='flex justify-between items-center'>
         <h1 className='text-2xl text-black/70'>Products in your Cart</h1>
         <AiFillCloseCircle size={25} className='text-primaryColor hover:text-primaryColorActif' onClick={() => setShowCart(false)} />
@@ -36,8 +37,8 @@ export default function cart() {
               <img src={import.meta.env.VITE_API_UPLOAD + item.img} alt="" className='w-[100px] h-[100px] object-cover' />
 
               <div className='flex flex-col gap-2 '>
-                <h2 className='text-xl text-black/70 mb-7'>{item.title} </h2>
-                <p className='text-sm text-black/60'>{item.desc}  </p>
+                <h2 className='text-xl text-black/70 mb-5'>{item.title} </h2>
+                <p className='text-sm text-black/60'>{item.desc.substring(0,50)}...  </p>
                 <p className='text-primaryColor text-sm'>{item.quantity} x $ {item.price} </p>
               </div>
             </div>
