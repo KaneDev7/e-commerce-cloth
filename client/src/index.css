@@ -2,8 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+
+ 
 :root{
-    --globalWidth : 1300px
+    --globalWidth : 1400px
+}
+
+*{
+  font-family: 'Roboto Condensed'  ;
 }
 .globalWidth{
     max-width: var(--globalWidth);
@@ -63,6 +69,7 @@
     font-size: 20px;
     font-weight: 500;
 }
+
 @keyframes transX{
     to{
         transform: translateX(0);
@@ -87,6 +94,16 @@
     .cart{
         right: 0;
     }
+}
+
+/* PRODUCT DETAIL */
+
+.product_detaitl_text_block:first-child{
+  padding-top: 0px ;
+}
+
+.product_detaitl_text_block{
+  padding: 30px 0;
 }
 
 

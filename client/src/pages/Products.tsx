@@ -10,6 +10,8 @@ import { LuListFilter } from "react-icons/lu";
 import { GlobalContext } from "../context/ContextProvider";
 import { useDispatch, useSelector } from "react-redux";
 import { addFilter, resetFilter } from "../redux/filterSlice";
+import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../redux/SelectedFilterSlice";
+import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../redux/CustomeFilterSlice";
 //import { products } from "./home/container/FeatureProducts";
 
 export default function Products() {
@@ -17,9 +19,13 @@ export default function Products() {
   const catId = parseInt(useParams().id)
   const [sort, setSort] = useState('desc')
   const filters = useSelector(state => state.filter)
-  const [customFilters, setcustomFilters] = useState<string[]>([])
-  const [colorSelected, setColorSelected] = useState <string[]>([])
-  const [sizeSelected, setSizeSelected] = useState <string[]>([])
+  const selectedFilter = useSelector(state => state.selectedFilter)
+  const customFilters = useSelector(state => state.customFilters)
+
+
+  // const [customFilters, setcustomFilters] = useState<string[]>([])
+  const [colorSelected, setColorSelected] = useState<string[]>([])
+  const [sizeSelected, setSizeSelected] = useState<string[]>([])
   const [isMobile, setIsMobile] = useState(false)
 
   const [showClosefilterBtn, setShowClosefilterBtn] = useState(false)
@@ -33,40 +39,32 @@ export default function Products() {
 
   const { showFilter, setShowFilter } = useContext(GlobalContext)
 
+
   const handleAddFilter = (option) => {
     const isFilterExist = customFilters.some(item => item.value === option.value)
-
     if (!isFilterExist) {
-      setcustomFilters(prev => [...prev, option])
-      
-      if(option.type === 'colors'){
-        setColorSelected(prev => [...prev, option.value]) 
-      }else if(option.type === 'sizes'){
-        setSizeSelected(prev => [...prev, option.value]) 
-      }
+      dispatch(addCustomeFilter(option))
+      dispatch(addSelectedFilter(option.value))
     }
   }
 
   const handleDeleteFilter = (id, value) => {
-    setcustomFilters(prev => prev.filter(item => item.id !== id))
-    setColorSelected(prev => prev.filter(item => item !== value))
-    setSizeSelected(prev => prev.filter(item => item !== value))
+    dispatch(deletCustomeFilter(id))
+    dispatch(deleteSelectedilter(value))
+
   }
 
   const handleResetFilter = () => {
-     dispatch(resetFilter())
-     setcustomFilters([]) 
-     setSizeSelected([]) 
-     setColorSelected([]) 
+    dispatch(resetFilter())
+    dispatch(resetCustomeFilter())
+    dispatch(resetSelectedFilter())
   }
 
+
   const updateFilter = () => {
-    
-    const newFilter =  customFilters.map(item => `&[filters][${item.type}][${item.field}]=${item.value}` )
+    const newFilter = customFilters.map(item => `&[filters][${item.type}][${item.field}]=${item.value}`)
     dispatch(addFilter(newFilter))
-    if(isMobile){
-      setShowFilter(false)
-    }
+    if (isMobile) setShowFilter(false)
   }
 
   useEffect(() => {
@@ -90,16 +88,19 @@ export default function Products() {
 
   useEffect(() => {
     dispatch(resetFilter())
+    dispatch(resetCustomeFilter())
+    dispatch(resetSelectedFilter())
   }, [])
 
   return (
-    <div className="w-full globalWidth mt-10 ">
+    <div className="w-full globalWidth mt-10  ">
       <div className="w-full flex ">
         {/* SIDEBAR CATEGORY */}
         {
           showFilter &&
           <motion.div initial={{ x: -500, opacity: .2 }} animate={{ x: 0, opacity: 1 }}
-            className="h-full lg:sticky pt-10 lg:translate-x-[0] translate-x-[-500px] fixed top-[0]  left-5 z-20  w-[500px] bg-white">
+            className="h-full lg:sticky pt-10 lg:translate-x-[0] translate-x-[-500px] fixed top-[0] 
+            left-0 lg:left-5 pr-10 pl-10 lg:pr-10 lg:pl-0 z-20  w-[500px] bg-white border-r">
             {
               showClosefilterBtn &&
               <AiFillCloseCircle size={25} className='absolute right-5 top-10 text-primaryColor hover:text-primaryColorActif'
@@ -108,29 +109,33 @@ export default function Products() {
 
 
             {/* FILTER BY SIZE */}
-            <div className="mb-10">
-              <h1 className="text-black/80 mb-4 filterTitle">Filtrer par taille</h1>
+            {
+              categorie?.attributes?.title !== 'sacs & accessoires' &&
+              <div className="mb-10">
+                <h1 className="text-black/80 mb-4 filterTitle">Filtrer par taille</h1>
 
-              <div className="flex flex-wrap gap-5 cursor-pointer">
-                {sizes?.map(item => (
-                  <div
-                  style={{
-                    background : sizeSelected.includes(item?.attributes?.size) && '#3378f0', 
-                    color : sizeSelected.includes(item?.attributes?.size) && '#fff' 
+                <div className="flex flex-wrap gap-5 cursor-pointer">
+                  {sizes?.map(item => (
+                    <div
+                      style={{
+                        background: selectedFilter.includes(item?.attributes?.size) && '#3378f0',
+                        color: selectedFilter.includes(item?.attributes?.size) && '#fff'
 
-                  }}
-                    onClick={() => handleAddFilter({
-                      id: item.id,
-                      type: 'sizes',
-                      field: 'size',
-                      value: item?.attributes?.size
-                    })}
-                    className="w-[40px] h-[40px] flex items-center justify-center border hover:bg-primaryColor hover:text-white border-black/50 ">
-                    {item?.attributes?.size} 
-                  </div>
-                ))}
+                      }}
+                      onClick={() => handleAddFilter({
+                        id: item.id,
+                        type: 'sizes',
+                        field: 'size',
+                        value: item?.attributes?.size
+                      })}
+                      className="w-[40px] h-[40px] flex items-center justify-center border hover:bg-primaryColor hover:text-white border-black/10 ">
+                      {item?.attributes?.size}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            }
+
 
 
             {/* FILTER BY COLOR */}
@@ -141,17 +146,17 @@ export default function Products() {
                 {colors?.map(item => (
                   <div
                     style={{
-                       background: item?.attributes?.color,
-                       opacity : colorSelected.includes(item?.attributes?.color) && '1' 
-                      
-                      }}
+                      background: item?.attributes?.color,
+                      opacity: selectedFilter.includes(item?.attributes?.color) && '1'
+
+                    }}
                     onClick={() => handleAddFilter({
                       id: item.id,
                       type: 'colors',
                       field: 'color',
                       value: item?.attributes?.color
                     })}
-                    className={`w-[25px] h-[25px] flex items-center justify-center border opacity-30 hover:opacity-100 border-black rounded-full`} >
+                    className={`w-[25px] h-[25px] flex items-center justify-center border opacity-30 hover:opacity-100 border-black/30 rounded-full`} >
                   </div>
                 ))}
               </div>
@@ -160,24 +165,29 @@ export default function Products() {
 
             {/* FILTER BY SUB CATEGORY */}
 
-            <div className="mb-10">
-              <h1 className="text-black/80 mb-4 filterTitle">Filtrer par sous categorie</h1>
+            {
+              categorie?.attributes?.title !== 'sacs & accessoires' &&
 
-              <div className="flex flex-wrap gap-5 cursor-pointer">
-                {subCategories?.map(item => (
-                  <div
-                  onClick={() => handleAddFilter({
-                    id: item.id,
-                    type: 'sub_categories',
-                    field: 'subCategory',
-                    value: item?.attributes?.subCategory
-                  })}
-                  className="flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-black/75 text-[15px] py-2 px-4">
-                    {item?.attributes?.subCategory} 
-                  </div>
-                ))}
+              <div className="mb-10">
+                <h1 className="text-black/80 mb-4 filterTitle">Filtrer par sous categorie</h1>
+
+                <div className="flex flex-wrap gap-5 cursor-pointer">
+                  {subCategories?.map(item => (
+                    <div
+                      onClick={() => handleAddFilter({
+                        id: item.id,
+                        type: 'sub_categories',
+                        field: 'subCategory',
+                        value: item?.attributes?.subCategory
+                      })}
+                      className="flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-black/75 text-[15px] py-2 px-4">
+                      {item?.attributes?.subCategory}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+
+            }
 
 
 
@@ -206,18 +216,8 @@ export default function Products() {
 
         {/* PRODUCT CATEGORY */}
         <div className="lg:w-[100%] w-full p-10">
-          <div className="w-full h-[400px] mb-20" style={{
-            backgroundImage: `url(${import.meta.env.VITE_API_UPLOAD + categorie?.attributes?.img?.data?.attributes?.url})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-
-          }}>
-            {/* <img src={import.meta.env.VITE_API_UPLOAD + categorie?.attributes?.img2?.data?.attributes?.url} className="w-full h-full object-cover" alt="" /> */}
-
-            {/* <img src="https://images.pexels.com/photos/1074535/pexels-photo-1074535.jpeg?auto=compress&cs=tinysrgb&w=1600" */}
-            {/* className="w-full h-full object-cover" alt="" /> */}
-          </div>
+        
+          <h1 className="text-3xl text-center capitalize text-black/75">{categorie?.attributes?.title} </h1>
           {
             !showFilter &&
             <button
@@ -233,17 +233,17 @@ export default function Products() {
                 <p>{item?.value} </p>
 
                 <AiFillCloseCircle size={23} className='text-gray-300 hover:text-gray-400'
-                  onClick={() => handleDeleteFilter(item.id,item.value)} />
+                  onClick={() => handleDeleteFilter(item.id, item.value)} />
               </div>
             ))}
             {customFilters.length !== 0 &&
-            <button
-             onClick={handleResetFilter}
-             className="text-sm text-red-600 hover:underline">Effacer les filtres</button>
-            
+              <button
+                onClick={handleResetFilter}
+                className="text-sm text-red-600 hover:underline">Effacer les filtres</button>
+
             }
           </div>
-          <List catId={catId} subCat={filters}  sort={sort} />
+          <List catId={catId} subCat={filters} sort={sort} />
 
         </div>
       </div>

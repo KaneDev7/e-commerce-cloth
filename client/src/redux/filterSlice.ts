@@ -14,8 +14,6 @@ export const filterSlice = createSlice({
            return state = [...action.payload]
         },
 
-        
-
         resetFilter: (state) => {
          return state = []
         },

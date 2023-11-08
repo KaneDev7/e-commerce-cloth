@@ -7,6 +7,8 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 import {cartSlice} from './cartSlice'
 import { configureStore } from '@reduxjs/toolkit'
 import { filterSlice } from './filterSlice'
+import {selectedFilterSlice } from './SelectedFilterSlice'
+import { customeFilterSlice } from './CustomeFilterSlice'
 
 const persistConfig = {
   key: 'root',
@@ -15,7 +17,9 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   cart: cartSlice.reducer,
-  filter : filterSlice.reducer
+  filter : filterSlice.reducer,
+  customFilters: customeFilterSlice.reducer,
+  selectedFilter : selectedFilterSlice.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
