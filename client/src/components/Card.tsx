@@ -1,53 +1,57 @@
 import { useEffect, useRef } from "react";
 import { ProductType } from "../pages/home/container/FeatureProducts";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 type TypeProps = { product: ProductType }
 
 export default function Card({ product }: TypeProps) {
 
-    const img2Ref = useRef<HTMLImageElement | null> (null) 
-    const imgUrl = import.meta.env.VITE_API_UPLOAD+product?.attributes?.img?.data[0]?.attributes?.url
-    const imgUrl2 = import.meta.env.VITE_API_UPLOAD+product?.attributes?.img2?.data?.attributes?.url
+    console.log(product?.attributes.title)
+    const navigate = useNavigate()
+    const img2Ref = useRef<HTMLImageElement | null>(null)
+    const imgUrl = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img?.data[0]?.attributes?.url
+    const imgUrl2 = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img2?.data?.attributes?.url
 
-    const handleMouseEnter = ()=>{
-        if(!imgUrl2) return 
-        if(img2Ref.current){
+    const handleMouseEnter = () => {
+        if (!imgUrl2) return
+        if (img2Ref.current) {
             img2Ref.current.style.zIndex = '1'
         }
     }
 
-    const handleMouseLeave = ()=>{
-        if(img2Ref.current){
+    const handleMouseLeave = () => {
+        if (img2Ref.current) {
             img2Ref.current.style.zIndex = '-1'
         }
     }
 
-   
+
     return (
-        <motion.div className="w-[250px] relative duration-500 flex-auto "
-        onMouseEnter={handleMouseEnter}   
-        onMouseLeave={handleMouseLeave}   
+        <motion.div className={`relative duration-500 card `}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
         >
-            <Link to={`/product/${product.id}`}>
-            <img src={imgUrl} alt="" className="w-full h-[400px] object-cover"/>
-            </Link>
+            {/* <Link to={`/product/${product.id}`}> */}
+            <img onClick={() => navigate(`/product/${product.id}`)} src={imgUrl} alt="" className="w-full h-[400px] object-cover" />
+            {/* </Link> */}
             {
-              product?.attributes?.img2?.data?.attributes?.url &&
-            <Link to={`/product/${product.id}`} >
-            
-            <img src={imgUrl2} alt=""
-                ref={img2Ref}
+                product?.attributes?.img2?.data?.attributes?.url &&
+                // <Link to={`/product/${product.id}`} >
+
+                <img onClick={() => navigate(`/product/${product.id}`)} src={imgUrl2} alt=""
+                    ref={img2Ref}
                     className="w-full h-[400px] object-cover absolute inset-0 z-[-1] "
-                  />
-            </Link>
+                />
+                // </Link>
 
             }
-            <div className="mt-2">
-                <h2 className="text-[1.1rem] text-black/80 font-medium "> {product?.attributes.title}</h2>
-                <span className="text-black/40 text-[1.2rem] font-medium  line-through mr-4 "> $ {product?.attributes.oldPrice || product?.attributes.price + 20} </span>
-                <span className="text-[1.2rem] font-medium text-black/80 "> $ {product?.attributes.price} </span>
+            <div className="mt-3 flex justify-between items-center">
+                <h2 className="text-md text-black/80 font-bold capitalize"> {product?.attributes.title}</h2>
+                <div>
+                    <span className="text-black/70 text-md  line-through mr-2 "> $ {product?.attributes.oldPrice || product?.attributes.price + 20} </span>
+                    <span className="text-md font-bold text-black/90 "> $ {product?.attributes.price} </span>
+                </div>
             </div>
             {
                 product?.attributes.isNew &&

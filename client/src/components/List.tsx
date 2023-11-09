@@ -12,7 +12,7 @@ export default function List({ catId, subCat, maxPrice, sort }: TypeProps) {
 
     useEffect(()=>{
         setUrl( `/products?populate=*&[filters][categories][id]=${catId}${subCat.map(item => item).join('')}&sort=price:${sort}`) 
-    },[subCat])
+    },[subCat, catId])
 
     if (isLoading) {
         return <div className='flex justify-center items-center mt[100px] '>
@@ -20,10 +20,10 @@ export default function List({ catId, subCat, maxPrice, sort }: TypeProps) {
         </div>
       }
     return (
-        <div className="max-w-full flex items-start gap-10 flex-wrap mt-5">
-
+        <div className="max-w-full flex items-start gap-10 flex-wrap mt-5 list">
+ 
             {
-                products?.map(product => (
+                products?.map((product) => (
                     <Card product={product} />
                 ))
             }

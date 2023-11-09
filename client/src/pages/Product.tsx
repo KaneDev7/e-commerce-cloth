@@ -4,7 +4,7 @@ import { FaBalanceScale } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import LongButton from '../components/LongButton'
 import useFetch from '../hooks/useFetch'
-import { useParams, useNavigate, useNavigation } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addItem } from '../redux/cartSlice'
 
@@ -20,6 +20,7 @@ import 'swiper/css/navigation';
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
 import ProductLoad from '../components/ProductLoad'
+import Recommandation from '../components/Recommandation'
 
 // const images = [
 //   "https://images.pexels.com/photos/6311251/pexels-photo-6311251.jpeg?auto=compress&cs=tinysrgb&w=1600",
@@ -29,14 +30,15 @@ import ProductLoad from '../components/ProductLoad'
 export default function Product() {
   const [selectedImg, setSelectedImg] = useState('img')
   const selectedFilter = useSelector(state => state.selectedFilter)
-  const navigate = useNavigate()
   const [quantity, setQuantity] = useState(1)
   const { id } = useParams()
   const dispatch = useDispatch()
   const { data: product, isLoading, error } = useFetch(`/products/${id}?populate=*`)
 
-  console.log('navigate', useNavigation())
+  // const isTailleExist = product?.attributes?.categories?.data?.some(item => item?.attributes?.title === 'sacs & accessoires')
   let imgUrl, imgUrl2, images
+
+  console.log()
 
   if (product.length !== 0) {
     console.log(product)
@@ -68,10 +70,10 @@ export default function Product() {
 
 
   return (
-    <div className='p-10 globalWidth'>
+    <div className='globalWidth mt-20'>
       <div className='w-full flex flex-wrap gap-[40px] '>
 
-        <div className='lg:w-[50%] w-[100%] lg:min-w-[500px] gap-4'>
+        <div className='lg:w-[45%] w-[100%] lg:min-w-[500px] gap-4'>
           <div className='md:mb-20 w-full '>
             <Swiper
               pagination={{
@@ -84,7 +86,7 @@ export default function Product() {
               {
                 images?.map(image => (
                   <SwiperSlide>
-                    <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full aspect-square object-cover' />
+                    <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full h-auto aspect-square object-cover ' />
                   </SwiperSlide>
                 ))
 
@@ -114,7 +116,7 @@ export default function Product() {
           <div className='flex items-center flex-wrap  gap-10 border-b border-black/10 product_detaitl_text_block'>
 
             {/* SIZES */}
-            {product?.attributes?.sizes &&
+            {product?.attributes?.sizes?.data.length > 0 &&
               <div className=''>
                 <h1 className='text-[17px] text-black/70 '>Tailles disponibles</h1>
                 <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
@@ -186,8 +188,8 @@ export default function Product() {
           </div>
 
         </div>
-
       </div>
+      <Recommandation categories={product?.attributes?.categories?.data}/>
     </div>
   )
 }

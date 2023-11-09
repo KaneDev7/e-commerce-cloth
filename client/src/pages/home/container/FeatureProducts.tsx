@@ -78,7 +78,7 @@ export default function FeatureProducts({ type }: FetureType) {
         </div>
 
         <div className="flex justify-center items-center">
-          <div className="flex flex-wrap gap-12 mt-10">
+          <div className="list feature mt-10">
 
             {
               products.map(product => (

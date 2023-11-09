@@ -5,9 +5,9 @@ import FeatureProducts from "./container/FeatureProducts";
 export default function Home() {
   return (
     <div>
-      <Banner/>
+      <Banner />
       <FeatureProducts type='featured' />
-      <Category/>
+      <Category />
       <FeatureProducts type='tending' />
     </div>
   )

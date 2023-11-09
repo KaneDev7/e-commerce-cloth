@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import Card from "../components/Card";
 import { motion } from 'framer-motion'
-import { useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import List from "../components/List";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -71,6 +71,8 @@ export default function Products() {
     window.scroll(0, 0)
   }, [])
 
+ 
+  
   useEffect(() => {
     window.addEventListener('resize', () => {
       const lgScreen = window.matchMedia("(max-width : 1024px)").matches
@@ -93,13 +95,13 @@ export default function Products() {
   }, [])
 
   return (
-    <div className="w-full globalWidth mt-10  ">
-      <div className="w-full flex ">
+    <div className="w-full globalWidth mt-20  ">
+      <div className="w-full flex gap-10 ">
         {/* SIDEBAR CATEGORY */}
         {
           showFilter &&
           <motion.div initial={{ x: -500, opacity: .2 }} animate={{ x: 0, opacity: 1 }}
-            className="h-full lg:sticky pt-10 lg:translate-x-[0] translate-x-[-500px] fixed top-[0] 
+            className="h-full lg:sticky pt-5 lg:translate-x-[0] translate-x-[-500px] fixed top-[0] 
             left-0 lg:left-5 pr-10 pl-10 lg:pr-10 lg:pl-0 z-20  w-[500px] bg-white border-r">
             {
               showClosefilterBtn &&
@@ -215,9 +217,9 @@ export default function Products() {
 
 
         {/* PRODUCT CATEGORY */}
-        <div className="lg:w-[100%] w-full p-10">
+        <div className="lg:w-[100%] w-full ">
         
-          <h1 className="text-3xl text-center capitalize text-black/75">{categorie?.attributes?.title} </h1>
+          <h1 className="text-4xl text-center mt-10 text-black font-bold uppercase">{categorie?.attributes?.title}S </h1>
           {
             !showFilter &&
             <button
@@ -227,7 +229,7 @@ export default function Products() {
             </button>
           }
 
-          <div className="flex flex-wrap gap-5 cursor-pointer mt-5">
+          <div className="flex flex-wrap gap-5 cursor-pointer mt-20">
             {customFilters?.map(item => (
               <div className="flex items-center justify-center gap-3 bg-gray-100 text-black/75 text-[15px] py-2 px-4">
                 <p>{item?.value} </p>
