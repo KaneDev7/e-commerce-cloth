@@ -15,7 +15,7 @@ export default function List({ catId, subCat, maxPrice, sort }: TypeProps) {
     },[subCat, catId])
 
     if (isLoading) {
-        return <div className='flex justify-center items-center mt[100px] '>
+        return <div className='flex justify-center items-center h-[500px] mt[100px] '>
           <ProductLoad />
         </div>
       }

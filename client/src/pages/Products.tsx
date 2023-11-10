@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import Card from "../components/Card";
 import { motion } from 'framer-motion'
-import {useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import List from "../components/List";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFilter, resetFilter } from "../redux/filterSlice";
 import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../redux/SelectedFilterSlice";
 import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../redux/CustomeFilterSlice";
+import { colorCode } from "../helpers/colorsCode";
 //import { products } from "./home/container/FeatureProducts";
 
 export default function Products() {
@@ -71,8 +72,8 @@ export default function Products() {
     window.scroll(0, 0)
   }, [])
 
- 
-  
+
+
   useEffect(() => {
     window.addEventListener('resize', () => {
       const lgScreen = window.matchMedia("(max-width : 1024px)").matches
@@ -101,8 +102,8 @@ export default function Products() {
         {
           showFilter &&
           <motion.div initial={{ x: -500, opacity: .2 }} animate={{ x: 0, opacity: 1 }}
-            className="h-full lg:sticky pt-5 lg:translate-x-[0] translate-x-[-500px] fixed top-[0] 
-            left-0 lg:left-5 pr-10 pl-10 lg:pr-10 lg:pl-0 z-20  w-[500px] bg-white border-r">
+            className="h-full lg:sticky pt-5 lg:translate-x-[0] translate-x-[-500px] fixed top-[10px] 
+            left-0 lg:left-5 px-10 z-20  w-[500px] bg-white border-r">
             {
               showClosefilterBtn &&
               <AiFillCloseCircle size={25} className='absolute right-5 top-10 text-primaryColor hover:text-primaryColorActif'
@@ -148,7 +149,7 @@ export default function Products() {
                 {colors?.map(item => (
                   <div
                     style={{
-                      background: item?.attributes?.color,
+                      background: colorCode[item?.attributes?.color],
                       opacity: selectedFilter.includes(item?.attributes?.color) && '1'
 
                     }}
@@ -158,7 +159,7 @@ export default function Products() {
                       field: 'color',
                       value: item?.attributes?.color
                     })}
-                    className={`w-[25px] h-[25px] flex items-center justify-center border opacity-30 hover:opacity-100 border-black/30 rounded-full`} >
+                    className={`w-[25px] h-[25px] flex items-center justify-center border opacity-50 hover:opacity-100 border-black/30 rounded-full`} >
                   </div>
                 ))}
               </div>
@@ -218,22 +219,32 @@ export default function Products() {
 
         {/* PRODUCT CATEGORY */}
         <div className="lg:w-[100%] w-full ">
-        
-          <h1 className="text-4xl text-center mt-10 text-black font-bold uppercase">{categorie?.attributes?.title}S </h1>
+
+          <h1 className="text-4xl text-center  text-black font-bold uppercase">{categorie?.attributes?.title}S </h1>
           {
             !showFilter &&
             <button
               onClick={() => setShowFilter(true)}
-              className="flex items-center gap-5 py-2 px-4 bg-gray-100 hover:bg-gray-200  cursor-pointer">
+              className="flex items-center gap-5 py-2 px-4 bg-white/90 hover:bg-white shadow-sm  cursor-pointer">
               <LuListFilter /> Filtrer
             </button>
           }
 
-          <div className="flex flex-wrap gap-5 cursor-pointer mt-20">
+          <div className="flex flex-wrap gap-5 cursor-pointer mt-10">
             {customFilters?.map(item => (
-              <div className="flex items-center justify-center gap-3 bg-gray-100 text-black/75 text-[15px] py-2 px-4">
-                <p>{item?.value} </p>
+              <div className="flex items-center justify-center gap-3 bg-white text-black/90 text-[15px] py-2 px-4">
+                <div className="flex items-center gap-3">
+                  {colorCode[item?.value] &&
+                    <p style={{
+                      background: colorCode[item?.value],
+                    }}
+                      className="w-[10px] h-[10px] rounded-full border "
+                    >
+                    </p>
+                  }
 
+                  <p className="capitalize">{item?.value} </p>
+                </div>
                 <AiFillCloseCircle size={23} className='text-gray-300 hover:text-gray-400'
                   onClick={() => handleDeleteFilter(item.id, item.value)} />
               </div>
@@ -249,6 +260,6 @@ export default function Products() {
 
         </div>
       </div>
-    </div>
+    </div >
   )
 }

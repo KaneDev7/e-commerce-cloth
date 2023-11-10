@@ -3,6 +3,19 @@ import useFetch from '../hooks/useFetch'
 import Card from './Card'
 import { useParams } from 'react-router-dom'
 
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/pagination';
+
+// import './styles.css';
+
+// import required modules
+import { Pagination, Navigation } from 'swiper/modules';
+
 export default function Recommandation({ categories }) {
     const { id } = useParams()
     const [url, setUrl] = useState<string>('')
@@ -26,19 +39,46 @@ export default function Recommandation({ categories }) {
 
                 {
                     products.length > 0 &&
-                    <h1 className="md:text-3xl text-2xl   text-black/90 font-bold duration-200"> NOS RECOMANDATIONS </h1>
+                    <h1 className="text-2xl   text-black/90 font-bold duration-200"> PRODUITS SIMILAIRES </h1>
 
                 }
 
-                <div className="flex justify-cen">
-                    <div className="list feature  mt-10">
+                <div className="flex ">
+                    {/* <div className="mt-10"> */}
 
+                    <Swiper
+                        breakpoints={{
+                            640: {
+                                slidesPerView: 2,
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 3,
+                                spaceBetween: 40,
+                            },
+                            1024: {
+                                slidesPerView: 4,
+                                spaceBetween: 50,
+                            },
+                        }}
+                        // slidesPerView={4}
+                        spaceBetween={30}
+                        navigation={true}
+                        loop={true}
+                        modules={[Navigation, Pagination]}
+                        className="mySwiper mt-10"
+                    >
                         {
                             products.map(product => (
-                                <Card key={product.id} product={product} />
+                                <SwiperSlide key={product.id} >
+                                    <Card product={product} />
+                                </SwiperSlide>
                             ))
                         }
-                    </div>
+
+                    </Swiper>
+
+                    {/* </div> */}
                 </div>
 
             </div>

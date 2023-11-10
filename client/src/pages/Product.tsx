@@ -2,25 +2,29 @@ import { BiCartAdd } from 'react-icons/bi'
 import { AiOutlineHeart } from 'react-icons/ai'
 import { FaBalanceScale } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
-import LongButton from '../components/LongButton'
 import useFetch from '../hooks/useFetch'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addItem } from '../redux/cartSlice'
+import { useContext } from 'react'
+import { UserContext } from '../context/UserContext'
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/pagination';
+import 'swiper/css/zoom';
 import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 
 // import './styles.css';
 
 // import required modules
-import { Pagination, Navigation } from 'swiper/modules';
+import { Pagination, Navigation, Zoom } from 'swiper/modules';
 import ProductLoad from '../components/ProductLoad'
 import Recommandation from '../components/Recommandation'
+import Assurance from '../components/Assurance'
 
 // const images = [
 //   "https://images.pexels.com/photos/6311251/pexels-photo-6311251.jpeg?auto=compress&cs=tinysrgb&w=1600",
@@ -30,7 +34,10 @@ import Recommandation from '../components/Recommandation'
 export default function Product() {
   const [selectedImg, setSelectedImg] = useState('img')
   const selectedFilter = useSelector(state => state.selectedFilter)
+  const { user } = useContext(UserContext)
   const [quantity, setQuantity] = useState(1)
+
+  const navigate = useNavigate()
   const { id } = useParams()
   const dispatch = useDispatch()
   const { data: product, isLoading, error } = useFetch(`/products/${id}?populate=*`)
@@ -38,7 +45,6 @@ export default function Product() {
   // const isTailleExist = product?.attributes?.categories?.data?.some(item => item?.attributes?.title === 'sacs & accessoires')
   let imgUrl, imgUrl2, images
 
-  console.log()
 
   if (product.length !== 0) {
     console.log(product)
@@ -49,6 +55,20 @@ export default function Product() {
   }
 
 
+  const handleAddProductToCart = () => {
+    console.log(user)
+    if (!user) {
+      return navigate('/login')
+    }
+    dispatch(addItem({
+      id: product.id,
+      title: product?.attributes?.title,
+      desc: product?.attributes?.desc,
+      price: product?.attributes?.price,
+      img: product?.attributes?.img?.data[0]?.attributes?.url,
+      quantity: quantity
+    }))
+  }
   const addQuantity = () => {
     setQuantity((prev) => prev + 1)
   }
@@ -70,23 +90,27 @@ export default function Product() {
 
 
   return (
-    <div className='globalWidth mt-20'>
-      <div className='w-full flex flex-wrap gap-[40px] '>
+    <div className='globalWidth mt-10'>
+      <div className='w-full flex flex-wrap gap-[40px] bg-white p-5 shadow-sm'>
 
         <div className='lg:w-[45%] w-[100%] lg:min-w-[500px] gap-4'>
           <div className='md:mb-20 w-full '>
             <Swiper
               pagination={{
-                type: 'fraction',
+                clickable: true,
               }}
+              zoom={true}
+
               navigation={true}
-              modules={[Pagination, Navigation]}
+              modules={[Zoom, Navigation, Pagination]}
               className="mySwiper"
             >
               {
                 images?.map(image => (
                   <SwiperSlide>
-                    <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full h-auto aspect-square object-cover ' />
+                    <div className='swiper-zoom-container'>
+                      <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full h-auto aspect-square  object-contain ' />
+                    </div>
                   </SwiperSlide>
                 ))
 
@@ -103,7 +127,7 @@ export default function Product() {
 
             <h1 className='text-black/80 font-bold md:text-4xl text-3xl '>  {product?.attributes?.title} </h1>
 
-            <p className="w-full max-w-[900px] text-black/90 md:text-[16px] text-[15px] text-justify">
+            <p className="w-full max-w-[900px] text-black/90 md:text-[15px] text-[15px] text-justify">
               {product?.attributes?.desc}
             </p>
 
@@ -112,13 +136,13 @@ export default function Product() {
 
 
           {/* BLOCK */}
- 
-          <div className='flex items-center flex-wrap  gap-10 border-b border-black/10 product_detaitl_text_block'>
+
+          <div className='flex items-center flex-wrap  gap-20 border-b border-black/10 product_detaitl_text_block'>
 
             {/* SIZES */}
             {product?.attributes?.sizes?.data.length > 0 &&
               <div className=''>
-                <h1 className='text-[17px] text-black/70 '>Tailles disponibles</h1>
+                <h1 className='text-[14px] text-black/80 '>Tailles</h1>
                 <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
                   {product?.attributes?.sizes?.data.map(item => (
                     <div
@@ -130,18 +154,13 @@ export default function Product() {
               </div>
             }
 
-            {/* COLORS */}
+            {/* AJOUT DE QUANTITE */}
             <div>
-              <h1 className='text-[17px] text-black/70 '>Couleur disponibles</h1>
-              <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
-                {product?.attributes?.colors?.data.map(item => (
-                  <div
-                    style={{
-                      background: item?.attributes?.color
-                    }}
-                    className={`w-[35px] h-[35px] flex items-center justify-center border border-black/10 rounded-full`} >
-                  </div>
-                ))}
+              <h1 className='text-[14px] text-black/80 '>Quantité</h1>
+              <div className='w-fit flex gap-4 mt-3'>
+                <button className='w-[35px] h-[35px] rounded-full border border-black  hover:bg-primaryColor hover:text-white' onClick={reduceQuantity}>-</button>
+                <p className='flex h-[35px] justify-center items-center'>{quantity} </p>
+                <button className='w-[35px] h-[35px] rounded-full border border-black  hover:bg-primaryColor hover:text-white' onClick={addQuantity}>+</button>
               </div>
             </div>
 
@@ -150,46 +169,19 @@ export default function Product() {
 
           {/* BLOCK */}
           <div className='flex items-center flex-wrap gap-10 product_detaitl_text_block'>
-            {/* AJOUT DE QUANTITE */}
-            <div className='w-fit flex gap-4'>
-              <button className='w-[30px] h-[30px] rounded-full border border-black  hover:bg-primaryColor hover:text-white' onClick={reduceQuantity}>-</button>
-              <p className='flex h-[30px] justify-center items-center'>{quantity} </p>
-              <button className='w-[30px] h-[30px] rounded-full border border-black  hover:bg-primaryColor hover:text-white' onClick={addQuantity}>+</button>
-            </div>
-
 
             <button
-              className=' w-fit flex justify-center items-center gap-4 py-2 px-10 bg-primaryColor hover:bg-primaryColorActif'
-              onClick={() => dispatch(addItem({
-                id: product.id,
-                title: product?.attributes?.title,
-                desc: product?.attributes?.desc,
-                price: product?.attributes?.price,
-                img: product?.attributes?.img?.data[0]?.attributes?.url,
-                quantity: quantity
-              }))}
+              className=' w-fit flex justify-center items-center gap-4 py-3 px-10 bg-primaryColor hover:bg-primaryColorActif'
+              onClick={() => handleAddProductToCart()}
             >
-              <BiCartAdd color='white' size={25} />
-              <span className='text-white ml-2 text-sm'>AJOUTER AU PANIER </span>
+              <BiCartAdd color='white' size={30} />
+              <span className='text-white ml-2 text-[1px6] '>AJOUTER AU PANIER </span>
             </button>
           </div>
-
-          <div className='w-fit flex gap-4 mt-10'>
-            <div className='w-fit flex justify-center items-center gap-2'>
-              <AiOutlineHeart color='#3378f0' size={25} />
-              <span className='text-primaryColor text-sm'>ADD TO WISH LIST</span>
-            </div>
-
-            <div className='w-fit flex justify-center items-center gap-2'>
-              <FaBalanceScale color='#3378f0' size={25} />
-              <span className='text-primaryColor text-sm'>ADD TO COMPARE</span>
-            </div>
-
-          </div>
-
+          <Assurance/>
         </div>
       </div>
-      <Recommandation categories={product?.attributes?.categories?.data}/>
+      <Recommandation categories={product?.attributes?.categories?.data} />
     </div>
   )
 }

@@ -10,6 +10,7 @@ import ContextProvider from './context/ContextProvider'
 import { Provider } from 'react-redux'
 import configureStore from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
+import Login from './pages/Login'
 
 const { store, persistor } = configureStore()
 const router = createBrowserRouter([
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: 'product/:id',
         element: <Product />
+      },
+      {
+        path: 'login',
+        element: <Login />
       },
     ]
   }

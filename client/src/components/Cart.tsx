@@ -17,7 +17,6 @@ export default function cart() {
   const dispatch = useDispatch()
 
   const totalPrice = () =>{
-    
     let total = 0
    return products.reduce((acc, item) => acc+=(item.price * item.quantity), 0).toFixed(2)
   }

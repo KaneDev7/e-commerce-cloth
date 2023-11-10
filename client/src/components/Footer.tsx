@@ -9,7 +9,7 @@ export default function Footer() {
       <div className='flex flex-col bg-grayA '>
 
         {/* TOP */}
-        <div className='bg-primaryColor flex justify-center items-center ' >
+        {/* <div className='bg-primaryColor flex justify-center items-center ' >
           <div className='max-w-[1100px] w-full flex justify-between items-center flex-wrap p-4'>
             <h2 className='text-white text-[16px] font-semibold '>BE IN TOUCH WIDTH US:</h2>
             <div className='h-[40px] flex rounded-md'>
@@ -24,7 +24,7 @@ export default function Footer() {
               <BsPinterest size={20} color='white' />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* CENTER */}
 

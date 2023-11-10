@@ -5,7 +5,8 @@
 
  
 :root{
-    --globalWidth : 1300px
+    --globalWidth : 1250px;
+    --backgroundBody : #f7f7f7;
 }
 
 *{
@@ -13,8 +14,14 @@
 }
 
 body{
-  padding: 0 20px;
+  background: var(--backgroundBody);
 }
+
+.backgroundBody{
+  background: var(--backgroundBody);
+}
+
+
 .globalWidth{
     max-width: var(--globalWidth);
     margin-right: auto;
@@ -84,6 +91,8 @@ body{
     font-size: 20px;
     font-weight: 500;
 }
+
+
 
 @keyframes transX{
     to{

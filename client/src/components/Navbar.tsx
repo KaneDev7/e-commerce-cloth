@@ -23,13 +23,13 @@ export default function Navbar() {
   const products = useSelector(state => state.cart.products)
 
   return (
-    <div className='relative '>
+    <div className='relative px-5 bg-white shadow-sm'>
       {showMenuMobile && <NavBarMobile />}
 
-      <div className='h-[80px] flex justify-between items-center pb-5 pt-3  globalWidth'>
+      <div className='h-[80px] flex justify-between items-center  p-5 globalWidth'>
 
         {/* LEFT */}
-        <div className='lg:flex items-center gap-4 hidden '>
+        <div className='lg:flex items-center gap-4 hidden  '>
 
           {/* <div className='flex items-center'>
             <img src="/images/en.png" alt="" />
