@@ -106,11 +106,11 @@ export default function FeatureProducts({ type }: FetureType) {
                   spaceBetween: 40,
                 },
                 1024: {
-                  slidesPerView: 4,
+                  slidesPerView: products.length > 3 ? 4 : products.length ,
                   spaceBetween: 50,
                 },
               }}
-              // slidesPerView={4}
+               slidesPerView={products.length > 3 ? 4 : products.length  }
               spaceBetween={30}
               navigation={true}
               loop={true}

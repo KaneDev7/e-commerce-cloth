@@ -13,6 +13,7 @@ import { addFilter, resetFilter } from "../redux/filterSlice";
 import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../redux/SelectedFilterSlice";
 import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../redux/CustomeFilterSlice";
 import { colorCode } from "../helpers/colorsCode";
+import { Button } from "@/components/ui/button";
 //import { products } from "./home/container/FeatureProducts";
 
 export default function Products() {
@@ -121,7 +122,7 @@ export default function Products() {
                   {sizes?.map(item => (
                     <div
                       style={{
-                        background: selectedFilter.includes(item?.attributes?.size) && '#3378f0',
+                        background: selectedFilter.includes(item?.attributes?.size) && '#001355',
                         color: selectedFilter.includes(item?.attributes?.size) && '#fff'
 
                       }}
@@ -206,11 +207,11 @@ export default function Products() {
                 <label htmlFor="highestPrice" className="ml-2">Prix ​​(superieur d'abord)</label>
               </div>
 
-              <button
+              <Button
                 onClick={updateFilter}
-                className="h-[40px] text-[16px] text-white mt-10 bg-primaryColor hover:bg-primaryColorActif  px-4">
-                Appliquer
-              </button>
+               className='bg-primaryColor/95 hover:bg-primaryColor mt-5'>
+                Appliquer le filtre
+              </Button>
             </div>
 
           </motion.div>

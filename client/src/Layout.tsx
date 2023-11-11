@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -7,6 +7,13 @@ import { UserContext } from './context/UserContext'
 
 export default function Layout() {
     const [user, setUser] = useState(null)
+
+    useEffect(()=> {
+    const newUser = JSON.parse(sessionStorage.getItem('user')) || null
+    setUser(newUser)
+
+    },[])
+
     return (
         <UserContext.Provider value={{user , setUser}}>
             <Navbar />

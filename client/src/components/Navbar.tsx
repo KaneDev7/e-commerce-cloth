@@ -1,4 +1,8 @@
 import { FiChevronDown } from 'react-icons/fi'
+import {IoIosInformationCircle} from 'react-icons/io'
+import {MdLocationOn, MdDateRange} from 'react-icons/md'
+import {BiSolidLogOut} from 'react-icons/bi'
+import {} from 'react-icons/'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { CiUser } from 'react-icons/ci'
 import { BsHeart } from 'react-icons/bs'
@@ -13,6 +17,16 @@ import { useSelector } from 'react-redux'
 import NavBarMobile from './NavBarMobile'
 import useFetch from '../hooks/useFetch'
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { UserContext } from '@/context/UserContext'
+
 export default function Navbar() {
 
   const { data: categories, isLoading, error } = useFetch('/categories')
@@ -21,6 +35,7 @@ export default function Navbar() {
   const [subCatStatus, setSubCatStatus] = useState('hidden')
   const navigate = useNavigate()
   const products = useSelector(state => state.cart.products)
+  const { user } = useContext(UserContext)
 
   return (
     <div className='relative px-5 bg-white shadow-sm'>
@@ -29,50 +44,38 @@ export default function Navbar() {
       <div className='h-[80px] flex justify-between items-center  p-5 globalWidth'>
 
         {/* LEFT */}
-        <div className='lg:flex items-center gap-4 hidden  '>
 
-          {/* <div className='flex items-center'>
-            <img src="/images/en.png" alt="" />
-            <FiChevronDown />
-          </div>
-
-          <div className='flex items-center'>
-            <span>USD</span>
-            <FiChevronDown />
-          </div> */}
-          <Link onMouseEnter={() => setSubCatStatus('hidden')} to='/'>Accueil</Link>
-          <div
-            onMouseEnter={() => setSubCatStatus('flex')}
-
-            className='relative z-40'>
-            <p
-              // onMouseEnter={() => setSubCatStatus('flex')}
-              className='cursor-pointer'>Produits</p>
-
-            <div
-              onMouseLeave={() => setSubCatStatus('hidden')}
-
-              className={`absolute ${subCatStatus} flex-col space-y-4 mt-2 p-3 z-30 bg-white shadow-sm shadow-black/5 `}>
-              {
-                categories.map(categorie => (
-                  <Link  className='capitalize whitespace-nowrap' onClick={() => setSubCatStatus('hidden')} to={`/products/${categorie?.id}`}>
-                  {categorie?.attributes.title} 
-                  </Link>
-                ))
-              }
-              {/* <Link  className='whitespace-nowrap' to='/'>Chaussures</Link>
-              <Link  className='whitespace-nowrap' to='/'>Sacs & Accessoires</Link> */}
-            </div>
-          </div>
-
-          <Link onMouseEnter={() => setSubCatStatus('hidden')} to=''>A propos</Link>
-          <Link onMouseEnter={() => setSubCatStatus('hidden')} to=''>Contact</Link>
+        <div className=''>
+          <Link to='/' className='text-3xl font-bold' >DMRFSTORE</Link>
         </div>
+
 
         {/* CENTER */}
 
-        <div className=''>
-          <Link to='/' className='text-4xl font-bold' >DMRSTORE</Link>
+        <div className='lg:flex items-center gap-4 hidden  '>
+
+          <Link to='/' className='text-md '>Accueil</Link>
+          <DropdownMenu>
+            <DropdownMenuTrigger className='text-md '>
+              Produits
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+              <DropdownMenuSeparator />
+              {
+                categories.map(categorie => (
+                  <Link className='capitalize whitespace-nowrap' to={`/products/${categorie?.id}`}>
+                    <DropdownMenuItem>
+                      {categorie?.attributes.title}
+                    </DropdownMenuItem>
+                  </Link>
+                ))
+              }
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Link className='text-md ' to=''>A propos</Link>
+          <Link className='text-md ' to=''>Contact</Link>
         </div>
 
         {/* RIGHT */}
@@ -80,12 +83,82 @@ export default function Navbar() {
         <div className='flex items-center gap-4'>
 
           <div className='flex items-center gap-4'>
+
             <AiOutlineSearch size={20} className='text-gray-600' />
-            <CiUser size={20} className='text-gray-600' />
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                {
+                  user ?
+                    <p className='flex justify-center items-center gap-2'>
+                      <CiUser size={20} className='text-gray-600' />
+                      <span className='text-md'> {user?.user?.username} </span>
+                    </p> :
+                    <CiUser size={20} className='text-gray-600' />
+                }
+              </DropdownMenuTrigger>
+
+              {
+                user ?
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <p className='flex justify-center items-center gap-1'>
+                        <IoIosInformationCircle size={15} className='text-gray-600' />
+                        <span className='text-md'> Informations </span>
+                      </p>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem>
+                      <p className='flex justify-center items-center gap-1'>
+                        <MdLocationOn size={15} className='text-gray-600' />
+                        <span className='text-md'> Adress </span>
+                      </p>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem>
+                      <p className='flex justify-center items-center gap-1'>
+                        <MdDateRange size={15} className='text-gray-600' />
+                        <span className='text-md'> Commandes </span>
+                      </p>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem>
+                      <p className='flex justify-center items-center gap-1'>
+                        <BiSolidLogOut size={15} className='text-gray-600' />
+                        <span className='text-md'> Se decconecter </span>
+                      </p>
+                      </DropdownMenuItem>
+
+                  </DropdownMenuContent> :
+
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <Link to='/login'>
+                      <DropdownMenuItem>Se connecter</DropdownMenuItem>
+                    </Link>
+
+                  </DropdownMenuContent>
+
+              }
+
+            </DropdownMenu>
+
+            {/* <CiUser size={20} className='text-gray-600' /> */}
             <BsHeart size={20} className='text-gray-600' />
 
             <div className='relative'>
-              <PiShoppingCartLight size={20} className='text-gray-600' onClick={() => setShowCart(true)} />
+              <DropdownMenu>
+                <DropdownMenuTrigger className='text-sm'>
+                  <PiShoppingCartLight size={20} className='text-gray-600' />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className='p-5'>
+                  <DropdownMenuLabel className='text-xl'>Mon Panier</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <Cart />
+                </DropdownMenuContent>
+              </DropdownMenu>
               {products.length !== 0 &&
                 <span className='w-[20px] h-[20px] flex justify-center items-center rounded-full absolute top-[-10px] right-[-10px] bg-primaryColor text-sm text-white '>{products.length} </span>
               }
@@ -96,7 +169,7 @@ export default function Navbar() {
 
 
       </div>
-      {showCart && <Cart />}
+
     </div>
   )
 }

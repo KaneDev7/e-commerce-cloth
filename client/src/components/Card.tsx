@@ -7,7 +7,6 @@ type TypeProps = { product: ProductType }
 
 export default function Card({ product }: TypeProps) {
 
-    console.log(product?.attributes.title)
     const navigate = useNavigate()
     const img2Ref = useRef<HTMLImageElement | null>(null)
     const imgUrl = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img?.data[0]?.attributes?.url
@@ -28,12 +27,12 @@ export default function Card({ product }: TypeProps) {
 
 
     return (
-        <motion.div className={`relative duration-500 card `}
+        <motion.div className={`relative  duration-500 card bg-white  shadow-md`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
             {/* <Link to={`/product/${product.id}`}> */}
-            <img onClick={() => navigate(`/product/${product.id}`)} src={imgUrl} alt="" className="w-full h-[400px] object-cover" />
+            <img onClick={() => navigate(`/product/${product.id}`)} src={imgUrl} alt="" className="w-full h-[350px] object-cover" />
             {/* </Link> */}
             {
                 product?.attributes?.img2?.data?.attributes?.url &&
@@ -41,13 +40,18 @@ export default function Card({ product }: TypeProps) {
 
                 <img onClick={() => navigate(`/product/${product.id}`)} src={imgUrl2} alt=""
                     ref={img2Ref}
-                    className="w-full h-[400px] object-cover absolute inset-0 z-[-1] "
+                    className="w-full h-[350px] object-cover absolute inset-0 z-[-1] "
                 />
                 // </Link>
 
             }
-            <div className="mt-3 flex justify-between items-center">
-                <h2 className="text-md text-black/80 font-bold capitalize"> {product?.attributes.title}</h2>
+            <div className="flex justify-between items-center  p-4">
+                <h2 title={product?.attributes.title} className="text-sm text-black/80 font-bold capitalize"> 
+                {product?.attributes.title.length > 20 ?
+                product?.attributes.title.substring(0,20) + '...' :
+                product?.attributes.title
+                }
+                </h2>
                 <div>
                     <span className="text-black/70 text-md  line-through mr-2 "> $ {product?.attributes.oldPrice || product?.attributes.price + 20} </span>
                     <span className="text-md font-bold text-black/90 "> $ {product?.attributes.price} </span>
@@ -55,7 +59,7 @@ export default function Card({ product }: TypeProps) {
             </div>
             {
                 product?.attributes.isNew &&
-                <p className=" px-2 bg-white text-sm text-blue-700 absolute top-2 left-2 z-10">New Season</p>
+                <p className=" px-2 text-sm bg-primaryColor text-white absolute top-2 left-2 z-10">New Season</p>
             }
         </motion.div>
     )

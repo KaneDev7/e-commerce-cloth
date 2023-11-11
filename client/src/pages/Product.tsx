@@ -9,6 +9,10 @@ import { addItem } from '../redux/cartSlice'
 import { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
 
+// shaadcdn 
+import { Button } from "@/components/ui/button"
+
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
@@ -170,15 +174,13 @@ export default function Product() {
           {/* BLOCK */}
           <div className='flex items-center flex-wrap gap-10 product_detaitl_text_block'>
 
-            <button
-              className=' w-fit flex justify-center items-center gap-4 py-3 px-10 bg-primaryColor hover:bg-primaryColorActif'
-              onClick={() => handleAddProductToCart()}
-            >
-              <BiCartAdd color='white' size={30} />
-              <span className='text-white ml-2 text-[1px6] '>AJOUTER AU PANIER </span>
-            </button>
+            <Button onClick={() => handleAddProductToCart()} className='bg-primaryColor/95 hover:bg-primaryColor'>
+              <BiCartAdd color='white' size={20} className="mr-3" />
+              Ajouter au panier
+            </Button>
+
           </div>
-          <Assurance/>
+          <Assurance />
         </div>
       </div>
       <Recommandation categories={product?.attributes?.categories?.data} />

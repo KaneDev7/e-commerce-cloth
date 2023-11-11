@@ -6,7 +6,7 @@ import { AiOutlineTwitter, AiOutlineGoogle } from 'react-icons/ai'
 export default function Footer() {
   return (
     <div className='mt-20'>
-      <div className='flex flex-col bg-grayA '>
+      <div className='flex flex-col bg-white '>
 
         {/* TOP */}
         {/* <div className='bg-primaryColor flex justify-center items-center ' >
