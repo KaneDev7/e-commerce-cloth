@@ -33,7 +33,7 @@ export default function Register() {
     const navigate = useNavigate()
 
     const {
-        register,
+        register, 
         handleSubmit,
         watch,
         formState: { errors },
@@ -102,7 +102,6 @@ export default function Register() {
                         <Label htmlFor="password" className="text-sm font-bold">Mot de passe</Label>
                         <Input type="password" id="password" placeholder="Mot de pass"
                             className={`${errors.password && 'border-red-400 border'} `}
-
                             {...register("password", { required: true })} />
                     </div>
                     <div className={`text-red-400 text-sm mt-3 `} >

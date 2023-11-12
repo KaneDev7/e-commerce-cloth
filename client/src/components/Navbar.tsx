@@ -35,8 +35,15 @@ export default function Navbar() {
   const [subCatStatus, setSubCatStatus] = useState('hidden')
   const navigate = useNavigate()
   const products = useSelector(state => state.cart.products)
-  const { user } = useContext(UserContext)
+  const { user , setUser } = useContext(UserContext)
 
+
+  const handleLogOut = () =>{
+    setUser(null)
+    sessionStorage.removeItem('user')
+    navigate('/login')
+
+  }
   return (
     <div className='relative px-5 bg-white shadow-sm'>
       {showMenuMobile && <NavBarMobile />}
@@ -91,7 +98,7 @@ export default function Navbar() {
                   user ?
                     <p className='flex justify-center items-center gap-2'>
                       <CiUser size={20} className='text-gray-600' />
-                      <span className='text-md'> {user?.user?.username} </span>
+                      <span className='text-md capitalize'> {user?.user?.username} </span>
                     </p> :
                     <CiUser size={20} className='text-gray-600' />
                 }
@@ -123,7 +130,7 @@ export default function Navbar() {
                       </p>
                       </DropdownMenuItem>
 
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleLogOut}>
                       <p className='flex justify-center items-center gap-1'>
                         <BiSolidLogOut size={15} className='text-gray-600' />
                         <span className='text-md'> Se decconecter </span>
