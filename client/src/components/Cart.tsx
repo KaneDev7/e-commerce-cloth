@@ -75,15 +75,12 @@ export default function cart() {
         </div>
 
         <Link to='/panier'>
-          <DropdownMenuItem>
-            <Button className='bg-green-700 hover:bg-green-800'>
+          <DropdownMenuItem className=''>
+            <Button className='w-full bg-green-700 hover:bg-green-800'>
               COMMANDER
             </Button>
           </DropdownMenuItem>
         </Link>
-
-
-
 
         <p className='text-red-400 text-sm cursor-pointer' onClick={() => dispatch(reset())}>Reset Cart</p>
       </div>

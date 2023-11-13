@@ -60,7 +60,6 @@ export default function Product() {
 
 
   const handleAddProductToCart = () => {
-    console.log(user)
     if (!user) {
       return navigate('/login')
     }
@@ -114,7 +113,7 @@ export default function Product() {
                 images?.map(image => (
                   <SwiperSlide>
                     <div className='swiper-zoom-container'>
-                      <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full h-auto aspect-square  object-contain ' />
+                      <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full h-auto aspect-square object-contain cursor-zoom-in ' />
                     </div>
                   </SwiperSlide>
                 ))

@@ -70,7 +70,7 @@ export default function Navbar() {
 
         {/* CENTER */}
 
-        <div className='lg:flex items-center gap-4 hidden  '>
+        <div className='lg:flex items-center gap-4 hidden font-medium '>
 
           <Link to='/' className='text-md '>Accueil</Link>
           <DropdownMenu>

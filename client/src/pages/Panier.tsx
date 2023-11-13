@@ -1,6 +1,7 @@
 import Assurance from '@/components/Assurance'
 import { Button } from '@/components/ui/button'
 import { UserContext } from '@/context/UserContext'
+import { getCommandFromClient } from '@/lib/nodeMailer/getCommand'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { MdDelete } from 'react-icons/md'
 import { useSelector } from 'react-redux'
@@ -26,8 +27,8 @@ export default function Panier() {
             },
             commande: [...cart]
         }
-
-        console.log(commandesDetail)
+        getCommandFromClient(commandesDetail)
+    
     }
 
     useEffect(() => {
