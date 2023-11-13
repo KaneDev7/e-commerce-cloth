@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { ProductType } from "../pages/home/container/FeatureProducts";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import ProductLoad from "./ProductLoad";
 
 type TypeProps = { product: ProductType }
 
@@ -25,24 +26,21 @@ export default function Card({ product }: TypeProps) {
         }
     }
 
+  
 
     return (
         <motion.div className={`relative  duration-500 card bg-white  shadow-md`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
-            {/* <Link to={`/product/${product.id}`}> */}
             <img onClick={() => navigate(`/product/${product.id}`)} src={imgUrl} alt="" className="w-full h-[350px] object-cover" />
-            {/* </Link> */}
             {
                 product?.attributes?.img2?.data?.attributes?.url &&
-                // <Link to={`/product/${product.id}`} >
 
                 <img onClick={() => navigate(`/product/${product.id}`)} src={imgUrl2} alt=""
                     ref={img2Ref}
                     className="w-full h-[350px] object-cover absolute inset-0 z-[-1] "
                 />
-                // </Link>
 
             }
             <div className="flex justify-between items-center  p-4">

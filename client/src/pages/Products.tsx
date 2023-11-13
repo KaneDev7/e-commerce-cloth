@@ -14,6 +14,7 @@ import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../
 import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../redux/CustomeFilterSlice";
 import { colorCode } from "../helpers/colorsCode";
 import { Button } from "@/components/ui/button";
+import ProductLoad from "@/components/ProductLoad";
 //import { products } from "./home/container/FeatureProducts";
 
 export default function Products() {
@@ -96,6 +97,11 @@ export default function Products() {
     dispatch(resetSelectedFilter())
   }, [])
 
+  if (isLoadingCat || isColorsLoading || isSizeLoading || isSubCategoriesLoading) {
+    return <div className='flex justify-center items-center h-[500px] mt[100px] '>
+      <ProductLoad   />
+    </div>
+  }
   return (
     <div className="w-full globalWidth mt-20  ">
       <div className="w-full flex gap-10 ">

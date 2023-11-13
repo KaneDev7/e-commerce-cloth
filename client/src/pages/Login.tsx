@@ -64,7 +64,7 @@ export default function Login() {
 
   return (
     <div className='globalWidth  flex justify-center items-center '>
-      <div className='w-[300px]  bg-white shadow-md px-7 py-10 mt-20' >
+      <div className=' bg-white shadow-md px-7 py-10 mt-20' >
         <h1 className="font-bold">CONNECTEZ-VOUS À VOTRE COMPTE</h1>
 
         {

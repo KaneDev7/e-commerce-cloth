@@ -65,6 +65,7 @@ export default function Product() {
       return navigate('/login')
     }
     dispatch(addItem({
+      username : user.user.username,
       id: product.id,
       title: product?.attributes?.title,
       desc: product?.attributes?.desc,
@@ -83,7 +84,7 @@ export default function Product() {
 
   useEffect(() => {
     window.scroll(0, 0)
-  }, [])
+  }, [id])
 
   if (isLoading) {
     return <div className='w-screen h-screen flex justify-center items-center'>

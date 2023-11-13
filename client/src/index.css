@@ -83,7 +83,8 @@
 }
 
 *{
-font-family: 'Roboto Condensed'  ;
+font-family: 'Roboto' sans-serif  ;
+
 }
 
 body{
@@ -94,11 +95,15 @@ background: var(--backgroundBody);
 background: var(--backgroundBody);
 }
 
-
 .globalWidth{
   max-width: var(--globalWidth);
   margin-right: auto;
   margin-left: auto;
+}
+
+.title{
+  font-size: 25px;
+  font-weight: bold;
 }
 
 .cart{

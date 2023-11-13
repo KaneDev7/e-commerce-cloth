@@ -8,7 +8,7 @@ import { CiUser } from 'react-icons/ci'
 import { BsHeart } from 'react-icons/bs'
 import { PiShoppingCartLight } from 'react-icons/pi'
 import { AiOutlineMenu } from 'react-icons/ai'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import Cart from './Cart'
@@ -34,16 +34,27 @@ export default function Navbar() {
   const { showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
   const [subCatStatus, setSubCatStatus] = useState('hidden')
   const navigate = useNavigate()
-  const products = useSelector(state => state.cart.products)
   const { user , setUser } = useContext(UserContext)
+  const [cart, setCart] = useState([])
+
+ const  products = useSelector(state => state.cart.products)
 
 
   const handleLogOut = () =>{
     setUser(null)
     sessionStorage.removeItem('user')
     navigate('/login')
-
   }
+
+  // console.log(products,user.user.username )
+  useEffect(()=>{
+    if(user){
+      const filterCart = products.filter(item => item.username === user.user.username)
+      setCart(filterCart)
+    }
+    
+  },[products, user] )
+
   return (
     <div className='relative px-5 bg-white shadow-sm'>
       {showMenuMobile && <NavBarMobile />}
@@ -166,8 +177,8 @@ export default function Navbar() {
                   <Cart />
                 </DropdownMenuContent>
               </DropdownMenu>
-              {products.length !== 0 &&
-                <span className='w-[20px] h-[20px] flex justify-center items-center rounded-full absolute top-[-10px] right-[-10px] bg-primaryColor text-sm text-white '>{products.length} </span>
+              {(cart.length !== 0 && user ) &&
+                <span className='w-[20px] h-[20px] flex justify-center items-center rounded-full absolute top-[-10px] right-[-10px] bg-primaryColor text-sm text-white '>{cart.length} </span>
               }
             </div>
           </div>

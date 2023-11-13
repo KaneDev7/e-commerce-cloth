@@ -15,6 +15,7 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
+import ProductLoad from './ProductLoad';
 
 export default function Recommandation({ categories }) {
     const { id } = useParams()
@@ -32,6 +33,12 @@ export default function Recommandation({ categories }) {
         setProducts(newProducts)
     }, [data])
 
+
+    if (isLoading) {
+        return <div className='flex justify-center items-center h-[500px] mt[100px] '>
+          <ProductLoad />
+        </div>
+      }
     return (
         <div className="flex  my-[5rem] globalWidth">
 

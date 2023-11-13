@@ -18,20 +18,23 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from './ui/button'
 import { BiCartAdd } from 'react-icons/bi'
+import { Link, useNavigate } from 'react-router-dom'
+import { UserContext } from '@/context/UserContext'
 
 
 type ContextType = {
   setShowCart: React.Dispatch<React.SetStateAction<Boolean>>
 }
 export default function cart() {
-  const { setShowCart } = useContext(GlobalContext)
-  const products = useSelector(state => state.cart.products)
+  const { user } = useContext(UserContext)
+  const products = useSelector(state => state.cart.products.filter(item => item.username === user.user.username))
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   const totalPrice = () => {
     let total = 0
     return products.reduce((acc, item) => acc += (item.price * item.quantity), 0).toFixed(2)
   }
+
 
   const image = "https://images.pexels.com/photos/6311251/pexels-photo-6311251.jpeg?auto=compress&cs=tinysrgb&w=1600"
   return (
@@ -54,6 +57,7 @@ export default function cart() {
               </div>
             </div>
 
+
             <button className=''>
               <MdDelete className='text-red-500 hover:text-red-600' size={18} onClick={() => dispatch(removeItem(item.id))} />
             </button>
@@ -70,9 +74,16 @@ export default function cart() {
           <p>$ {totalPrice()} </p>
         </div>
 
-        <Button className='bg-green-700 hover:bg-green-800'>
-          PASSER LA COMMANDE
-        </Button>
+        <Link to='/panier'>
+          <DropdownMenuItem>
+            <Button className='bg-green-700 hover:bg-green-800'>
+              COMMANDER
+            </Button>
+          </DropdownMenuItem>
+        </Link>
+
+
+
 
         <p className='text-red-400 text-sm cursor-pointer' onClick={() => dispatch(reset())}>Reset Cart</p>
       </div>

@@ -66,7 +66,7 @@ export default function Register() {
 
     return (
         <div className='globalWidth flex justify-center items-center '>
-            <div className='w-[350px]  bg-white shadow-md px-7 py-10 mt-20' >
+            <div className=' bg-white shadow-md px-7 py-10 mt-20' >
                 <h1 className="font-bold">VEUILLEZ VOUS INSCRIR</h1>
                 {
                     message && <p className="bg-red-100 text-red-700 text-sm mt-5  p-3"> {message} </p>
