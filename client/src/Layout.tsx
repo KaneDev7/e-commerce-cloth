@@ -4,14 +4,16 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import BreadCrumb from './components/BreadCrumb'
 import { UserContext } from './context/UserContext'
+import { useDispatch } from 'react-redux'
+import { reset } from './redux/cartSlice'
 
 export default function Layout() {
     const [user, setUser] = useState(null)
+    const dispatch = useDispatch()
 
     useEffect(()=> {
     const newUser = JSON.parse(sessionStorage.getItem('user')) || null
     setUser(newUser)
-
     },[])
 
     return (

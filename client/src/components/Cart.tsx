@@ -1,23 +1,14 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { MdDelete } from 'react-icons/md'
-import { AiFillCloseCircle } from 'react-icons/ai'
-import { GlobalContext } from '../context/ContextProvider'
-import LongButton from './LongButton'
 import { useSelector } from 'react-redux'
 import { removeItem, reset } from '../redux/cartSlice'
 import { useDispatch } from 'react-redux'
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from './ui/button'
-import { BiCartAdd } from 'react-icons/bi'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserContext } from '@/context/UserContext'
 
@@ -27,24 +18,27 @@ type ContextType = {
 }
 export default function cart() {
   const { user } = useContext(UserContext)
-  const products = useSelector(state => state.cart.products.filter(item => item.username === user.user.username))
+  const products = useSelector(state => state.cart.products)
+   const [cart, setCart] = useState([])
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
   const totalPrice = () => {
     let total = 0
-    return products.reduce((acc, item) => acc += (item.price * item.quantity), 0).toFixed(2)
+    return cart.reduce((acc, item) => acc += (item.price * item.quantity), 0).toFixed(2)
   }
 
+  useEffect(() => {
+    const filterCart = products.filter(item => item.username.trim() === user.user.username.trim())
+    setCart(filterCart)
 
-  const image = "https://images.pexels.com/photos/6311251/pexels-photo-6311251.jpeg?auto=compress&cs=tinysrgb&w=1600"
+}, [])
+
   return (
     <div className=''>
-      {/* <div className='flex justify-between items-center'>
-        <h1 className='text-2xl text-black/70'>Products in your Cart</h1>
-        <AiFillCloseCircle size={25} className='text-primaryColor hover:text-primaryColorActif' onClick={() => setShowCart(false)} />
-      </div> */}
 
-      {products?.map(item => (
+      {cart?.map(item => (
         <div key={item.id}>
           <div className='flex justify-between mt-5 gap-5 relative'>
             <div className='flex gap-5'>

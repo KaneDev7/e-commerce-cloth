@@ -84,12 +84,12 @@
 }
 
 *{
-font-family: 'Roboto' sans-serif  ;
 
 }
 
 body{
 background: var(--backgroundBody);
+font-family: 'Quicksand', sans-serif;
 }
 
 .backgroundBody{
@@ -102,9 +102,16 @@ background: var(--backgroundBody);
   margin-left: auto;
 }
 
+.primaryTitle{
+  font-size: 30px;
+  font-weight: bold;
+  /* font-family: 'Roboto Condensed', sans-serif !important  ; */
+}
 .title{
   font-size: 25px;
   font-weight: bold;
+  /* font-family: 'Roboto Condensed', sans-serif !important  ; */
+
 }
 
 .cart{
@@ -146,7 +153,6 @@ background: var(--backgroundBody);
 display: grid;
 grid-template-columns: repeat(3, 1fr);
 flex-wrap: wrap;
-gap: 20px;
 }
 .feature{
 grid-template-columns: repeat(4, 1fr);

@@ -11,7 +11,15 @@ import { UserContext } from '../context/UserContext'
 
 // shaadcdn 
 import { Button } from "@/components/ui/button"
-
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -30,48 +38,60 @@ import ProductLoad from '../components/ProductLoad'
 import Recommandation from '../components/Recommandation'
 import Assurance from '../components/Assurance'
 
-// const images = [
-//   "https://images.pexels.com/photos/6311251/pexels-photo-6311251.jpeg?auto=compress&cs=tinysrgb&w=1600",
-//   "https://images.pexels.com/photos/6311252/pexels-photo-6311252.jpeg?auto=compress&cs=tinysrgb&w=1600"
-// ]
+
 
 export default function Product() {
   const [selectedImg, setSelectedImg] = useState('img')
   const selectedFilter = useSelector(state => state.selectedFilter)
   const { user } = useContext(UserContext)
   const [quantity, setQuantity] = useState(1)
+  const [selectSize, setSelectSize] = useState('')
+  const cart = useSelector(state => state.cart.products)
 
   const navigate = useNavigate()
   const { id } = useParams()
   const dispatch = useDispatch()
   const { data: product, isLoading, error } = useFetch(`/products/${id}?populate=*`)
 
-  // const isTailleExist = product?.attributes?.categories?.data?.some(item => item?.attributes?.title === 'sacs & accessoires')
   let imgUrl, imgUrl2, images
 
+  console.log(selectSize)
 
   if (product.length !== 0) {
     console.log(product)
     imgUrl = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img?.data?.attributes?.url
     imgUrl2 = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img2?.data?.attributes?.url
     images = product?.attributes?.img.data
-    // console.log(product?.attributes?.img.data)
   }
-
 
   const handleAddProductToCart = () => {
     if (!user) {
       return navigate('/login')
     }
-    dispatch(addItem({
-      username : user.user.username,
-      id: product.id,
-      title: product?.attributes?.title,
-      desc: product?.attributes?.desc,
-      price: product?.attributes?.price,
-      img: product?.attributes?.img?.data[0]?.attributes?.url,
-      quantity: quantity
-    }))
+    const isArticleInCartOfCurrentUser = cart.some(item => item.id === product.id && user.user.username.trim() === item.username.trim())
+
+    if (!isArticleInCartOfCurrentUser) {
+      dispatch(addItem({
+        username: user.user.username,
+        id: product.id,
+        title: product?.attributes?.title,
+        desc: product?.attributes?.desc,
+        price: product?.attributes?.price,
+        img: product?.attributes?.img?.data[0]?.attributes?.url,
+        quantity: quantity
+      }))
+    } else {
+      dispatch(addItem({
+        id: product.id,
+        username: user.user.username
+      }))
+    }
+
+
+  }
+
+  const handleSelectSizeChange = (event) => {
+    console.log(event)
   }
   const addQuantity = () => {
     setQuantity((prev) => prev + 1)
@@ -129,9 +149,9 @@ export default function Product() {
           {/* BLOCK */}
           <div className='w-full  border-b border-black/10 flex flex-col gap-4 product_detaitl_text_block'>
 
-            <h1 className='text-black/80 font-bold md:text-4xl text-3xl '>  {product?.attributes?.title} </h1>
+            <h1 className='primaryTitle font-bold md:text-4xl text-3xl '>  {product?.attributes?.title} </h1>
 
-            <p className="w-full max-w-[900px] text-black/90 md:text-[15px] text-[15px] text-justify">
+            <p className="w-full max-w-[900px] text-black/70 font-normal text-[14px] text-justify">
               {product?.attributes?.desc}
             </p>
 
@@ -144,19 +164,26 @@ export default function Product() {
           <div className='flex items-center flex-wrap  gap-20 border-b border-black/10 product_detaitl_text_block'>
 
             {/* SIZES */}
-            {product?.attributes?.sizes?.data.length > 0 &&
-              <div className=''>
-                <h1 className='text-[14px] text-black/80 '>Tailles</h1>
-                <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
-                  {product?.attributes?.sizes?.data.map(item => (
-                    <div
-                      className="w-[35px] h-[35px] flex items-center justify-center border  border-black/10 ">
-                      {item?.attributes?.size}
-                    </div>
-                  ))}
-                </div>
+            <div className=''>
+              <h1 className='text-[14px] text-black/80 '>Tailles</h1>
+              <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
+
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Selectionner la taille" />
+                  </SelectTrigger>
+                  <SelectContent >
+                    <SelectGroup >
+                        {product?.attributes?.sizes?.data.map(item => (
+                            <SelectItem value={item?.attributes?.size}  > {item?.attributes?.size} </SelectItem>
+                        ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
-            }
+            </div>
+
+
 
             {/* AJOUT DE QUANTITE */}
             <div>

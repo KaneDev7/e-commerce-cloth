@@ -19,12 +19,16 @@ export const cartSlice = createSlice({
     reducers : {
 
         addItem : (state, action) =>{
-            const item = state.products.find(item => item.id === action.payload.id)
+           const findArticleInCart = state.products.find(item => item.id === action.payload.id && action.payload.username.trim() === item.username.trim())
+    
 
-            if(item){
-                item.quantity+=1
+           if(!findArticleInCart){
+            
+                 state.products.push(action.payload)
             }else{
-                state.products.push(action.payload)
+                const index = state.products.findIndex(item => item.id === action.payload.id && action.payload.username.trim() === item.username.trim())
+                const articleUpdated = {...findArticleInCart, quantity : findArticleInCart.quantity + 1}
+                state.products[index] = articleUpdated
             }
         },
 

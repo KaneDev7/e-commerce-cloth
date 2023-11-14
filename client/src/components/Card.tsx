@@ -43,16 +43,15 @@ export default function Card({ product }: TypeProps) {
                 />
 
             }
-            <div className="flex justify-between items-center  p-4">
-                <h2 title={product?.attributes.title} className="text-sm text-black/80 font-bold capitalize"> 
-                {product?.attributes.title.length > 20 ?
-                product?.attributes.title.substring(0,20) + '...' :
-                product?.attributes.title
-                }
+            <div className="flex flex-col justify-between items-start gap-2 p-4 ">
+                <h2 
+                onClick={() => navigate(`/product/${product.id}`)}
+                 title={product?.attributes.title} className="text-sm text-black/80 font-bold capitalize hover:underline cursor-pointer"> 
+                {product?.attributes.title}
                 </h2>
                 <div>
                     <span className="text-black/70 text-md  line-through mr-2 "> $ {product?.attributes.oldPrice || product?.attributes.price + 20} </span>
-                    <span className="text-md font-bold text-black/90 "> $ {product?.attributes.price} </span>
+                    <span className="text-md font-bold text-black "> $ {product?.attributes.price} </span>
                 </div>
             </div>
             {

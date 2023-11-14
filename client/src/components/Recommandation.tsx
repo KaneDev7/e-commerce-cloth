@@ -46,7 +46,7 @@ export default function Recommandation({ categories }) {
 
                 {
                     products.length > 0 &&
-                    <h1 className="text-2xl   text-black/90 font-bold duration-200"> PRODUITS SIMILAIRES </h1>
+                    <h1 className="title text-black/90 font-bold duration-200"> PRODUITS SIMILAIRES </h1>
 
                 }
 

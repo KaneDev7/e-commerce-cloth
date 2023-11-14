@@ -1,8 +1,8 @@
 import { FiChevronDown } from 'react-icons/fi'
-import {IoIosInformationCircle} from 'react-icons/io'
-import {MdLocationOn, MdDateRange} from 'react-icons/md'
-import {BiSolidLogOut} from 'react-icons/bi'
-import {} from 'react-icons/'
+import { IoIosInformationCircle } from 'react-icons/io'
+import { MdLocationOn, MdDateRange } from 'react-icons/md'
+import { BiSolidLogOut } from 'react-icons/bi'
+import { } from 'react-icons/'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { CiUser } from 'react-icons/ci'
 import { BsHeart } from 'react-icons/bs'
@@ -34,26 +34,27 @@ export default function Navbar() {
   const { showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
   const [subCatStatus, setSubCatStatus] = useState('hidden')
   const navigate = useNavigate()
-  const { user , setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const [cart, setCart] = useState([])
 
- const  products = useSelector(state => state.cart.products)
+  const products = useSelector(state => state.cart.products)
 
 
-  const handleLogOut = () =>{
+  const handleLogOut = () => {
     setUser(null)
     sessionStorage.removeItem('user')
     navigate('/login')
   }
 
   // console.log(products,user.user.username )
-  useEffect(()=>{
-    if(user){
+  useEffect(() => {
+    if (user) {
       const filterCart = products.filter(item => item.username === user.user.username)
       setCart(filterCart)
+
     }
-    
-  },[products, user] )
+
+  }, [products, user])
 
   return (
     <div className='relative px-5 bg-white shadow-sm'>
@@ -105,56 +106,54 @@ export default function Navbar() {
             <AiOutlineSearch size={20} className='text-gray-600' />
             <DropdownMenu>
               <DropdownMenuTrigger>
-                {
-                  user ?
-                    <p className='flex justify-center items-center gap-2'>
-                      <CiUser size={20} className='text-gray-600' />
-                      <span className='text-md capitalize'> {user?.user?.username} </span>
-                    </p> :
-                    <CiUser size={20} className='text-gray-600' />
-                }
+                <CiUser size={20} className='text-gray-600' />
               </DropdownMenuTrigger>
 
               {
                 user ?
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
+                    <DropdownMenuLabel className='text-center'>
+                      {user.user.username}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                       <p className='flex justify-center items-center gap-1'>
                         <IoIosInformationCircle size={15} className='text-gray-600' />
                         <span className='text-md'> Informations </span>
                       </p>
-                      </DropdownMenuItem>
+                    </DropdownMenuItem>
 
-                      <DropdownMenuItem>
+                    <DropdownMenuItem>
                       <p className='flex justify-center items-center gap-1'>
                         <MdLocationOn size={15} className='text-gray-600' />
                         <span className='text-md'> Adress </span>
                       </p>
-                      </DropdownMenuItem>
+                    </DropdownMenuItem>
 
-                      <DropdownMenuItem>
+                    <DropdownMenuItem>
                       <p className='flex justify-center items-center gap-1'>
                         <MdDateRange size={15} className='text-gray-600' />
                         <span className='text-md'> Commandes </span>
                       </p>
-                      </DropdownMenuItem>
+                    </DropdownMenuItem>
 
-                      <DropdownMenuItem onClick={handleLogOut}>
+                    <DropdownMenuItem onClick={handleLogOut}>
                       <p className='flex justify-center items-center gap-1'>
                         <BiSolidLogOut size={15} className='text-gray-600' />
                         <span className='text-md'> Se decconecter </span>
                       </p>
-                      </DropdownMenuItem>
+                    </DropdownMenuItem>
 
                   </DropdownMenuContent> :
 
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+
                     <Link to='/login'>
                       <DropdownMenuItem>Se connecter</DropdownMenuItem>
+                    </Link>
+
+                    <Link to='/register'>
+                      <DropdownMenuItem>S'inscrire</DropdownMenuItem>
                     </Link>
 
                   </DropdownMenuContent>
@@ -165,22 +164,27 @@ export default function Navbar() {
 
             {/* <CiUser size={20} className='text-gray-600' /> */}
             <BsHeart size={20} className='text-gray-600' />
+            {
+              !user ?
+                <PiShoppingCartLight onClick={() => !user && navigate('/login')} size={20} className='text-gray-600' /> :
+                <div className='relative'>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className='text-sm'>
+                      <PiShoppingCartLight size={20} className='text-gray-600' />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className='p-5'>
+                      <DropdownMenuLabel className='text-xl'>Mon Panier</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <Cart />
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  {(cart.length !== 0 && user) &&
+                    <span className='w-[20px] h-[20px] flex justify-center items-center rounded-full absolute top-[-10px] right-[-10px] bg-primaryColor text-sm text-white '>{cart.length} </span>
+                  }
+                </div>
+            }
 
-            <div className='relative'>
-              <DropdownMenu>
-                <DropdownMenuTrigger className='text-sm'>
-                  <PiShoppingCartLight size={20} className='text-gray-600' />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className='p-5'>
-                  <DropdownMenuLabel className='text-xl'>Mon Panier</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <Cart />
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {(cart.length !== 0 && user ) &&
-                <span className='w-[20px] h-[20px] flex justify-center items-center rounded-full absolute top-[-10px] right-[-10px] bg-primaryColor text-sm text-white '>{cart.length} </span>
-              }
-            </div>
+
           </div>
           <AiOutlineMenu onClick={() => setShowMenuMobile(true)} size={25} className='lg:hidden block' />
         </div>

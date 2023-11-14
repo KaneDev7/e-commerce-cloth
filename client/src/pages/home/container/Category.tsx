@@ -8,7 +8,7 @@ export default function Category() {
     const navigate = useNavigate()
 
     return (
-        <section className='px-10 my-40 globalWidth'>
+        <section className='my-30 globalWidth bg-primaryColor'>
             <div className='w-full  grid category'>
                 {
                     categories.map((categorie, index) => (
@@ -19,7 +19,7 @@ export default function Category() {
                             {/* <Link to={`/products/${categorie.id}`}> */}
                                 <button
                                 onClick={()=> navigate(`/products/${categorie.id}`) }
-                                 className='min-w-[100px] w-fit h-[40px]  px-2 text-white font-normal bg-primaryColor hover:bg-primaryColorActif hover:text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-sm '>
+                                 className='min-w-[100px] w-fit h-[40px]  px-2 text-primaryColor font-bold bg-white shadow-md  hover:bg-primaryColor hover:text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-sm '>
                                     {categorie?.attributes.title}
                                 </button>
                             {/* </Link> */}

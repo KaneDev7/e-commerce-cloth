@@ -2,22 +2,20 @@ import Assurance from '@/components/Assurance'
 import { Button } from '@/components/ui/button'
 import { UserContext } from '@/context/UserContext'
 import { getCommandFromClient } from '@/lib/nodeMailer/getCommand'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import {useContext, useEffect, useState } from 'react'
 import { MdDelete } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 export default function Panier() {
+    
     const { user } = useContext(UserContext)
-
+    const navigate = useNavigate()
     const products = useSelector(state => state.cart.products)
+    const [cart, setCart] = useState([])
     const [allArticles, setAllArticle] = useState(0)
     const [total, setTotal] = useState(0)
-    const [cart, setCart] = useState([])
-    const navigate = useNavigate()
 
-    console.log('allArticles', allArticles)
-    console.log('total', total)
 
     const commande = () => {
         const commandesDetail = {
@@ -28,22 +26,22 @@ export default function Panier() {
             commande: [...cart]
         }
         getCommandFromClient(commandesDetail)
-    
+
     }
+
 
     useEffect(() => {
         const totalQuantity = cart.reduce((acc, item) => {
             return acc += item.quantity
         }, 0)
-
         setAllArticle(totalQuantity)
     }, [cart])
+
 
     useEffect(() => {
         const totalPrice = cart.reduce((acc, item) => {
             return acc += item.price
         }, 0)
-
         setTotal(totalPrice)
     }, [cart])
 
@@ -53,8 +51,13 @@ export default function Panier() {
             const filterCart = products.filter(item => item.username === user.user.username)
             setCart(filterCart)
         }
+    }, [user, products])
 
-    }, [products, user])
+
+    if (!user) {
+        return navigate('/login')
+    }
+
 
     return (
         <div className='globalWidth my-20 '>
