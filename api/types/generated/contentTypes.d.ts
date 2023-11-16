@@ -751,6 +751,68 @@ export interface ApiColorColor extends Schema.CollectionType {
   };
 }
 
+export interface ApiNavAccessoireNavAccessoire extends Schema.CollectionType {
+  collectionName: 'nav_accessoires';
+  info: {
+    singularName: 'nav-accessoire';
+    pluralName: 'nav-accessoires';
+    displayName: 'nav_accessoire';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    categorieId: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::nav-accessoire.nav-accessoire',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::nav-accessoire.nav-accessoire',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiNavChaussureNavChaussure extends Schema.CollectionType {
+  collectionName: 'nav_chaussures';
+  info: {
+    singularName: 'nav-chaussure';
+    pluralName: 'nav-chaussures';
+    displayName: 'nav_chaussure';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    route: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::nav-chaussure.nav-chaussure',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::nav-chaussure.nav-chaussure',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Schema.CollectionType {
   collectionName: 'products';
   info: {
@@ -871,6 +933,30 @@ export interface ApiSubCategorySubCategory extends Schema.CollectionType {
   };
 }
 
+export interface ApiTypeType extends Schema.CollectionType {
+  collectionName: 'types';
+  info: {
+    singularName: 'type';
+    pluralName: 'types';
+    displayName: 'nav_vetement';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    categorieId: Attribute.String & Attribute.DefaultTo<'/'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::type.type', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::type.type', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -889,9 +975,12 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::category.category': ApiCategoryCategory;
       'api::color.color': ApiColorColor;
+      'api::nav-accessoire.nav-accessoire': ApiNavAccessoireNavAccessoire;
+      'api::nav-chaussure.nav-chaussure': ApiNavChaussureNavChaussure;
       'api::product.product': ApiProductProduct;
       'api::size.size': ApiSizeSize;
       'api::sub-category.sub-category': ApiSubCategorySubCategory;
+      'api::type.type': ApiTypeType;
     }
   }
 }

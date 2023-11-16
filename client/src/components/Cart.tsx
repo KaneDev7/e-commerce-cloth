@@ -24,6 +24,8 @@ export default function cart() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  console.log(cart)
+  
   const totalPrice = () => {
     let total = 0
     return cart.reduce((acc, item) => acc += (item.price * item.quantity), 0).toFixed(2)

@@ -2,13 +2,14 @@ import Assurance from '@/components/Assurance'
 import { Button } from '@/components/ui/button'
 import { UserContext } from '@/context/UserContext'
 import { getCommandFromClient } from '@/lib/nodeMailer/getCommand'
-import {useContext, useEffect, useState } from 'react'
+import { it } from 'node:test'
+import { useContext, useEffect, useState } from 'react'
 import { MdDelete } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 export default function Panier() {
-    
+
     const { user } = useContext(UserContext)
     const navigate = useNavigate()
     const products = useSelector(state => state.cart.products)
@@ -78,11 +79,17 @@ export default function Panier() {
                                 <div className='w-[300px]  flex gap-5 '>
                                     <img src={import.meta.env.VITE_API_UPLOAD + item.img} alt="" className='w-[80px] h-[80px] object-cover' />
 
-                                    <div className='flex flex-col gap-2 '>
+                                    <div className='flex flex-col  '>
                                         <h1 onClick={() => navigate(`/product/${item.id}`)} className=' text-black text-[16px] hover:underline cursor-pointer'>{item.title} </h1>
                                         {/* <p className='text-sm text-black/60'>{item.desc.substring(0,50)}...  </p> */}
                                         <p className='text-primaryColor text-md font-bold'> $ {item.price} </p>
+                                        <div className='flex'>
+                                        {item.size.map((size, i) => (
+                                           <p className='text-sm'> { size} {i !== item.size.length - 1 && ','} </p>
+                                        ))}
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 {/* AJOUT DE QUANTITE */}

@@ -19,6 +19,7 @@ export default function Layout() {
     return (
         <UserContext.Provider value={{user , setUser}}>
             <Navbar />
+            <BreadCrumb/>
             <div className='py-0 px-5 '>
                 <Outlet />
             </div>

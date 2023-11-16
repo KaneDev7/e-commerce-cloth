@@ -15,7 +15,13 @@ import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../red
 import { colorCode } from "../helpers/colorsCode";
 import { Button } from "@/components/ui/button";
 import ProductLoad from "@/components/ProductLoad";
-//import { products } from "./home/container/FeatureProducts";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 export default function Products() {
 
@@ -119,7 +125,7 @@ export default function Products() {
         {
           showFilter &&
           <motion.div initial={{ x: -500, opacity: .2 }} animate={{ x: 0, opacity: 1 }}
-            className="h-full  lg:sticky pt-5 lg:translate-x-[0] translate-x-[-500px] fixed top-[10px] 
+            className="h-full  lg:sticky pt-5 lg:translate-x-[0] translate-x-[-500px] fixed lg:top-[10px] top-0
             left-0 lg:left-5 px-10 z-20 w-[80vw] lg:w-[500px] bg-white border-r">
             {
               showClosefilterBtn &&
@@ -127,108 +133,125 @@ export default function Products() {
                 onClick={() => setShowFilter(false)} />
             }
 
+            {/* FILTRER */}
 
-            {/* FILTER BY SIZE */}
-            {
-              categorie?.attributes?.title !== 'sacs & accessoires' &&
-              <div className="mb-10">
-                <h1 className="text-black/80 mb-4 filterTitle">Filtrer par taille</h1>
-
-                <div className="flex flex-wrap gap-5 cursor-pointer">
-                  {sizes?.map(item => (
-                    <div
-                      style={{
-                        background: selectedFilter.includes(item?.attributes?.size) && '#001355',
-                        color: selectedFilter.includes(item?.attributes?.size) && '#fff'
-
-                      }}
-                      onClick={() => handleAddFilter({
-                        id: item.id,
-                        type: 'sizes',
-                        field: 'size',
-                        value: item?.attributes?.size
-                      })}
-                      className="w-[40px] h-[40px] flex items-center justify-center border hover:bg-primaryColor hover:text-white border-black/10 ">
-                      {item?.attributes?.size}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            }
-
-
-
-            {/* FILTER BY COLOR */}
             <div className="mb-10">
-              <h1 className="text-black/80 mb-4 filterTitle">Filtrer par couleur</h1>
+              <h1 className="text-primaryColor font-bold">Filtrer par</h1>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>Couleurs</AccordionTrigger>
+                  <AccordionContent>
+                    <div
+                      className="flex flex-wrap gap-2 bg-white cursor-pointer">
+                      {colors?.map(item => (
+                        <div
+                          style={{
+                            opacity: selectedFilter.includes(item?.attributes?.color) && '1'
+                          }}
+                          onClick={() => handleAddFilter({
+                            id: item.id,
+                            type: 'colors',
+                            field: 'color',
+                            value: item?.attributes?.color
+                          })}
+                          className="w-fit flex items-center gap-2 border p-2  opacity-50 hover:opacity-100"
+                        >
+                          <div
+                            style={{
+                              background: colorCode[item?.attributes?.color],
+                            }}
+                            className={`w-[20px] h-[20px] flex items-center justify-center border 
+                            border-black/30 rounded-full`} >
+                          </div>
+                          <p> {item?.attributes?.color} </p>
 
-              <div className="flex flex-wrap gap-2">
-                {colors?.map(item => (
-                  <div
-                    style={{
-                      background: colorCode[item?.attributes?.color],
-                      opacity: selectedFilter.includes(item?.attributes?.color) && '1'
+                        </div>
 
-                    }}
-                    onClick={() => handleAddFilter({
-                      id: item.id,
-                      type: 'colors',
-                      field: 'color',
-                      value: item?.attributes?.color
-                    })}
-                    className={`w-[25px] h-[25px] flex items-center justify-center border opacity-50 hover:opacity-100 border-black/30 rounded-full`} >
-                  </div>
-                ))}
-              </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+
+                </AccordionItem>
+                {
+                  categorie?.attributes?.title !== 'sacs & accessoires' &&
+                  <>
+                    <AccordionItem value="item-2">
+                      <AccordionTrigger>Tailles</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="mb-10">
+
+                          <div className="flex flex-wrap gap-5 cursor-pointer">
+                            {sizes?.map(item => (
+                              <div
+                                style={{
+                                  background: selectedFilter.includes(item?.attributes?.size) && '#001355',
+                                  color: selectedFilter.includes(item?.attributes?.size) && '#fff'
+
+                                }}
+                                onClick={() => handleAddFilter({
+                                  id: item.id,
+                                  type: 'sizes',
+                                  field: 'size',
+                                  value: item?.attributes?.size
+                                })}
+                                className="w-[35px] h-[35px] flex items-center justify-center border hover:bg-primaryColor hover:text-white border-black/10 ">
+                                {item?.attributes?.size}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="item-3">
+                      <AccordionTrigger>Types</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="mb-10">
+                          <div className="flex flex-wrap gap-5 cursor-pointer">
+                            {subCategories?.map(item => (
+                              <div
+                                onClick={() => handleAddFilter({
+                                  id: item.id,
+                                  type: 'sub_categories',
+                                  field: 'subCategory',
+                                  value: item?.attributes?.subCategory
+                                })}
+                                className="flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-black/75 text-[14px] py-2 px-4">
+                                {item?.attributes?.subCategory}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </>
+                }
+              </Accordion>
             </div>
 
 
-            {/* FILTER BY SUB CATEGORY */}
 
-            {
-              categorie?.attributes?.title !== 'sacs & accessoires' &&
-
+            {/* TIRER */}
+            <h1 className="text-primaryColor font-bold mb-5">Tirer par</h1>
+ 
               <div className="mb-10">
-                <h1 className="text-black/80 mb-4 filterTitle">Filtrer par sous categorie</h1>
-
-                <div className="flex flex-wrap gap-5 cursor-pointer">
-                  {subCategories?.map(item => (
-                    <div
-                      onClick={() => handleAddFilter({
-                        id: item.id,
-                        type: 'sub_categories',
-                        field: 'subCategory',
-                        value: item?.attributes?.subCategory
-                      })}
-                      className="flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-black/75 text-[15px] py-2 px-4">
-                      {item?.attributes?.subCategory}
-                    </div>
-                  ))}
+                <div className="">
+                  <input type="radio" name="price" id="lowPrice" onChange={() => setSort('asc')} />
+                  <label htmlFor="lowPrice" className="ml-2">Prix ​​(inférieur d'abord)</label>
                 </div>
+
+                <div className="">
+                  <input type="radio" name="price" id="highestPrice" onChange={() => setSort('desc')} />
+                  <label htmlFor="highestPrice" className="ml-2">Prix ​​(superieur d'abord)</label>
+                </div>
+
+                <Button
+                  onClick={updateFilter}
+                  className='bg-primaryColor/95 hover:bg-primaryColor mt-5'>
+                  Appliquer le filtre
+                </Button>
               </div>
 
-            }
-
-
-
-            <div className="mb-10">
-              <h1 className="text-black/80  mb-4 filterTitle">Trier par</h1>
-              <div className="">
-                <input type="radio" name="price" id="lowPrice" onChange={() => setSort('asc')} />
-                <label htmlFor="lowPrice" className="ml-2">Prix ​​(inférieur d'abord)</label>
-              </div>
-
-              <div className="">
-                <input type="radio" name="price" id="highestPrice" onChange={() => setSort('desc')} />
-                <label htmlFor="highestPrice" className="ml-2">Prix ​​(superieur d'abord)</label>
-              </div>
-
-              <Button
-                onClick={updateFilter}
-                className='bg-primaryColor/95 hover:bg-primaryColor mt-5'>
-                Appliquer le filtre
-              </Button>
-            </div>
 
           </motion.div>
         }
@@ -266,8 +289,7 @@ export default function Products() {
                     onClick={() => handleDeleteFilter(item.id, item.value)} />
                 </div>
               ))}
-
-
+              
               <button
                 onClick={handleResetFilter}
                 className="text-sm text-red-600 hover:underline">Effacer les filtres</button>

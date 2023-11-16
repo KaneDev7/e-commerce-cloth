@@ -68,30 +68,37 @@ export default function Product() {
     if (!user) {
       return navigate('/login')
     }
-    const isArticleInCartOfCurrentUser = cart.some(item => item.id === product.id && user.user.username.trim() === item.username.trim())
+    const isArticleInCartOfCurrentUser = cart.find(item => item.id === product.id && user.user.username.trim() === item.username.trim())
 
     if (!isArticleInCartOfCurrentUser) {
-      dispatch(addItem({
+      return dispatch(addItem({
         username: user.user.username,
         id: product.id,
         title: product?.attributes?.title,
         desc: product?.attributes?.desc,
         price: product?.attributes?.price,
         img: product?.attributes?.img?.data[0]?.attributes?.url,
-        quantity: quantity
-      }))
-    } else {
-      dispatch(addItem({
-        id: product.id,
-        username: user.user.username
+        quantity: quantity,
+        size: [selectSize],
+        isNewSize: false
+
       }))
     }
 
+    const isArticleHasSameSize = isArticleInCartOfCurrentUser.size.some(item => item === selectSize)
+    console.log(isArticleHasSameSize)
 
+    dispatch(addItem({
+      id: product.id,
+      username: user.user.username,
+      size: [...isArticleInCartOfCurrentUser.size, selectSize],
+      isNewSize: isArticleHasSameSize
+    }))
+    
   }
 
   const handleSelectSizeChange = (event) => {
-    console.log(event)
+    setSelectSize(event.target.value)
   }
   const addQuantity = () => {
     setQuantity((prev) => prev + 1)
@@ -137,9 +144,7 @@ export default function Product() {
                     </div>
                   </SwiperSlide>
                 ))
-
               }
-
             </Swiper>
           </div>
         </div>
@@ -168,18 +173,15 @@ export default function Product() {
               <h1 className='text-[14px] text-black/80 '>Tailles</h1>
               <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
 
-                <Select>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Selectionner la taille" />
-                  </SelectTrigger>
-                  <SelectContent >
-                    <SelectGroup >
-                        {product?.attributes?.sizes?.data.map(item => (
-                            <SelectItem value={item?.attributes?.size}  > {item?.attributes?.size} </SelectItem>
-                        ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <select
+                  onChange={handleSelectSizeChange}
+                  id="countries"
+                  className="bg-gray-50 border border-black/25 text-gray-900 text-sm rounded-md px-3 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <option className='text-sm' selected>Seletionner une taille</option>
+                  {product?.attributes?.sizes?.data.map(item => (
+                    <option value={item?.attributes?.size}  > {item?.attributes?.size} </option>
+                  ))}
+                </select>
               </div>
             </div>
 

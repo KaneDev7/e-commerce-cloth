@@ -25,20 +25,38 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+
 import { UserContext } from '@/context/UserContext'
+import { Button } from './ui/button'
 
 export default function Navbar() {
 
   const { data: categories, isLoading, error } = useFetch('/categories')
+  const { data: vetementsType } = useFetch('/types')
+  const { data: chaussursType } = useFetch('/nav-chaussures')
+  const { data: accessoiresType } = useFetch('/nav-accessoires')
+
+ 
+
   const { showCart, setShowCart } = useContext(GlobalContext)
   const { showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
   const [subCatStatus, setSubCatStatus] = useState('hidden')
   const navigate = useNavigate()
   const { user, setUser } = useContext(UserContext)
   const [cart, setCart] = useState([])
-
   const products = useSelector(state => state.cart.products)
 
+  console.log(vetementsType)
 
   const handleLogOut = () => {
     setUser(null)
@@ -60,42 +78,123 @@ export default function Navbar() {
     <div className='relative px-5 bg-white shadow-sm'>
       {showMenuMobile && <NavBarMobile />}
 
-      <div className='h-[80px] flex justify-between items-center  p-5 globalWidth'>
+      <div className='h-[80px] flex justify-between items-center   globalWidth'>
 
         {/* LEFT */}
 
         <div className=''>
-          <Link to='/' className='text-3xl font-bold' >DMRFSTORE</Link>
+          <Link to='/' className='text-3xl font-bold text-primaryColor' >DMRFSTORE</Link>
         </div>
 
 
         {/* CENTER */}
+        <div className='lg:flex items-center gap-4 hidden font-bold '>
 
-        <div className='lg:flex items-center gap-4 hidden font-medium '>
+        <NavigationMenu className='z-[50] flex justify-center'>
+          <NavigationMenuList className='w-full'>
+          <NavigationMenuItem>
+              <Link to='/'>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Accueil
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
 
-          <Link to='/' className='text-md '>Accueil</Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger className='text-md '>
-              Produits
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
-              <DropdownMenuSeparator />
-              {
-                categories.map(categorie => (
-                  <Link className='capitalize whitespace-nowrap' to={`/products/${categorie?.id}`}>
-                    <DropdownMenuItem>
-                      {categorie?.attributes.title}
-                    </DropdownMenuItem>
-                  </Link>
-                ))
-              }
-            </DropdownMenuContent>
-          </DropdownMenu>
 
-          <Link className='text-md ' to=''>A propos</Link>
-          <Link className='text-md ' to=''>Contact</Link>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Vetements</NavigationMenuTrigger>
+              <NavigationMenuContent >
+
+                <div className='p-5 flex gap-20 w-fit '>
+                  <ul>
+                    <h1 className='text-primaryColor font-bold mb-5'>VETEMENTS</h1>
+                    {
+                      vetementsType.map((vetement, index) => (
+                        <li className='mb-1'>
+                          <Link to={`/products/${vetement?.attributes?.categorieId}`}
+                           className='text-sm hover:underline whitespace-nowrap capitalize'>
+                              <small className="text-sm font-medium leading-none">{vetement?.attributes?.title}</small>
+                          </Link>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                  <div className='bg-gray-400 w-[200px] h-[200px] p-2 rounded-sm'>
+                    <img src="/images/collection_vetement/nav_vetement.jpg" alt="nav_vetement"
+                      className='w-full h-full object-cover'
+                    />
+                  </div>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Chaussures</NavigationMenuTrigger>
+              <NavigationMenuContent >
+
+                <div className='p-5 flex gap-20 w-fit '>
+                  <ul>
+                    <h1 className='text-primaryColor font-bold mb-5'>CHAUSSURES</h1>
+                    {
+                      chaussursType.map((chaussure, index) => (
+                        <li className='mb-1'>
+                         <Link to={`/products/${chaussure?.attributes?.categorieId}`}
+                           className='text-sm hover:underline whitespace-nowrap capitalize'>
+                              <small className="text-sm font-medium leading-none">{chaussure?.attributes?.title}</small>
+                          </Link>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                  <div className='bg-gray-400 w-[200px] h-[200px] p-2 rounded-sm'>
+                    <img src="/images/collection-chaussures/sport.jpg" alt="nav_vetement"
+                      className='w-full h-full object-cover'
+                    />
+                  </div>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Sacs & Accessoires</NavigationMenuTrigger>
+              <NavigationMenuContent >
+
+              <div className='p-5 flex gap-20 w-fit '>
+                  <ul>
+                    <h1 className='text-primaryColor font-bold mb-5'>CHAUSSURES</h1>
+                    {
+                      accessoiresType.map((accessoire, index) => (
+                        <li className='mb-1'>
+                         <Link to={`/products/${accessoire?.attributes?.categorieId}`}
+                           className='text-sm hover:underline whitespace-nowrap capitalize'>
+                              <small className="text-sm font-medium leading-none">{accessoire?.attributes?.title}</small>
+                          </Link>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                  <div className='bg-gray-400 w-[200px] h-[200px] p-2 rounded-sm'>
+                    <img src="/images/collection_sac_et_accessoire/pochette.jpg" alt="nav_vetement"
+                      className='w-full h-full object-cover'
+                    />
+                  </div>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link to='/'>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  A propos
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
+          </NavigationMenuList>
+        </NavigationMenu>
         </div>
+
+
 
         {/* RIGHT */}
 

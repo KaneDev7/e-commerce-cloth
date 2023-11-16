@@ -8,7 +8,7 @@ export default function Category() {
     const navigate = useNavigate()
 
     return (
-        <section className='my-30 globalWidth bg-primaryColor'>
+        <section className='my-40 p-5 globalWidth bg-black/90'>
             <div className='w-full  grid category'>
                 {
                     categories.map((categorie, index) => (

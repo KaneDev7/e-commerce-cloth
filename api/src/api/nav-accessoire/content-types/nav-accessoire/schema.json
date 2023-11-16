@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "nav_accessoires",
+  "info": {
+    "singularName": "nav-accessoire",
+    "pluralName": "nav-accessoires",
+    "displayName": "nav_accessoire"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "categorieId": {
+      "type": "string"
+    }
+  }
+}

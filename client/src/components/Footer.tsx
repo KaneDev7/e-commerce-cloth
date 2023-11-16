@@ -52,7 +52,7 @@ export default function Footer() {
 
             <div className='flex flex-col leading-8 min-w-[250px] footerLink'>
               <h3 className='text-xl font-bold '>About</h3>
-              <p className='leading-6'>
+              <p className='leading-6 '>
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga delectus deserunt iste incidunt
                 dolore iusto rerum blanditiis vel accusantium necessitatibus,
                 veritatis debitis natus. Cupiditate similique, exercitationem iste facilis ut nobis.
@@ -73,7 +73,7 @@ export default function Footer() {
         <div className='flex justify-center items-center'>
             <div className='max-w-[1500px] w-full p-8 flex justify-between items-center flex-wrap'>
               <div className='flex items-center gap-4'>
-                <h1 className='text-primaryColor font-bold text-2xl'>LAMASTORE</h1>
+                <h1 className='text-primaryColor font-bold text-2xl'>DMRFSTORE</h1>
                 <p className='text-sm'>Copyright 2023, All Right Reserved</p>
               </div>
 

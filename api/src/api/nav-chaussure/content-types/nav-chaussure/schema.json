@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "nav_chaussures",
+  "info": {
+    "singularName": "nav-chaussure",
+    "pluralName": "nav-chaussures",
+    "displayName": "nav_chaussure"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "route": {
+      "type": "string"
+    }
+  }
+}
