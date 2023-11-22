@@ -9,8 +9,7 @@ import { reset } from './redux/cartSlice'
 
 export default function Layout() {
     const [user, setUser] = useState(null)
-    const dispatch = useDispatch()
-
+   
     useEffect(()=> {
     const newUser = JSON.parse(sessionStorage.getItem('user')) || null
     setUser(newUser)

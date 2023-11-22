@@ -121,7 +121,7 @@ export default function Register() {
 
 
                     <Button type="submit" className="mt-5 bg-primaryColor/95 hover:bg-primaryColor">
-                        se connecter
+                        S'inscrire
                     </Button>
                 </form>
                 <p className="text-sm mt-5">Vous avez deja un compte ? <Link to='/login' className="text-sm hover:underline text-blue-500">connectez-vous </Link>  </p>

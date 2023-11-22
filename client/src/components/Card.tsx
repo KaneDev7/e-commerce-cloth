@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ProductType } from "../pages/home/container/FeatureProducts";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import ProductLoad from "./ProductLoad";
 import { getDayBetweenTwoDay } from "@/helpers/date";
@@ -29,6 +29,7 @@ export default function Card({ product }: TypeProps) {
             img2Ref.current.style.zIndex = '-1'
         }
     }
+
 
     const isNew = getDayBetweenTwoDay(product?.attributes?.publishedAt) < DAY_MINIMIUM_FOR_NEW
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import Card from "../components/Card";
 import { motion } from 'framer-motion'
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import List from "../components/List";
 import { AiFillCloseCircle } from "react-icons/ai";
@@ -112,6 +112,8 @@ export default function Products() {
 
   }, [])
 
+
+
   if (isLoadingCat || isColorsLoading || isSizeLoading || isSubCategoriesLoading) {
     return <div className='flex justify-center items-center h-[500px] mt[100px] '>
       <ProductLoad />
@@ -145,6 +147,7 @@ export default function Products() {
                       className="flex flex-wrap gap-2 bg-white cursor-pointer">
                       {colors?.map(item => (
                         <div
+                        key={item.id}
                           style={{
                             opacity: selectedFilter.includes(item?.attributes?.color) && '1'
                           }}
@@ -204,7 +207,7 @@ export default function Products() {
                     </AccordionItem>
 
                     <AccordionItem value="item-3">
-                      <AccordionTrigger>Types</AccordionTrigger>
+                      <AccordionTrigger>Sous catégories</AccordionTrigger>
                       <AccordionContent>
                         <div className="mb-10">
                           <div className="flex flex-wrap gap-5 cursor-pointer">

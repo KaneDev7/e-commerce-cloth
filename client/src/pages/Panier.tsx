@@ -1,12 +1,19 @@
+import { baseRequest } from '@/axios/baseRequest'
 import Assurance from '@/components/Assurance'
 import { Button } from '@/components/ui/button'
 import { UserContext } from '@/context/UserContext'
 import { getCommandFromClient } from '@/lib/nodeMailer/getCommand'
+import { removeItem } from '@/redux/cartSlice'
 import { it } from 'node:test'
 import { useContext, useEffect, useState } from 'react'
 import { MdDelete } from 'react-icons/md'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+
+// Toast 
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Panier() {
 
@@ -16,18 +23,48 @@ export default function Panier() {
     const [cart, setCart] = useState([])
     const [allArticles, setAllArticle] = useState(0)
     const [total, setTotal] = useState(0)
+    const dispatch = useDispatch()
 
 
-    const commande = () => {
-        const commandesDetail = {
-            user: {
-                name: user.user.username,
-                email: user.user.email,
-            },
-            commande: [...cart]
+    console.log(user)
+    const commande = async () => {
+        for (const item of cart) {
+
+            const data = {
+                data: {
+                    name: item.title,
+                    quantity: item.quantity.toString(),
+                    price: item.price.toString(),
+                    size: item.size.toString(),
+                    username: item.username,
+                    img: item.img,
+                    statut: 'en attente'
+                }
+            }
+            console.log(JSON.stringify(data))
+            try {
+                const response = await baseRequest.post('http://localhost:1337/api/commands',
+                    JSON.stringify(data),
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${user.jwt}`,
+                        },
+                        withCredentials: true,
+                    })
+
+
+                toast.success("Cmmande effectuée avec succée", {
+                    hideProgressBar: true
+                })
+
+            } catch (err: any) {
+                console.log(err)
+                toast.success(err.response.data.error.message, {
+                    hideProgressBar: true
+                })
+            }
         }
-        getCommandFromClient(commandesDetail)
-
     }
 
 
@@ -62,6 +99,8 @@ export default function Panier() {
 
     return (
         <div className='globalWidth my-20 '>
+      <ToastContainer />
+ 
             <h1 className='title'>PANIER</h1>
 
             <div className='w-full flex gap-4 justify-between flex-wrap mt-5   '>
@@ -84,9 +123,7 @@ export default function Panier() {
                                         {/* <p className='text-sm text-black/60'>{item.desc.substring(0,50)}...  </p> */}
                                         <p className='text-primaryColor text-md font-bold'> $ {item.price} </p>
                                         <div className='flex'>
-                                        {item.size.map((size, i) => (
-                                           <p className='text-sm'> { size} {i !== item.size.length - 1 && ','} </p>
-                                        ))}
+                                            <p className='text-sm'> {item.size.toString()} </p>
                                         </div>
                                     </div>
 

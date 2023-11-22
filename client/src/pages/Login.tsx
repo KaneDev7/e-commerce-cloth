@@ -4,16 +4,6 @@ import { useForm, SubmitHandler } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-
 import { Input } from "@/components/ui/input"
 import { Label } from "@radix-ui/react-dropdown-menu"
 import { Link, useNavigate } from "react-router-dom"
@@ -40,9 +30,7 @@ export default function Login() {
   } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(
-      JSON.stringify({identifier : data.email, password : data.password})
-    )
+ 
     try {
       const response = await baseRequest.post('http://localhost:1337/api/auth/local',
 

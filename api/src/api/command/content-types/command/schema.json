@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "commands",
+  "info": {
+    "singularName": "command",
+    "pluralName": "commands",
+    "displayName": "command",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "string"
+    },
+    "price": {
+      "type": "string"
+    },
+    "statut": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
+    },
+    "img": {
+      "type": "string"
+    },
+    "size": {
+      "type": "string"
+    }
+  }
+}

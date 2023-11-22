@@ -35,8 +35,11 @@ export default function cart() {
     const filterCart = products.filter(item => item.username.trim() === user.user.username.trim())
     setCart(filterCart)
 
-}, [])
+}, [products])
 
+if( cart.length === 0 ){
+  return <p className='mt-5'>Votre panier est vide</p>
+}
   return (
     <div className=''>
 

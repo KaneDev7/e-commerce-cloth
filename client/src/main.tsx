@@ -13,6 +13,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Panier from './pages/Panier'
+import Admin from './pages/admin/admin'
 
 const { store, persistor } = configureStore()
 const router = createBrowserRouter([
@@ -26,11 +27,15 @@ const router = createBrowserRouter([
       },
       {
         path: 'products/:id',
-        element: <Products />
+        element: <Products />,
       },
       {
         path: 'product/:id',
         element: <Product />
+      },
+      {
+        path: 'admin',
+        element: <Admin />
       },
       {
         path: 'panier',

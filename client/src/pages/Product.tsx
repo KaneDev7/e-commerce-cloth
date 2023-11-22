@@ -11,15 +11,7 @@ import { UserContext } from '../context/UserContext'
 
 // shaadcdn 
 import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -29,23 +21,21 @@ import 'swiper/css/zoom';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-
-// import './styles.css';
-
 // import required modules
 import { Pagination, Navigation, Zoom } from 'swiper/modules';
 import ProductLoad from '../components/ProductLoad'
 import Recommandation from '../components/Recommandation'
 import Assurance from '../components/Assurance'
 
+// Toast 
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Product() {
-  const [selectedImg, setSelectedImg] = useState('img')
-  const selectedFilter = useSelector(state => state.selectedFilter)
   const { user } = useContext(UserContext)
   const [quantity, setQuantity] = useState(1)
-  const [selectSize, setSelectSize] = useState('')
+  const [selectSize, setSelectSize] = useState(null)
   const cart = useSelector(state => state.cart.products)
 
   const navigate = useNavigate()
@@ -55,23 +45,30 @@ export default function Product() {
 
   let imgUrl, imgUrl2, images
 
-  console.log(selectSize)
+  console.log(user)
 
   if (product.length !== 0) {
-    console.log(product)
     imgUrl = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img?.data?.attributes?.url
     imgUrl2 = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img2?.data?.attributes?.url
     images = product?.attributes?.img.data
   }
 
+
   const handleAddProductToCart = () => {
     if (!user) {
       return navigate('/login')
     }
-    const isArticleInCartOfCurrentUser = cart.find(item => item.id === product.id && user.user.username.trim() === item.username.trim())
 
-    if (!isArticleInCartOfCurrentUser) {
-      return dispatch(addItem({
+    const articleInCartOfCurrentUser = cart.find(item => item.id === product.id && user.user.username.trim() === item.username.trim())
+
+    if (!Boolean(selectSize)) {
+      return toast.warn("Seletionner d'abord votre taille", {
+        hideProgressBar : true
+      })
+    }
+
+    if (!articleInCartOfCurrentUser) {
+      dispatch(addItem({
         username: user.user.username,
         id: product.id,
         title: product?.attributes?.title,
@@ -81,24 +78,40 @@ export default function Product() {
         quantity: quantity,
         size: [selectSize],
         isNewSize: false
-
       }))
+
+      return toast.success("Ajouter au panier avec succé", {
+        hideProgressBar: true
+      })
+
     }
 
-    const isArticleHasSameSize = isArticleInCartOfCurrentUser.size.some(item => item === selectSize)
-    console.log(isArticleHasSameSize)
+    const isArticleHasSameSize = articleInCartOfCurrentUser.size.some(item => item === selectSize)
+
+    // if(isArticleHasSameSize && articleInCartOfCurrentUser ) {
+    //   return toast("Produit", {
+    //     hideProgressBar : true
+    //   })
+    // }
 
     dispatch(addItem({
       id: product.id,
       username: user.user.username,
-      size: [...isArticleInCartOfCurrentUser.size, selectSize],
+      size: [...articleInCartOfCurrentUser.size, selectSize],
       isNewSize: isArticleHasSameSize
     }))
-    
+    return toast.success("Ajouter au panier avec succé", {
+      hideProgressBar: true
+    })
+
   }
 
   const handleSelectSizeChange = (event) => {
+    if (event.target.value === 'Seletionner une taille') {
+      return setSelectSize(null)
+    }
     setSelectSize(event.target.value)
+
   }
   const addQuantity = () => {
     setQuantity((prev) => prev + 1)
@@ -109,8 +122,14 @@ export default function Product() {
   }
 
   useEffect(() => {
+    setSelectSize(null)
+  }, [id])
+
+  useEffect(() => {
     window.scroll(0, 0)
   }, [id])
+
+
 
   if (isLoading) {
     return <div className='w-screen h-screen flex justify-center items-center'>
@@ -122,6 +141,7 @@ export default function Product() {
 
   return (
     <div className='globalWidth mt-10'>
+      <ToastContainer />
       <div className='w-full flex flex-wrap gap-[40px] bg-white p-5 shadow-sm'>
 
         <div className='lg:w-[45%] w-[100%] lg:min-w-[500px] gap-4'>
@@ -172,12 +192,11 @@ export default function Product() {
             <div className=''>
               <h1 className='text-[14px] text-black/80 '>Tailles</h1>
               <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
-
                 <select
                   onChange={handleSelectSizeChange}
                   id="countries"
                   className="bg-gray-50 border border-black/25 text-gray-900 text-sm rounded-md px-3 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  <option className='text-sm' selected>Seletionner une taille</option>
+                  <option className='text-sm' value={undefined} selected>Seletionner une taille</option>
                   {product?.attributes?.sizes?.data.map(item => (
                     <option value={item?.attributes?.size}  > {item?.attributes?.size} </option>
                   ))}
@@ -203,7 +222,7 @@ export default function Product() {
           {/* BLOCK */}
           <div className='flex items-center flex-wrap gap-10 product_detaitl_text_block'>
 
-            <Button onClick={() => handleAddProductToCart()} className='bg-primaryColor/95 hover:bg-primaryColor'>
+            <Button onClick={handleAddProductToCart} className='bg-primaryColor/95 hover:bg-primaryColor'>
               <BiCartAdd color='white' size={20} className="mr-3" />
               Ajouter au panier
             </Button>

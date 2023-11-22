@@ -751,6 +751,43 @@ export interface ApiColorColor extends Schema.CollectionType {
   };
 }
 
+export interface ApiCommandCommand extends Schema.CollectionType {
+  collectionName: 'commands';
+  info: {
+    singularName: 'command';
+    pluralName: 'commands';
+    displayName: 'command';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    quantity: Attribute.String;
+    price: Attribute.String;
+    statut: Attribute.String;
+    username: Attribute.String;
+    img: Attribute.String;
+    size: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::command.command',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::command.command',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiNavAccessoireNavAccessoire extends Schema.CollectionType {
   collectionName: 'nav_accessoires';
   info: {
@@ -975,6 +1012,7 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::category.category': ApiCategoryCategory;
       'api::color.color': ApiColorColor;
+      'api::command.command': ApiCommandCommand;
       'api::nav-accessoire.nav-accessoire': ApiNavAccessoireNavAccessoire;
       'api::nav-chaussure.nav-chaussure': ApiNavChaussureNavChaussure;
       'api::product.product': ApiProductProduct;

@@ -27,7 +27,6 @@ export const cartSlice = createSlice({
                 state.products.push(action.payload)
             } else {
                 const index = state.products.findIndex(item => item.id === action.payload.id && action.payload.username.trim() === item.username.trim())
-                console.log(action.payload.isNewSize)
                
                 if (!action.payload.isNewSize) {
                     articleUpdated = {
