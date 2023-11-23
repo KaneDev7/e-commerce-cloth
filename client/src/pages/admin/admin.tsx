@@ -2,6 +2,9 @@ import { UserContext } from '@/context/UserContext'
 import { UserCheck } from 'lucide-react'
 import React, { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useFetch from '@/hooks/useFetch'
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { FaUserCircle } from "react-icons/fa";
 
 import {
     Table,
@@ -13,52 +16,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import useFetch from '@/hooks/useFetch'
+import { Checkbox } from "@/components/ui/checkbox"
 
-const invoices = [
-    {
-        invoice: "INV001",
-        paymentStatus: "Paid",
-        totalAmount: "$250.00",
-        paymentMethod: "Credit Card",
-    },
-    {
-        invoice: "INV002",
-        paymentStatus: "Pending",
-        totalAmount: "$150.00",
-        paymentMethod: "PayPal",
-    },
-    {
-        invoice: "INV003",
-        paymentStatus: "Unpaid",
-        totalAmount: "$350.00",
-        paymentMethod: "Bank Transfer",
-    },
-    {
-        invoice: "INV004",
-        paymentStatus: "Paid",
-        totalAmount: "$450.00",
-        paymentMethod: "Credit Card",
-    },
-    {
-        invoice: "INV005",
-        paymentStatus: "Paid",
-        totalAmount: "$550.00",
-        paymentMethod: "PayPal",
-    },
-    {
-        invoice: "INV006",
-        paymentStatus: "Pending",
-        totalAmount: "$200.00",
-        paymentMethod: "Bank Transfer",
-    },
-    {
-        invoice: "INV007",
-        paymentStatus: "Unpaid",
-        totalAmount: "$300.00",
-        paymentMethod: "Credit Card",
-    },
-]
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
+
 
 export default function Admin() {
 
@@ -97,8 +62,10 @@ export default function Admin() {
                         <TableCaption>A list of your recent invoices.</TableCaption>
                         <TableHeader>
                             <TableRow>
+                                <TableHead className='w-fit'>
+                                    <input type="checkbox" className='w-fit' />
+                                </TableHead>
                                 <TableHead>Nom du produit</TableHead>
-                                <TableHead>Nom d'utilisateur </TableHead>
                                 <TableHead>Date / Heure</TableHead>
                                 <TableHead>Taille</TableHead>
                                 <TableHead>Prix</TableHead>
@@ -110,38 +77,77 @@ export default function Admin() {
                         <TableBody>
                             {
                                 commands?.map(item => (
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            <div className=' flex gap-5 w-[200px] '>
-                                                <img src={import.meta.env.VITE_API_UPLOAD + item?.attributes.img} alt="" className='w-[60px] h-[60px] object-cover' />
-                                                <p>
-                                                    {item?.attributes?.name}
-                                                </p>
+
+                                    <HoverCard>
+                                        <HoverCardTrigger asChild>
+                                            <TableRow>
+
+                                                <TableCell className='w-fit'>
+                                                    <input type="checkbox" className='w-fit ' />
+                                                </TableCell>
+                                                <TableCell className="font-medium">
+                                                    <div className=' flex gap-5 w-[200px] '>
+                                                        <img src={import.meta.env.VITE_API_UPLOAD + item?.attributes.img} alt="" className='w-[35px] h-[35px] object-cover' />
+                                                        <p>
+                                                            {item?.attributes?.name}
+                                                        </p>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    {new Date(item?.attributes?.createdAt).toLocaleDateString() + ' - ' +
+                                                        new Date(item?.attributes?.createdAt).toLocaleTimeString()
+                                                    }
+                                                </TableCell>
+
+                                                <TableCell > {item?.attributes?.size} </TableCell>
+
+                                                <TableCell>{item?.attributes?.price} $</TableCell>
+                                                <TableCell> {item?.attributes?.quantity} </TableCell>
+                                                <TableCell>{item?.attributes?.price * item?.attributes?.quantity} $</TableCell>
+                                                <TableCell >
+                                                    <p style={{
+                                                        background: item?.attributes?.statut === 'en attente' ? '#ffa600a5' :
+                                                            item?.attributes?.statut === 'livré' ? '#029b02b1' : 'red'
+                                                    }}
+                                                        className='p-[2px] rounded-md text-center text-white capitalize'
+                                                    >{item?.attributes?.statut}</p>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <HiOutlineDotsHorizontal />
+                                                </TableCell>
+                                            </TableRow>
+                                        </HoverCardTrigger>
+
+                                        <HoverCardContent className="w-80">
+                                            <div className="flex gap-5">
+                                                <FaUserCircle size={50} className='text-black/25' />
+
+                                                <div className="space-y-1">
+                                                    <h4 className="text-sm font-semibold">
+                                                        {item?.attributes?.username}
+                                                    </h4>
+                                                    <p className="text-sm text-[12.4px] ">
+                                                        <span className='mr-3'>  Adress : </span>
+                                                        {item?.attributes?.adress}
+                                                    </p>
+
+                                                    <p className="text-sm text-[12.4px] ">
+                                                        <span className='mr-3'>  Téléphone : </span>
+                                                        {item?.attributes?.phone}
+                                                    </p>
+
+                                                    <p className="text-sm text-[12.4px] ">
+                                                        <span className='mr-3'>  Date/heure : </span>
+                                                        {
+                                                            new Date(item?.attributes?.createdAt).toLocaleDateString() + ' - ' +
+                                                            new Date(item?.attributes?.createdAt).toLocaleTimeString()
+                                                        }
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </TableCell>
-                                        <TableCell>{item?.attributes?.username} </TableCell>
-                                        <TableCell>
-                                            {new Date(item?.attributes?.createdAt).toLocaleDateString() + ' - ' + 
-                                            new Date(item?.attributes?.createdAt).toLocaleTimeString()
-                                            
-                                            }
-                                        </TableCell>
+                                        </HoverCardContent>
+                                    </HoverCard>
 
-                                        <TableCell > {item?.attributes?.size} </TableCell>
-
-                                        <TableCell>{item?.attributes?.price } $</TableCell>
-                                        <TableCell> {item?.attributes?.quantity} </TableCell>
-                                        <TableCell>{item?.attributes?.price * item?.attributes?.quantity } $</TableCell>
-                                        <TableCell >
-                                            <p style={{
-                                                background: item?.attributes?.statut === 'en attente' ? '#ffa600a5' :
-                                                    item?.attributes?.statut === 'livré' ? '#029b02b1' : 'red'
-                                            }}
-                                                className='p-[2px] rounded-md text-center text-white capitalize'
-                                            >{item?.attributes?.statut}</p>
-                                        </TableCell>
-
-                                    </TableRow>
                                 ))
                             }
 

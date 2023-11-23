@@ -100,7 +100,6 @@ background: var(--backgroundBody);
   max-width: var(--globalWidth);
   margin-right: auto;
   margin-left: auto;
-  /* color:  #ffa600d4; */
 }
 
 .primaryTitle{

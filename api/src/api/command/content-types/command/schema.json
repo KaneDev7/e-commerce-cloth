@@ -32,6 +32,12 @@
     },
     "size": {
       "type": "string"
+    },
+    "adress": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "integer"
     }
   }
 }

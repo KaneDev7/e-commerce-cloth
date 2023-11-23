@@ -770,6 +770,8 @@ export interface ApiCommandCommand extends Schema.CollectionType {
     username: Attribute.String;
     img: Attribute.String;
     size: Attribute.String;
+    adress: Attribute.String;
+    phone: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
