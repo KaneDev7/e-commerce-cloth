@@ -1,6 +1,6 @@
 import { UserContext } from '@/context/UserContext'
 import { UserCheck } from 'lucide-react'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useFetch from '@/hooks/useFetch'
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -23,16 +23,66 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import { baseRequest } from '@/axios/baseRequest'
+import { ToastContainer, toast } from 'react-toastify'
 
 
 export default function Admin() {
 
     const { user } = useContext(UserContext)
+    const [commands, setCommand] = useState()
+    const [itemsId, setItemsId] = useState([])
     const navigate = useNavigate()
-    const { data: commands, isLoading, error } = useFetch(`/commands?populate=*`)
+
+    const individualIltemsChecked = (id, event) => {
+        if (event.target.checked) {
+            setItemsId(ids => [...ids, id])
+        } else {
+            setItemsId(itemsId.filter(ids => ids !== id))
+        }
+    }
+
+    const allItemsChecked = (e) => {
+        if (e.target.checked) {
+            const allItemsId = commands.map(item => item.id)
+            setItemsId(allItemsId)
+        } else {
+            setItemsId([])
+        }
+    }
+
+    const deleteCommandes = async () => {
+        for (const id of itemsId) {
+            try {
+                const response = await baseRequest.delete(`http://localhost:1337/api/commands/${id}`)
+                toast.success(`commande ${id} supprimé avec succée `, {
+                    hideProgressBar: true
+                })
+                setItemsId([])
+
+            } catch (err: any) {
+                console.log(err)
+                toast.success(err.response.data.error.message, {
+                    hideProgressBar: true
+                })
+            }
+        }
+    }
 
 
-    console.log(commands)
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await baseRequest.get(`http://localhost:1337/api/commands?populate=*}`)
+                setCommand(response.data.data)
+
+            } catch (err: any) {
+                console.log(err)
+            }
+        }
+        fetchData()
+    }, [itemsId]);
+
     if (user?.user?.username?.toLowerCase() !== 'oumar kane') {
         return <div className="bg-gray-200 w-full px-16 md:px-0 h-screen flex items-center justify-center">
             <div className="bg-white border border-gray-200 flex flex-col items-center justify-center px-4 md:px-8 lg:px-24 py-8 rounded-lg shadow-2xl">
@@ -50,6 +100,7 @@ export default function Admin() {
 
     return (
         <div className='globalWidth mt-10'>
+            <ToastContainer />
             <div className='w-full flex gap-10'>
                 {/* SIDEBAR */}
                 <div className='w-[300px]  h-screen  bg-white'>
@@ -57,13 +108,27 @@ export default function Admin() {
                 </div>
 
                 <div className='flex-1 bg-white p-5'>
-                    <h1>Commandes</h1>
+                    <h1 className='text-xl  mb-5'>Commandes</h1>
+                    {
+                        itemsId.length !== 0 &&
+                        <div className='flex items-center gap-4 my-2'>
+                            <p className='text-sm'> {itemsId.length} item{itemsId.length > 1 && 's'} selectionné{itemsId.length > 1 && 's'}</p>
+                            <button
+                                onClick={deleteCommandes}
+                                className='bg-red-100 hover:bg-white border border-red-200 text-red-700 font-medium 
+                         py-1 px-2 text-xs rounded-sm' >
+                                Supprimer
+                            </button>
+                        </div>
+
+                    }
+
                     <Table className='text-[12.5px] '>
                         <TableCaption>A list of your recent invoices.</TableCaption>
-                        <TableHeader>
-                            <TableRow>
+                        <TableHeader className='w-full bg-gray-200'>
+                            <TableRow >
                                 <TableHead className='w-fit'>
-                                    <input type="checkbox" className='w-fit' />
+                                    <input type="checkbox" onChange={allItemsChecked} className='w-fit' />
                                 </TableHead>
                                 <TableHead>Nom du produit</TableHead>
                                 <TableHead>Date / Heure</TableHead>
@@ -79,11 +144,16 @@ export default function Admin() {
                                 commands?.map(item => (
 
                                     <HoverCard>
-                                        <HoverCardTrigger asChild>
-                                            <TableRow>
+                                        <HoverCardTrigger
+                                            asChild
+                                            style={{
+                                                background: itemsId.includes(item.id) && '#dddddd3f'
+                                            }}
+                                        >
+                                            <TableRow >
 
                                                 <TableCell className='w-fit'>
-                                                    <input type="checkbox" className='w-fit ' />
+                                                    <input type="checkbox" checked={itemsId.includes(item.id)} onChange={() => individualIltemsChecked(item.id, event)} className='w-fit ' />
                                                 </TableCell>
                                                 <TableCell className="font-medium">
                                                     <div className=' flex gap-5 w-[200px] '>

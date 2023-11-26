@@ -81,7 +81,6 @@ export default function Panier() {
                         withCredentials: true,
                     })
                    
-                navigate('/')
                 toast.success("Cmmande effectuée avec succée", {
                     hideProgressBar: true
                 })
