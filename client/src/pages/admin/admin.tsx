@@ -6,6 +6,14 @@ import useFetch from '@/hooks/useFetch'
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaUserCircle } from "react-icons/fa";
 
+
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 import {
     Table,
     TableBody,
@@ -25,13 +33,31 @@ import {
 } from "@/components/ui/hover-card"
 import { baseRequest } from '@/axios/baseRequest'
 import { ToastContainer, toast } from 'react-toastify'
+import { Button } from '@/components/ui/button'
 
+const commandsTopBar = [
+    'Nom du produit',
+    'Date / Heure',
+    'Taille',
+    'Prix',
+    'Qauntité',
+    'Total',
+    'Status'
+]
+
+const filterOptions = [
+    'Tout',
+    'Livré',
+    'En attente',
+    'Annulé'
+]
 
 export default function Admin() {
 
     const { user } = useContext(UserContext)
     const [commands, setCommand] = useState()
     const [itemsId, setItemsId] = useState([])
+    const [filterSelected, setFilterSelected] = useState('tout')
     const navigate = useNavigate()
 
     const individualIltemsChecked = (id, event) => {
@@ -74,14 +100,58 @@ export default function Admin() {
         const fetchData = async () => {
             try {
                 const response = await baseRequest.get(`http://localhost:1337/api/commands?populate=*}`)
-                setCommand(response.data.data)
+                if (filterSelected === 'tout') {
+                    setCommand(response.data.data)
+                } else {
+                    const dataFilter = response.data.data.filter(item => item.attributes.statut === filterSelected.toLowerCase())
+                    setCommand(dataFilter)
+                }
+
 
             } catch (err: any) {
                 console.log(err)
             }
         }
         fetchData()
-    }, [itemsId]);
+    }, [itemsId, filterSelected]);
+
+    const handleSetCommand = async (item, event) => {
+        const updateItem = { ...item.attributes, statut: event.target.innerText.toLowerCase() }
+
+        try {
+            const response = await baseRequest.put(`http://localhost:1337/api/commands/${item.id}`,
+                JSON.stringify({ data: updateItem }),
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.jwt}`,
+                    },
+                    withCredentials: true,
+                })
+
+            const newCommandeState = commands.map(command => {
+                if (command.id === item.id) {
+                    return {
+                        id: item.id,
+                        attributes: { ...updateItem }
+                    }
+                } else {
+                    return command
+                }
+
+            })
+            setCommand(newCommandeState)
+            toast.success(`Opération réuissit`, {
+                hideProgressBar: true
+            })
+
+        } catch (err: any) {
+            console.log(err)
+            toast.error(err.response.data.error.message, {
+                hideProgressBar: true
+            })
+        }
+    }
 
     if (user?.user?.username?.toLowerCase() !== 'oumar kane') {
         return <div className="bg-gray-200 w-full px-16 md:px-0 h-screen flex items-center justify-center">
@@ -107,16 +177,33 @@ export default function Admin() {
                     sidebar
                 </div>
 
+                {/* BODY */}
+
                 <div className='flex-1 bg-white p-5'>
                     <h1 className='text-xl  mb-5'>Commandes</h1>
+                    <nav className='flex gap-3  my-5'>
+                        {
+                            filterOptions.map(item => (
+                                <Button
+                                style={{
+
+                                }}
+                                    onClick={(e) => setFilterSelected(e.target.innerText.toLowerCase())}
+                                    className={`text-black/60 hover:bg-gray-100 font-bold ${filterSelected.toLowerCase() === item.toLowerCase() && 'bg-gray-100 border'} `} >
+                                    {item}
+                                </Button>
+                            ))
+                        }
+
+                    </nav>
                     {
                         itemsId.length !== 0 &&
                         <div className='flex items-center gap-4 my-2'>
                             <p className='text-sm'> {itemsId.length} item{itemsId.length > 1 && 's'} selectionné{itemsId.length > 1 && 's'}</p>
                             <button
                                 onClick={deleteCommandes}
-                                className='bg-red-100 hover:bg-white border border-red-200 text-red-700 font-medium 
-                         py-1 px-2 text-xs rounded-sm' >
+                                className='bg-red-100 hover:bg-white border border-red-200
+                                 text-red-700 font-medium py-1 px-2 text-xs rounded-sm' >
                                 Supprimer
                             </button>
                         </div>
@@ -125,18 +212,16 @@ export default function Admin() {
 
                     <Table className='text-[12.5px] '>
                         <TableCaption>A list of your recent invoices.</TableCaption>
-                        <TableHeader className='w-full bg-gray-200'>
+                        <TableHeader className='w-full bg-gray-100 '>
                             <TableRow >
                                 <TableHead className='w-fit'>
                                     <input type="checkbox" onChange={allItemsChecked} className='w-fit' />
                                 </TableHead>
-                                <TableHead>Nom du produit</TableHead>
-                                <TableHead>Date / Heure</TableHead>
-                                <TableHead>Taille</TableHead>
-                                <TableHead>Prix</TableHead>
-                                <TableHead>Qauntité</TableHead>
-                                <TableHead>Total</TableHead>
-                                <TableHead>Status</TableHead>
+                                {
+                                    commandsTopBar.map(item => (
+                                        <TableHead className='font-bold'>{item} </TableHead>
+                                    ))
+                                }
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -179,11 +264,22 @@ export default function Admin() {
                                                         background: item?.attributes?.statut === 'en attente' ? '#ffa600a5' :
                                                             item?.attributes?.statut === 'livré' ? '#029b02b1' : 'red'
                                                     }}
-                                                        className='p-[2px] rounded-md text-center text-white capitalize'
+                                                        className='p-[2px] w-[80px] rounded-md text-center text-white capitalize'
                                                     >{item?.attributes?.statut}</p>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <HiOutlineDotsHorizontal />
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger>
+                                                            <HiOutlineDotsHorizontal />
+                                                        </DropdownMenuTrigger>
+
+                                                        <DropdownMenuContent >
+                                                            <DropdownMenuItem onClick={() => handleSetCommand(item, event)}>En attente</DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => handleSetCommand(item, event)}>Livré</DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => handleSetCommand(item, event)}>Annulé</DropdownMenuItem>
+                                                        </DropdownMenuContent>
+
+                                                    </DropdownMenu>
                                                 </TableCell>
                                             </TableRow>
                                         </HoverCardTrigger>
