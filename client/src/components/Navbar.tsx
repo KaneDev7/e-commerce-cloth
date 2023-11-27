@@ -42,7 +42,7 @@ import { Button } from './ui/button'
 
 export default function Navbar() {
 
-  const { data: categories, isLoading, error } = useFetch('/categories')
+  // const { data: categories, isLoading, error } = useFetch('/categories')
   const { data: vetementsType } = useFetch('/types')
   const { data: chaussursType } = useFetch('/nav-chaussures')
   const { data: accessoiresType } = useFetch('/nav-accessoires')
@@ -69,7 +69,6 @@ export default function Navbar() {
     if (user) {
       const filterCart = products.filter(item => item.username === user.user.username)
       setCart(filterCart)
-
     }
 
   }, [products, user])
@@ -230,10 +229,12 @@ export default function Navbar() {
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>
-                      <p className='flex justify-center items-center gap-1'>
-                        <MdDateRange size={15} className='text-gray-600' />
-                        <span className='text-md'> Commandes </span>
-                      </p>
+                      <Link to='/commands'>
+                        <p className='flex justify-center items-center gap-1'>
+                          <MdDateRange size={15} className='text-gray-600' />
+                          <span className='text-md'> Commandes </span>
+                        </p>
+                      </Link>
                     </DropdownMenuItem>
 
                     {

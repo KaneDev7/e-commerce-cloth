@@ -14,6 +14,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Panier from './pages/Panier'
 import Admin from './pages/admin/admin'
+import Commands from './pages/commandes'
 
 const { store, persistor } = configureStore()
 const router = createBrowserRouter([
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: 'panier',
         element: <Panier />
+      },
+      {
+        path: 'commands',
+        element: <Commands />
       },
       {
         path: 'login',

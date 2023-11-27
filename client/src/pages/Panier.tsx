@@ -3,7 +3,7 @@ import Assurance from '@/components/Assurance'
 import { Button } from '@/components/ui/button'
 import { UserContext } from '@/context/UserContext'
 import { getCommandFromClient } from '@/lib/nodeMailer/getCommand'
-import { removeItem } from '@/redux/cartSlice'
+import { removeItem, reset } from '@/redux/cartSlice'
 import { it } from 'node:test'
 import { useContext, useEffect, useState } from 'react'
 import { MdDelete } from 'react-icons/md'
@@ -45,6 +45,8 @@ export default function Panier() {
     const [message, setMessage] = useState(null)
     const dispatch = useDispatch()
 
+    console.log(user)
+
     const {
         register,
         handleSubmit,
@@ -59,12 +61,13 @@ export default function Panier() {
             const data = {
                 data: {
                     name: item.title,
-                    quantity: item.quantity.toString(),
-                    price: item.price.toString(),
-                    size: item.size.toString(),
+                    quantity: item?.quantity?.toString(),
+                    price: item?.price?.toString(),
+                    size: item?.size?.toString(),
                     username: item.username,
-                    adress : coordonnes.adress,
-                    phone : coordonnes.phone,
+                    email: user.user.email,
+                    adress: coordonnes.adress,
+                    phone: coordonnes.phone,
                     img: item.img,
                     statut: 'en attente'
                 }
@@ -80,7 +83,9 @@ export default function Panier() {
                         },
                         withCredentials: true,
                     })
-                   
+
+                dispatch(reset())
+                navigate('/commands')
                 toast.success("Cmmande effectuée avec succée", {
                     hideProgressBar: true
                 })
@@ -209,9 +214,9 @@ export default function Panier() {
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-[425px]">
                                     <DialogHeader>
-                                        <DialogTitle>Edit profile</DialogTitle>
+                                        <DialogTitle>Finaliser la commande</DialogTitle>
                                         <DialogDescription>
-                                            Pour finaliser la commande , veuillez remplire les informationq suivantes
+                                            Pour finaliser la commande , veuillez remplire les informations suivantes
                                         </DialogDescription>
                                     </DialogHeader>
                                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -242,7 +247,7 @@ export default function Panier() {
                                             Poursuivre
                                         </Button>
                                     </form>
-                                  
+
                                 </DialogContent>
                             </Dialog>
 

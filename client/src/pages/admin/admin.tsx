@@ -42,7 +42,8 @@ const commandsTopBar = [
     'Prix',
     'Qauntité',
     'Total',
-    'Status'
+    'Status',
+    ''
 ]
 
 const filterOptions = [
@@ -55,10 +56,12 @@ const filterOptions = [
 export default function Admin() {
 
     const { user } = useContext(UserContext)
-    const [commands, setCommand] = useState()
+    const [commands, setCommand] = useState([])
     const [itemsId, setItemsId] = useState([])
     const [filterSelected, setFilterSelected] = useState('tout')
+    const [total, setTotal] = useState()
     const navigate = useNavigate()
+
 
     const individualIltemsChecked = (id, event) => {
         if (event.target.checked) {
@@ -95,25 +98,6 @@ export default function Admin() {
         }
     }
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await baseRequest.get(`http://localhost:1337/api/commands?populate=*}`)
-                if (filterSelected === 'tout') {
-                    setCommand(response.data.data)
-                } else {
-                    const dataFilter = response.data.data.filter(item => item.attributes.statut === filterSelected.toLowerCase())
-                    setCommand(dataFilter)
-                }
-
-
-            } catch (err: any) {
-                console.log(err)
-            }
-        }
-        fetchData()
-    }, [itemsId, filterSelected]);
 
     const handleSetCommand = async (item, event) => {
         const updateItem = { ...item.attributes, statut: event.target.innerText.toLowerCase() }
@@ -153,6 +137,34 @@ export default function Admin() {
         }
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await baseRequest.get(`http://localhost:1337/api/commands?populate=*}`)
+                if (filterSelected === 'tout') {
+                    setCommand(response.data.data)
+                } else {
+                    const dataFilter = response.data.data.filter(item => item.attributes.statut === filterSelected.toLowerCase())
+                    setCommand(dataFilter)
+                }
+
+
+            } catch (err: any) {
+                console.log(err)
+            }
+        }
+        fetchData()
+    }, [itemsId, filterSelected]);
+
+    useEffect(() => {
+        const totalPrice = commands
+            .filter(item => item.attributes.statut === 'livré')
+            .reduce((acc, item) => {
+                return acc += (parseFloat(item?.attributes?.price) * parseFloat(item?.attributes?.quantity))
+            }, 0)
+        setTotal(totalPrice)
+    }, [commands])
+
     if (user?.user?.username?.toLowerCase() !== 'oumar kane') {
         return <div className="bg-gray-200 w-full px-16 md:px-0 h-screen flex items-center justify-center">
             <div className="bg-white border border-gray-200 flex flex-col items-center justify-center px-4 md:px-8 lg:px-24 py-8 rounded-lg shadow-2xl">
@@ -179,15 +191,15 @@ export default function Admin() {
 
                 {/* BODY */}
 
-                <div className='flex-1 bg-white p-5'>
+                <div className='flex-1 bg-white p-5 '>
                     <h1 className='text-xl  mb-5'>Commandes</h1>
                     <nav className='flex gap-3  my-5'>
                         {
                             filterOptions.map(item => (
                                 <Button
-                                style={{
+                                    style={{
 
-                                }}
+                                    }}
                                     onClick={(e) => setFilterSelected(e.target.innerText.toLowerCase())}
                                     className={`text-black/60 hover:bg-gray-100 font-bold ${filterSelected.toLowerCase() === item.toLowerCase() && 'bg-gray-100 border'} `} >
                                     {item}
@@ -211,7 +223,7 @@ export default function Admin() {
                     }
 
                     <Table className='text-[12.5px] '>
-                        <TableCaption>A list of your recent invoices.</TableCaption>
+                        <TableCaption>Gestionnaire de commande  </TableCaption>
                         <TableHeader className='w-full bg-gray-100 '>
                             <TableRow >
                                 <TableHead className='w-fit'>
@@ -261,10 +273,10 @@ export default function Admin() {
                                                 <TableCell>{item?.attributes?.price * item?.attributes?.quantity} $</TableCell>
                                                 <TableCell >
                                                     <p style={{
-                                                        background: item?.attributes?.statut === 'en attente' ? '#ffa600a5' :
-                                                            item?.attributes?.statut === 'livré' ? '#029b02b1' : 'red'
+                                                        background: item?.attributes?.statut === 'en attente' ? '#f5a207b1' :
+                                                            item?.attributes?.statut === 'livré' ? '#029b02b1' : '#f12323bb'
                                                     }}
-                                                        className='p-[2px] w-[80px] rounded-md text-center text-white capitalize'
+                                                        className='p-[2px] w-[80px]  rounded-md text-center text-white capitalize'
                                                     >{item?.attributes?.statut}</p>
                                                 </TableCell>
                                                 <TableCell>
@@ -284,7 +296,8 @@ export default function Admin() {
                                             </TableRow>
                                         </HoverCardTrigger>
 
-                                        <HoverCardContent className="w-80">
+
+                                        <HoverCardContent className="w-100">
                                             <div className="flex gap-5">
                                                 <FaUserCircle size={50} className='text-black/25' />
 
@@ -292,6 +305,10 @@ export default function Admin() {
                                                     <h4 className="text-sm font-semibold">
                                                         {item?.attributes?.username}
                                                     </h4>
+                                                    <p className="text-sm text-[12.4px] ">
+                                                        <span className='mr-3'>  Email : </span>
+                                                        {item?.attributes?.email}
+                                                    </p>
                                                     <p className="text-sm text-[12.4px] ">
                                                         <span className='mr-3'>  Adress : </span>
                                                         {item?.attributes?.adress}
@@ -316,6 +333,15 @@ export default function Admin() {
 
                                 ))
                             }
+                            {
+                                filterSelected === 'tout' &&
+                                <TableRow >
+                                    <TableCell  >
+                                        <p className='absolute right-0 text-sm font-bold'> Total : {total} $ </p>
+                                    </TableCell>
+                                </TableRow>
+                            }
+
 
                         </TableBody>
                     </Table>

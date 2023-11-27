@@ -84,7 +84,7 @@
 }
 
 *{
-  /* color: #dddddd3f; */
+  /* color: #f5a2079e; */
 }
 
 body{
@@ -191,7 +191,6 @@ grid-template-columns: repeat(4, 1fr);
   .category-card:nth-child(2){
       grid-column: span(1);
   }
-
 }
 
 @media (max-width: 1024px) {

@@ -38,6 +38,9 @@
     },
     "phone": {
       "type": "integer"
+    },
+    "email": {
+      "type": "email"
     }
   }
 }

@@ -22,7 +22,6 @@ export default function cart() {
    const [cart, setCart] = useState([])
 
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   console.log(cart)
   
