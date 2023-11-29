@@ -9,6 +9,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { filterSlice } from './filterSlice'
 import {selectedFilterSlice } from './SelectedFilterSlice'
 import { customeFilterSlice } from './CustomeFilterSlice'
+import { showSearchPageSlice } from './showSearchPageSlice'
+import { breadCrumbSlice } from './breadCrumbSlice'
 
 const persistConfig = {
   key: 'root',
@@ -19,7 +21,9 @@ const rootReducer = combineReducers({
   cart: cartSlice.reducer,
   filter : filterSlice.reducer,
   customFilters: customeFilterSlice.reducer,
-  selectedFilter : selectedFilterSlice.reducer
+  selectedFilter : selectedFilterSlice.reducer,
+  showSearchPage : showSearchPageSlice.reducer,
+  addRoute : breadCrumbSlice.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

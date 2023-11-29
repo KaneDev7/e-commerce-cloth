@@ -78,9 +78,11 @@
 /* MY CSS */
 
 :root{
-  --globalWidth : 1250px;
+  --globalWidth : 1300px;
   --backgroundBody : #f7f7f7;
   --primary : #001355;
+  /* --backgroundBody : #f7f7f7b4; */
+
 }
 
 *{
@@ -111,7 +113,6 @@ background: var(--backgroundBody);
   font-size: 25px;
   font-weight: bold;
   /* font-family: 'Roboto Condensed', sans-serif !important  ; */
-
 }
 
 .cart{

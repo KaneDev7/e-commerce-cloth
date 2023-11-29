@@ -23,7 +23,6 @@ export default function cart() {
 
   const dispatch = useDispatch()
 
-  console.log(cart)
   
   const totalPrice = () => {
     let total = 0

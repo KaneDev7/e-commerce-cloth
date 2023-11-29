@@ -16,7 +16,6 @@ export default function List({ catId, subCat, maxPrice, sort }: TypeProps) {
         setUrl( `/products?populate=*&[filters][categories][id]=${catId}${subCat.map(item => item).join('')}&sort=price:${sort}`) 
     },[subCat, catId])
 
-    
 
     if (isLoading) {
         return <div className='flex justify-center items-center h-[500px] mt[100px] '>

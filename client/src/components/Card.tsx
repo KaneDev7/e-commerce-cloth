@@ -30,7 +30,6 @@ export default function Card({ product }: TypeProps) {
         }
     }
 
-
     const isNew = getDayBetweenTwoDay(product?.attributes?.publishedAt) < DAY_MINIMIUM_FOR_NEW
 
     return (

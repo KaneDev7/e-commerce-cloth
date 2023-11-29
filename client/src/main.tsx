@@ -15,6 +15,7 @@ import Register from './pages/Register'
 import Panier from './pages/Panier'
 import Admin from './pages/admin/admin'
 import Commands from './pages/commandes'
+import SearchPage from './pages/searchPage'
 
 const { store, persistor } = configureStore()
 const router = createBrowserRouter([

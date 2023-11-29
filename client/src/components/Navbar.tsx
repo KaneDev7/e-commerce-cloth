@@ -14,7 +14,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import Cart from './Cart'
 import { GlobalContext } from '../context/ContextProvider'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import NavBarMobile from './NavBarMobile'
 import useFetch from '../hooks/useFetch'
 
@@ -39,6 +39,7 @@ import {
 
 import { UserContext } from '@/context/UserContext'
 import { Button } from './ui/button'
+import { setShowSearchPage } from '@/redux/showSearchPageSlice';
 
 export default function Navbar() {
 
@@ -47,24 +48,19 @@ export default function Navbar() {
   const { data: chaussursType } = useFetch('/nav-chaussures')
   const { data: accessoiresType } = useFetch('/nav-accessoires')
 
-
-
-  const { showCart, setShowCart } = useContext(GlobalContext)
-  const { showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
-  const [subCatStatus, setSubCatStatus] = useState('hidden')
-  const navigate = useNavigate()
-  const { user, setUser } = useContext(UserContext)
-  const [cart, setCart] = useState([])
+  const {showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
+  const {user, setUser } = useContext(UserContext)
   const products = useSelector(state => state.cart.products)
-
+  const [cart, setCart] = useState([])
+  const navigate = useNavigate()
+  const dispatch = useDispatch  ()
 
   const handleLogOut = () => {
     setUser(null)
     sessionStorage.removeItem('user')
     navigate('/login')
   }
-
-  // console.log(products,user.user.username )
+  
   useEffect(() => {
     if (user) {
       const filterCart = products.filter(item => item.username === user.user.username)
@@ -201,7 +197,7 @@ export default function Navbar() {
 
           <div className='flex items-center gap-4'>
 
-            <AiOutlineSearch size={20} className='text-gray-600' />
+            <AiOutlineSearch onClick={()=> dispatch(setShowSearchPage(true))} size={20} className='text-gray-600' />
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <CiUser size={20} className='text-gray-600' />
@@ -291,7 +287,6 @@ export default function Navbar() {
                   }
                 </div>
             }
-
 
           </div>
           <AiOutlineMenu onClick={() => setShowMenuMobile(true)} size={25} className='lg:hidden block' />
