@@ -1,12 +1,10 @@
 import { baseRequest } from '@/axios/baseRequest';
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { removeItem } from '@/redux/cartSlice';
 import { setShowSearchPage } from '@/redux/showSearchPageSlice';
+import { Item } from '@radix-ui/react-dropdown-menu';
 import { useState } from 'react';
 
 import { IoMdClose } from "react-icons/io";
-import { MdDelete } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,13 +16,21 @@ export default function SearchPage() {
 
     console.log('products', products)
 
+
+    products.map(item => {
+        item?.attributes?.size?.data.map(size => {
+            <p className='text-sm'> </p>
+            console.log(size?.attributes?.size )
+        })
+    })
+
     const handleClick = (id) => {
         navigate(`/product/${id}`)
         dispath(setShowSearchPage(false))
     }
 
     const handleChange = ({ target }) => {
-        if(target.value.trim() === ''){
+        if (target.value.trim() === '') {
             return
         }
 
@@ -56,35 +62,41 @@ export default function SearchPage() {
                         </Button> */}
                     </div>
                     {
-                        products.length > 1 && 
+                        products.length > 1 &&
                         <div className='w-full max-h-[80vh] bg-white shadow-sm mt-10 border overflow-y-auto p-10'>
-                        <div>
-                            {products?.map(item => (
-                                <div key={item.id} className='bg-white p-4 mb-3 shadow-sm'>
-                                    <div className='flex justify-between  gap-5  '>
-                                        <div className='w-[300px]  flex gap-5 '>
-                                            <img src={import.meta.env.VITE_API_UPLOAD + item?.attributes?.img?.data[0]?.attributes?.url} alt="" className='w-[80px] h-[80px] object-cover' />
+                            <div>
+                                {products?.map(item => (
+                                    <div key={item.id} className='bg-white p-4 mb-3 shadow-sm'>
+                                        <div className='flex justify-between  gap-5  '>
+                                            <div className=' flex gap-5 '>
+                                                <img src={import.meta.env.VITE_API_UPLOAD + item?.attributes?.img?.data[0]?.attributes?.url} alt="" className='w-[80px] h-[80px] object-cover' />
 
-                                            <div className='flex flex-col  '>
-                                                <h1 onClick={() => handleClick(item?.id)}
-                                                    className=' text-black text-[16px] hover:underline cursor-pointer'>{item?.attributes?.title} </h1>
-                                                {/* <p className='text-sm text-black/60'>{item.desc.substring(0,50)}...  </p> */}
-                                                <p className='text-primaryColor text-md font-bold'> $ {item?.attributes?.price} </p>
-                                                <div className='flex'>
-                                                    <p className='text-sm'> {item?.attributes?.size?.toString()} </p>
+                                                <div className='flex flex-col  '>
+                                                    <h1 onClick={() => handleClick(item?.id)}
+                                                        className=' text-black text-[16px] hover:underline cursor-pointer'>{item?.attributes?.title} </h1>
+                                                    {/* <p className='text-sm text-black/60'>{item?.attributes?.desc.substring(0,50)}...  </p> */}
+                                                    <p className='text-primaryColor text-md font-bold'> $ {item?.attributes?.price} </p>
+                                                    <div className='flex'>
+                                                        {
+                                                            item?.attributes?.size?.data.map(size => (
+                                                                <p className='text-sm'> {size?.attributes?.size} </p>
+                                                            ))
+
+                                                        }
+
+                                                    </div>
                                                 </div>
+
                                             </div>
 
                                         </div>
-
                                     </div>
-                                </div>
-                            ))
-                            }
+                                ))
+                                }
+                            </div>
                         </div>
-                    </div>
                     }
-                 
+
                 </div>
             </div>
 

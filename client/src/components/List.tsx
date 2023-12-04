@@ -9,8 +9,7 @@ type TypeProps = { catId: number, subCat: Array<string>, maxPrice: number, sort:
 export default function List({ catId, subCat, maxPrice, sort }: TypeProps) {
 
     const [url, setUrl] = useState<string>('')
-    const { data: products, isLoading, error } = useFetch(url)
-
+    const { data: products, isLoading, error } = useFetch(url)  
 
     useEffect(()=>{
         setUrl( `/products?populate=*&[filters][categories][id]=${catId}${subCat.map(item => item).join('')}&sort=price:${sort}`) 

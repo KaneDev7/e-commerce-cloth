@@ -3,7 +3,7 @@ import { AiOutlineHeart } from 'react-icons/ai'
 import { FaBalanceScale } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import useFetch from '../hooks/useFetch'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addItem } from '../redux/cartSlice'
 import { useContext } from 'react'
@@ -41,11 +41,10 @@ export default function Product() {
   const navigate = useNavigate()
   const { id } = useParams()
   const dispatch = useDispatch()
+  // const location = useLocation()
   const { data: product, isLoading, error } = useFetch(`/products/${id}?populate=*`)
 
   let imgUrl, imgUrl2, images
-
-  console.log(user)
 
   if (product.length !== 0) {
     imgUrl = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img?.data?.attributes?.url
@@ -53,10 +52,9 @@ export default function Product() {
     images = product?.attributes?.img.data
   }
 
-
   const handleAddProductToCart = () => {
     if (!user) {
-      return navigate('/login')
+      return navigate(`/login${location.pathname}`)
     }
 
     const articleInCartOfCurrentUser = cart.find(item => item.id === product.id && user.user.username.trim() === item.username.trim())
@@ -128,8 +126,6 @@ export default function Product() {
   useEffect(() => {
     window.scroll(0, 0)
   }, [id])
-
-
 
   if (isLoading) {
     return <div className='w-screen h-screen flex justify-center items-center'>

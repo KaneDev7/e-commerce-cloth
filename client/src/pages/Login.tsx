@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@radix-ui/react-dropdown-menu"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { UserContext } from "@/context/UserContext"
 import { useContext, useState } from "react"
 import { baseRequest } from "@/axios/baseRequest"
@@ -21,6 +21,9 @@ export default function Login() {
   const [message, setMessage] = useState(null)
   const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
+  const params = useParams()
+
+ // console.log({params})
 
   const {
     register,
@@ -42,7 +45,10 @@ export default function Login() {
 
       setUser(response?.data)
       sessionStorage.setItem('user', JSON.stringify(response?.data))
-      navigate('/')
+      if(params.frompath){
+        return navigate(`/${params?.frompath}/${params?.id}`)
+      }
+      navigate(`/`)
 
     } catch (err: any) {
       console.log(err)
@@ -85,7 +91,7 @@ export default function Login() {
 
 
           <div>
-            <Link to='/' className="text-sm hover:underline text-black/60">Mot de passe oublié ?</Link>
+            <Link to='/forgotpassword' className="text-sm hover:underline text-black/60">Mot de passe oublié ?</Link>
           </div>
 
           <Button type="submit" className="mt-5 bg-primaryColor/95 hover:bg-primaryColor">

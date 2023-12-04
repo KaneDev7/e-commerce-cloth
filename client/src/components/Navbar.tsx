@@ -10,7 +10,7 @@ import { BsHeart } from 'react-icons/bs'
 import { PiShoppingCartLight } from 'react-icons/pi'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import Cart from './Cart'
 import { GlobalContext } from '../context/ContextProvider'
@@ -48,19 +48,19 @@ export default function Navbar() {
   const { data: chaussursType } = useFetch('/nav-chaussures')
   const { data: accessoiresType } = useFetch('/nav-accessoires')
 
-  const {showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
-  const {user, setUser } = useContext(UserContext)
+  const { showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
+  const { user, setUser } = useContext(UserContext)
   const products = useSelector(state => state.cart.products)
   const [cart, setCart] = useState([])
   const navigate = useNavigate()
-  const dispatch = useDispatch  ()
+  const dispatch = useDispatch()
 
   const handleLogOut = () => {
     setUser(null)
     sessionStorage.removeItem('user')
     navigate('/login')
   }
-  
+
   useEffect(() => {
     if (user) {
       const filterCart = products.filter(item => item.username === user.user.username)
@@ -190,24 +190,30 @@ export default function Navbar() {
         </div>
 
 
-
         {/* RIGHT */}
 
         <div className='flex items-center gap-4'>
 
           <div className='flex items-center gap-4'>
 
-            <AiOutlineSearch onClick={()=> dispatch(setShowSearchPage(true))} size={20} className='text-gray-600' />
-            <DropdownMenu>
-              <DropdownMenuTrigger>
+            <AiOutlineSearch onClick={() => dispatch(setShowSearchPage(true))} size={20} className='text-gray-600' />
+
+            <DropdownMenu  >
+              <DropdownMenuTrigger  className={`flex justify-center items-center gap-2 ${user && 'border p-2'} `} >
                 <CiUser size={20} className='text-gray-600' />
+                {user &&
+                   <p className='text-sm'> 
+                   {user.user.username}
+                 </p>
+                }
               </DropdownMenuTrigger>
 
               {
                 user ?
+
                   <DropdownMenuContent>
                     <DropdownMenuLabel className='text-center'>
-                      {user.user.username}
+                      Mon Compte
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
@@ -250,7 +256,8 @@ export default function Navbar() {
                       </p>
                     </DropdownMenuItem>
 
-                  </DropdownMenuContent> :
+                  </DropdownMenuContent>
+                  :
 
                   <DropdownMenuContent>
                     <Link to='/login'>
@@ -270,7 +277,7 @@ export default function Navbar() {
             <BsHeart size={20} className='text-gray-600' />
             {
               !user ?
-                <PiShoppingCartLight onClick={() => !user && navigate('/login')} size={20} className='text-gray-600' /> :
+                <PiShoppingCartLight onClick={() => !user && navigate('/login') } size={20} className='text-gray-600' /> :
                 <div className='relative'>
                   <DropdownMenu>
                     <DropdownMenuTrigger className='text-sm'>
