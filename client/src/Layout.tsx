@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import NavbarFixed from './components/NavbarFixed'
+
 import Footer from './components/Footer'
 import BreadCrumb from './components/BreadCrumb'
 import { UserContext } from './context/UserContext'
@@ -28,8 +30,9 @@ export default function Layout() {
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
+           <NavbarFixed/>
             <Navbar />
-            <BreadCrumb />
+            {/* <BreadCrumb /> */}
             <div className='py-0 px-5 '>
                 {showSearchPage && <SearchPage />}
                 <Outlet />

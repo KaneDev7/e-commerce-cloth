@@ -2,9 +2,7 @@ import { baseRequest } from '@/axios/baseRequest'
 import Assurance from '@/components/Assurance'
 import { Button } from '@/components/ui/button'
 import { UserContext } from '@/context/UserContext'
-import { getCommandFromClient } from '@/lib/nodeMailer/getCommand'
 import { removeItem, reset } from '@/redux/cartSlice'
-import { it } from 'node:test'
 import { useContext, useEffect, useState } from 'react'
 import { MdDelete } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
@@ -212,6 +210,7 @@ export default function Panier() {
                                         COMMANDER A UN CLIC
                                     </Button>
                                 </DialogTrigger>
+                                
                                 <DialogContent className="sm:max-w-[425px]">
                                     <DialogHeader>
                                         <DialogTitle>Finaliser la commande</DialogTitle>

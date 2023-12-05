@@ -30,7 +30,7 @@ import {
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuItem,
+  NavigationMenuItem, 
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
@@ -40,6 +40,8 @@ import {
 import { UserContext } from '@/context/UserContext'
 import { Button } from './ui/button'
 import { setShowSearchPage } from '@/redux/showSearchPageSlice';
+
+const SCROLL_LIMIT = 400
 
 export default function Navbar() {
 
@@ -52,6 +54,8 @@ export default function Navbar() {
   const { user, setUser } = useContext(UserContext)
   const products = useSelector(state => state.cart.products)
   const [cart, setCart] = useState([])
+  const [showNavFixed, setShowNavFixed] = useState(false)
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -66,17 +70,22 @@ export default function Navbar() {
       const filterCart = products.filter(item => item.username === user.user.username)
       setCart(filterCart)
     }
-
   }, [products, user])
 
+  
+ useEffect(()=>{
+    window.addEventListener('scroll', (e) => {
+       if(window.scrollY > SCROLL_LIMIT ){
+        setShowNavFixed(true)
+       }else{
+        setShowNavFixed(false)
+       }
+    })
+ },[showNavFixed])
+
   return (
-    <div className='relative bg-white shadow-sm '>
-      <div className='w-full  p-2 flex justify-center text-center bg-[#f9f2e8] '>
-        <div className='items-center text-[13px] '>
-          <p> Une Question? Une commande à passer?</p>
-          <p>Appelez nous au <span className='font-bold'>78 137 37 37</span> </p>
-        </div>
-      </div>
+    <div className={`fixed top-0 w-full z-50 px-5 bg-white shadow-sm duration-300 ${!showNavFixed && 'opacity-0'} `} >
+
       {showMenuMobile && <NavBarMobile />}
 
       <div className='h-[80px] flex justify-between items-center   globalWidth'>
@@ -222,10 +231,17 @@ export default function Navbar() {
                       Mon Compte
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={()=> navigate('/infos')}>
+                    <DropdownMenuItem>
                       <p className='flex justify-center items-center gap-1'>
                         <IoIosInformationCircle size={15} className='text-gray-600' />
                         <span className='text-md'> Informations </span>
+                      </p>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem>
+                      <p className='flex justify-center items-center gap-1'>
+                        <MdLocationOn size={15} className='text-gray-600' />
+                        <span className='text-md'> Adress </span>
                       </p>
                     </DropdownMenuItem>
 
