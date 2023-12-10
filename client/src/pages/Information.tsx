@@ -1,4 +1,5 @@
-
+import Navbar from '@/components/Navbar'
+import NavbarFixed from '@/components/NavbarFixed'
 
 import { useForm, SubmitHandler } from "react-hook-form"
 
@@ -29,29 +30,33 @@ type Inputs = {
 }
 
 export default function Informations() {
-    const { user} = useContext(UserContext)
+    const { user } = useContext(UserContext)
     const navigate = useNavigate()
 
 
     return (
-        <div className='globalWidth flex justify-center items-center '>
-            <div className=' bg-white shadow-md px-7 py-10 mt-20' >
-                <h1 className="font-bold">VOS INFORMATIONS PERSONNELLES</h1>
+        <>
+            <NavbarFixed />
+            <Navbar />
+            <div className='globalWidth flex justify-center items-center '>
+                <div className=' bg-white shadow-md px-7 py-10 mt-20' >
+                    <h1 className="font-bold">VOS INFORMATIONS PERSONNELLES</h1>
 
-                <div className="mt-5 text-sm">
-                    <p className="font-bold">Prénom & nom <span className="font-normal"> {user?.user?.username} </span>  </p>
-                    <p className="font-bold">Adress-email <span className="font-normal">{user?.user?.email} </span>  </p>
+                    <div className="mt-5 text-sm">
+                        <p className="font-bold">Prénom & nom <span className="font-normal"> {user?.user?.username} </span>  </p>
+                        <p className="font-bold">Adress-email <span className="font-normal">{user?.user?.email} </span>  </p>
 
-                    <div className="flex flex-col mt-4">
+                        <div className="flex flex-col mt-4">
 
-                        <Button onClick={() => navigate('/forgotpassword')} className="mt-5 bg-primaryColor/95 hover:bg-primaryColor">
-                            Changer de mot de passe
-                        </Button>
+                            <Button onClick={() => navigate('/forgotpassword')} className="mt-5 bg-primaryColor/95 hover:bg-primaryColor">
+                                Changer de mot de passe
+                            </Button>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
+        </>
 
     )
 }

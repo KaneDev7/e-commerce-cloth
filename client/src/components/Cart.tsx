@@ -19,11 +19,11 @@ type ContextType = {
 export default function cart() {
   const { user } = useContext(UserContext)
   const products = useSelector(state => state.cart.products)
-   const [cart, setCart] = useState([])
+  const [cart, setCart] = useState([])
 
   const dispatch = useDispatch()
 
-  
+
   const totalPrice = () => {
     let total = 0
     return cart.reduce((acc, item) => acc += (item.price * item.quantity), 0).toFixed(2)
@@ -33,13 +33,13 @@ export default function cart() {
     const filterCart = products.filter(item => item.username.trim() === user.user.username.trim())
     setCart(filterCart)
 
-}, [products])
+  }, [products])
 
-if( cart.length === 0 ){
-  return <p className='mt-5'>Votre panier est vide</p>
-}
+  if (cart.length === 0) {
+    return <p className='mt-5'>Votre panier est vide</p>
+  }
   return (
-    <div className=''>
+    <div className='min-w-[300px] '>
 
       {cart?.map(item => (
         <div key={item.id}>
@@ -53,7 +53,6 @@ if( cart.length === 0 ){
                 <p className='text-primaryColor text-sm'>{item.quantity} x $ {item.price} </p>
               </div>
             </div>
-
 
             <button className=''>
               <MdDelete className='text-red-500 hover:text-red-600' size={18} onClick={() => dispatch(removeItem(item.id))} />
@@ -79,7 +78,7 @@ if( cart.length === 0 ){
           </DropdownMenuItem>
         </Link>
 
-        <p className='text-red-400 text-sm cursor-pointer' onClick={() => dispatch(reset())}>Reset Cart</p>
+        <p className='text-red-400 text-sm cursor-pointer hover:underline' onClick={() => dispatch(reset())}>Tout supprimeé</p>
       </div>
     </div>
   )

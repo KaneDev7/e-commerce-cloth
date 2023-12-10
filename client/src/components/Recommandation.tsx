@@ -22,7 +22,7 @@ export default function Recommandation({ categories }) {
     const [url, setUrl] = useState<string>('')
     const [products, setProducts] = useState([])
 
-    const { data, isLoading, error } = useFetch(url)
+    const { data, isLoading, error } = useFetch(`/products?populate=*${categories.map(categorie => `&[filters][categories][id]=${categorie?.id}`)}`)
 
     useEffect(() => {
         setUrl(`/products?populate=*${categories.map(categorie => `&[filters][categories][id]=${categorie?.id}`)}`)

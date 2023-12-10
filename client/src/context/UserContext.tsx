@@ -1,6 +1,7 @@
 import React, { useState, createContext } from 'react'
+import { Context } from 'vm'
 
-export const UserContext = createContext(null)
+export const UserContext  : Context<unknown | Object>= createContext(null)
 
 
 

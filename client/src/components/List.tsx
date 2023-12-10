@@ -8,7 +8,8 @@ type TypeProps = { catId: number, subCat: Array<string>, maxPrice: number, sort:
 
 export default function List({ catId, subCat, maxPrice, sort }: TypeProps) {
 
-    const [url, setUrl] = useState<string>('')
+    const [url, setUrl] = useState<string>(`/products?populate=*&[filters][categories][id]=${catId}${subCat.map(item => item).join('')}&sort=price:${sort}`)
+
     const { data: products, isLoading, error } = useFetch(url)  
 
     useEffect(()=>{
@@ -22,13 +23,16 @@ export default function List({ catId, subCat, maxPrice, sort }: TypeProps) {
         </div>
       }
     return (
-        <div className="max-w-full flex items-start gap-10 flex-wrap mt-5 list">
- 
-            {
-                products?.map((product) => (
-                    <Card key={product.id} product={product}/>
-                ))
-            }
-        </div>
+      <div>
+        <p className='mt-4'> {products.length} article{products.length > 1 && 's'}  trouvé{products.length > 1 && 's'}</p>
+          <div className="max-w-full flex items-start gap-10 flex-wrap mt-5 list">
+           
+           {
+               products?.map((product) => (
+                   <Card key={product.id} product={product}/>
+               ))
+           }
+       </div>
+      </div>
     )
 }

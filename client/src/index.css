@@ -147,7 +147,7 @@ background: var(--backgroundBody);
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 400px);
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 15px;
 }
 
 .list{
@@ -155,11 +155,27 @@ display: grid;
 grid-template-columns: repeat(3, 1fr);
 flex-wrap: wrap;
 }
+
 .feature{
 grid-template-columns: repeat(4, 1fr);
 
 }
 .category-card{
+  box-shadow: 0 0 30px #00000025;
+  filter: saturate(20%);
+  overflow: hidden;
+}
+
+.category-card:hover{
+  filter: saturate(100%);
+}
+.category-card img{
+  transition: .2s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+}
+
+.category-card:hover img{
+  transform: scale(1.1);
 }
 
 .category-card img{

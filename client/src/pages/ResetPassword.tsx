@@ -1,4 +1,6 @@
 
+import Navbar from '@/components/Navbar'
+import NavbarFixed from '@/components/NavbarFixed'
 
 import { useForm, SubmitHandler } from "react-hook-form"
 
@@ -82,45 +84,51 @@ export default function ResetPassword() {
         </div>
     }
     return (
-        <div className='globalWidth flex justify-center items-center '>
+        <>
+            <NavbarFixed />
+            <Navbar />
 
-            <div className=' bg-white shadow-md px-7 py-10 mt-20' >
-                <h1 className="font-bold">INITIALISER VOTRE MOT DE PASS</h1>
-                {
-                    message && <p className="bg-red-100 text-red-700 text-sm mt-5  p-3"> {message} </p>
-                }
+            <div className='globalWidth flex justify-center items-center '>
 
-
-                <form onSubmit={handleSubmit(onSubmit)}>
-
-                    <div className="grid w-full max-w-sm items-center gap-1.5 mt-5">
-                        <Label htmlFor="password" className="text-sm font-bold">Mot de passe</Label>
-                        <Input type="password" id="password" placeholder="Mot de pass"
-                            className={`${errors.password && 'border-red-400 border'} `}
-                            {...register("password", { required: true })} />
-                    </div>
-                    <div className={`text-red-400 text-sm mt-3 `} >
-                        {errors.password && <span className="text-sm">Verifier ce champ</span>}
-                    </div>
+                <div className=' bg-white shadow-md px-7 py-10 mt-20' >
+                    <h1 className="font-bold">INITIALISER VOTRE MOT DE PASS</h1>
+                    {
+                        message && <p className="bg-red-100 text-red-700 text-sm mt-5  p-3"> {message} </p>
+                    }
 
 
-                    <div className="grid w-full max-w-sm items-center gap-1.5 mt-5">
-                        <Label htmlFor="confirmPassword" className="text-sm font-bold">Comfirmer le mot de passe</Label>
-                        <Input type="password" id="confirmPassword" placeholder="Comfirmer le mot de pass"
-                            className={`${errors.confirmPassword && 'border-red-400 border'} `}
-                            {...register("confirmPassword", { required: true })} />
-                    </div>
-                    <div className={`text-red-400 text-sm mt-3 `} >
-                        {errors.confirmPassword && <span className="text-sm">Verifier ce champ</span>}
-                    </div>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+
+                        <div className="grid w-full max-w-sm items-center gap-1.5 mt-5">
+                            <Label htmlFor="password" className="text-sm font-bold">Mot de passe</Label>
+                            <Input type="password" id="password" placeholder="Mot de pass"
+                                className={`${errors.password && 'border-red-400 border'} `}
+                                {...register("password", { required: true })} />
+                        </div>
+                        <div className={`text-red-400 text-sm mt-3 `} >
+                            {errors.password && <span className="text-sm">Verifier ce champ</span>}
+                        </div>
 
 
-                    <Button type="submit" className="mt-5 bg-primaryColor/95 hover:bg-primaryColor">
-                        Enregistrer
-                    </Button>
-                </form>
+                        <div className="grid w-full max-w-sm items-center gap-1.5 mt-5">
+                            <Label htmlFor="confirmPassword" className="text-sm font-bold">Comfirmer le mot de passe</Label>
+                            <Input type="password" id="confirmPassword" placeholder="Comfirmer le mot de pass"
+                                className={`${errors.confirmPassword && 'border-red-400 border'} `}
+                                {...register("confirmPassword", { required: true })} />
+                        </div>
+                        <div className={`text-red-400 text-sm mt-3 `} >
+                            {errors.confirmPassword && <span className="text-sm">Verifier ce champ</span>}
+                        </div>
+
+
+                        <Button type="submit" className="mt-5 bg-primaryColor/95 hover:bg-primaryColor">
+                            Enregistrer
+                        </Button>
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
+
 
     )
 }

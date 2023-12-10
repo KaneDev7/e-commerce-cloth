@@ -1,8 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-
-
-
 const initialState: Boolean = true
 
 export const showSearchPageSlice = createSlice({
@@ -10,7 +7,7 @@ export const showSearchPageSlice = createSlice({
     initialState,
 
     reducers: {
-        setShowSearchPage : (state, action)=>{
+        setShowSearchPage : (state : Boolean, action) : boolean =>{
             return action.payload
         },
 

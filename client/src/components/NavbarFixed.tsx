@@ -73,6 +73,7 @@ export default function Navbar() {
   }, [products, user])
 
   
+
  useEffect(()=>{
     window.addEventListener('scroll', (e) => {
        if(window.scrollY > SCROLL_LIMIT ){
@@ -119,8 +120,8 @@ export default function Navbar() {
                     <ul>
                       <h1 className='text-primaryColor font-bold mb-5'>VETEMENTS</h1>
                       {
-                        vetementsType.map((vetement, index) => (
-                          <li key={index} className='mb-1'>
+                        vetementsType.map((vetement) => (
+                          <li key={vetement?.id} className='mb-1'>
                             <Link to={`/products/${vetement?.attributes?.categorieId}`}
                               className='text-sm hover:underline whitespace-nowrap capitalize'>
                               <small className="text-sm font-medium leading-none">{vetement?.attributes?.title}</small>
@@ -147,7 +148,7 @@ export default function Navbar() {
                       <h1 className='text-primaryColor font-bold mb-5'>CHAUSSURES</h1>
                       {
                         chaussursType.map((chaussure, index) => (
-                          <li className='mb-1'>
+                          <li key={chaussure?.id} className='mb-1'>
                             <Link to={`/products/${chaussure?.attributes?.categorieId}`}
                               className='text-sm hover:underline whitespace-nowrap capitalize'>
                               <small className="text-sm font-medium leading-none">{chaussure?.attributes?.title}</small>
@@ -173,8 +174,8 @@ export default function Navbar() {
                     <ul>
                       <h1 className='text-primaryColor font-bold mb-5'>CHAUSSURES</h1>
                       {
-                        accessoiresType.map((accessoire, index) => (
-                          <li className='mb-1'>
+                        accessoiresType.map((accessoire) => (
+                          <li key={accessoire.id} className='mb-1'>
                             <Link to={`/products/${accessoire?.attributes?.categorieId}`}
                               className='text-sm hover:underline whitespace-nowrap capitalize'>
                               <small className="text-sm font-medium leading-none">{accessoire?.attributes?.title}</small>

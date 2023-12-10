@@ -78,6 +78,10 @@
       "relation": "manyToMany",
       "target": "api::color.color",
       "inversedBy": "products"
+    },
+    "like": {
+      "type": "text",
+      "default": "[]"
     }
   }
 }

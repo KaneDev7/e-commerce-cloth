@@ -891,6 +891,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'manyToMany',
       'api::color.color'
     >;
+    like: Attribute.Text & Attribute.DefaultTo<'[]'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

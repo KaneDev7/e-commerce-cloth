@@ -41,6 +41,25 @@ import { UserContext } from '@/context/UserContext'
 import { Button } from './ui/button'
 import { setShowSearchPage } from '@/redux/showSearchPageSlice';
 
+
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
 export default function Navbar() {
 
   // const { data: categories, isLoading, error } = useFetch('/categories')
@@ -71,15 +90,14 @@ export default function Navbar() {
 
   return (
     <div className='relative bg-white shadow-sm '>
-      <div className='w-full  p-2 flex justify-center text-center bg-[#f9f2e8] '>
+      <div className='w-full p-2 flex justify-center text-center bg-[#f9f2e8]  '>
         <div className='items-center text-[13px] '>
           <p> Une Question? Une commande à passer?</p>
           <p>Appelez nous au <span className='font-bold'>78 137 37 37</span> </p>
         </div>
       </div>
-      {showMenuMobile && <NavBarMobile />}
 
-      <div className='h-[80px] flex justify-between items-center   globalWidth'>
+      <div className='h-[80px] flex justify-between items-center globalWidth px-5 xl:px-0 '>
 
         {/* LEFT */}
 
@@ -111,7 +129,7 @@ export default function Navbar() {
                       <h1 className='text-primaryColor font-bold mb-5'>VETEMENTS</h1>
                       {
                         vetementsType.map((vetement, index) => (
-                          <li key={index} className='mb-1'>
+                          <li key={vetement?.id} className='mb-1'>
                             <Link to={`/products/${vetement?.attributes?.categorieId}`}
                               className='text-sm hover:underline whitespace-nowrap capitalize'>
                               <small className="text-sm font-medium leading-none">{vetement?.attributes?.title}</small>
@@ -137,8 +155,9 @@ export default function Navbar() {
                     <ul>
                       <h1 className='text-primaryColor font-bold mb-5'>CHAUSSURES</h1>
                       {
-                        chaussursType.map((chaussure, index) => (
-                          <li className='mb-1'>
+                        chaussursType.map((chaussure) => (
+                          <li key={chaussure?.id} className='mb-1'>
+
                             <Link to={`/products/${chaussure?.attributes?.categorieId}`}
                               className='text-sm hover:underline whitespace-nowrap capitalize'>
                               <small className="text-sm font-medium leading-none">{chaussure?.attributes?.title}</small>
@@ -165,7 +184,7 @@ export default function Navbar() {
                       <h1 className='text-primaryColor font-bold mb-5'>CHAUSSURES</h1>
                       {
                         accessoiresType.map((accessoire, index) => (
-                          <li className='mb-1'>
+                          <li key={accessoire?.id} className='mb-1'>
                             <Link to={`/products/${accessoire?.attributes?.categorieId}`}
                               className='text-sm hover:underline whitespace-nowrap capitalize'>
                               <small className="text-sm font-medium leading-none">{accessoire?.attributes?.title}</small>
@@ -183,13 +202,13 @@ export default function Navbar() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
+              {/* <NavigationMenuItem>
                 <Link to='/'>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     A propos
                   </NavigationMenuLink>
                 </Link>
-              </NavigationMenuItem>
+              </NavigationMenuItem> */}
 
             </NavigationMenuList>
           </NavigationMenu>
@@ -205,12 +224,12 @@ export default function Navbar() {
             <AiOutlineSearch onClick={() => dispatch(setShowSearchPage(true))} size={20} className='text-gray-600' />
 
             <DropdownMenu  >
-              <DropdownMenuTrigger  className={`flex justify-center items-center gap-2 ${user && 'border p-2'} `} >
+              <DropdownMenuTrigger className={`flex justify-center items-center gap-2 ${user && 'border p-2'} `} >
                 <CiUser size={20} className='text-gray-600' />
                 {user &&
-                   <p className='text-sm'> 
-                   {user.user.username}
-                 </p>
+                  <p className='text-sm'>
+                    {user.user.username}
+                  </p>
                 }
               </DropdownMenuTrigger>
 
@@ -222,7 +241,7 @@ export default function Navbar() {
                       Mon Compte
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={()=> navigate('/infos')}>
+                    <DropdownMenuItem onClick={() => navigate('/infos')}>
                       <p className='flex justify-center items-center gap-1'>
                         <IoIosInformationCircle size={15} className='text-gray-600' />
                         <span className='text-md'> Informations </span>
@@ -276,7 +295,7 @@ export default function Navbar() {
             <BsHeart size={20} className='text-gray-600' />
             {
               !user ?
-                <PiShoppingCartLight onClick={() => !user && navigate('/login') } size={20} className='text-gray-600' /> :
+                <PiShoppingCartLight onClick={() => !user && navigate('/login')} size={20} className='text-gray-600' /> :
                 <div className='relative'>
                   <DropdownMenu>
                     <DropdownMenuTrigger className='text-sm'>
@@ -295,7 +314,78 @@ export default function Navbar() {
             }
 
           </div>
-          <AiOutlineMenu onClick={() => setShowMenuMobile(true)} size={25} className='lg:hidden block' />
+          <Sheet  >
+            <SheetTrigger asChild>
+              <AiOutlineMenu size={25} className='lg:hidden block' />
+            </SheetTrigger>
+            <SheetContent side='left' >
+              <SheetHeader>
+                <SheetTitle>MENU</SheetTitle>
+              </SheetHeader>
+              <div className='mt-10'>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Vetements</AccordionTrigger>
+                    <AccordionContent>
+                      {
+                        vetementsType.map((vetement, index) => (
+                          <li key={vetement?.id} className='mb-1'>
+                            <Link to={`/products/${vetement?.attributes?.categorieId}`}
+                              className='text-sm hover:underline whitespace-nowrap capitalize'>
+                              <small className="text-sm font-medium leading-none">{vetement?.attributes?.title}</small>
+                            </Link>
+                          </li>
+                        ))
+                      }
+                    </AccordionContent>
+
+                  </AccordionItem>
+                  {
+                    <>
+                      <AccordionItem value="item-2">
+                        <AccordionTrigger>Chaussures</AccordionTrigger>
+                        <AccordionContent>
+                          {
+                            chaussursType.map((chaussure) => (
+                              <li key={chaussure?.id} className='mb-1'>
+
+                                <Link to={`/products/${chaussure?.attributes?.categorieId}`}
+                                  className='text-sm hover:underline whitespace-nowrap capitalize'>
+                                  <small className="text-sm font-medium leading-none">{chaussure?.attributes?.title}</small>
+                                </Link>
+                              </li>
+                            ))
+                          }
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      <AccordionItem value="item-3">
+                        <AccordionTrigger>Sacs & Accessoires</AccordionTrigger>
+                        <AccordionContent>
+                          {
+                            accessoiresType.map((accessoire, index) => (
+                              <li key={accessoire?.id} className='mb-1'>
+                                <Link to={`/products/${accessoire?.attributes?.categorieId}`}
+                                  className='text-sm hover:underline whitespace-nowrap capitalize'>
+                                  <small className="text-sm font-medium leading-none">{accessoire?.attributes?.title}</small>
+                                </Link>
+                              </li>
+                            ))
+                          }
+                        </AccordionContent>
+                      </AccordionItem>
+                    </>
+                  }
+                </Accordion>
+              </div>
+              <SheetFooter>
+                <SheetClose asChild>
+                  <Button type="submit">Save changes</Button>
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+          {/* <AiOutlineMenu onClick={() => setShowMenuMobile(true)} size={25} className='lg:hidden block' /> */}
         </div>
 
 

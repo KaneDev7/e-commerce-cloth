@@ -1,6 +1,4 @@
 import { BiCartAdd } from 'react-icons/bi'
-import { AiOutlineHeart } from 'react-icons/ai'
-import { FaBalanceScale } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import useFetch from '../hooks/useFetch'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -8,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addItem } from '../redux/cartSlice'
 import { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
+
+import Navbar from '@/components/Navbar'
+import NavbarFixed from '@/components/NavbarFixed'
 
 // shaadcdn 
 import { Button } from "@/components/ui/button"
@@ -61,7 +62,7 @@ export default function Product() {
 
     if (!Boolean(selectSize)) {
       return toast.warn("Seletionner d'abord votre taille", {
-        hideProgressBar : true
+        hideProgressBar: true
       })
     }
 
@@ -85,12 +86,6 @@ export default function Product() {
     }
 
     const isArticleHasSameSize = articleInCartOfCurrentUser.size.some(item => item === selectSize)
-
-    // if(isArticleHasSameSize && articleInCartOfCurrentUser ) {
-    //   return toast("Produit", {
-    //     hideProgressBar : true
-    //   })
-    // }
 
     dispatch(addItem({
       id: product.id,
@@ -136,98 +131,101 @@ export default function Product() {
 
 
   return (
-    <div className='globalWidth mt-10'>
-      <ToastContainer />
-      <div className='w-full flex flex-wrap gap-[40px] bg-white p-5 shadow-sm'>
+    <>
+      <NavbarFixed />
+      <Navbar />
+      <div className='globalWidth mt-10 px-5'>
+        <ToastContainer />
+        <div className='w-full flex flex-wrap gap-[40px] bg-white p-5 shadow-sm'>
 
-        <div className='lg:w-[45%] w-[100%] lg:min-w-[500px] gap-4'>
-          <div className='md:mb-20 w-full '>
-            <Swiper
-              pagination={{
-                clickable: true,
-              }}
-              zoom={true}
-
-              navigation={true}
-              modules={[Zoom, Navigation, Pagination]}
-              className="mySwiper"
-            >
-              {
-                images?.map(image => (
-                  <SwiperSlide>
-                    <div className='swiper-zoom-container'>
-                      <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full h-auto aspect-square object-contain cursor-zoom-in ' />
-                    </div>
-                  </SwiperSlide>
-                ))
-              }
-            </Swiper>
-          </div>
-        </div>
-
-        <div className='flex-1 min-w-[40%] '>
-
-          {/* BLOCK */}
-          <div className='w-full  border-b border-black/10 flex flex-col gap-4 product_detaitl_text_block'>
-
-            <h1 className='primaryTitle font-bold md:text-4xl text-3xl '>  {product?.attributes?.title} </h1>
-
-            <p className="w-full max-w-[900px] text-black/70 font-normal text-[14px] text-justify">
-              {product?.attributes?.desc}
-            </p>
-
-            <h2 className='text-primaryColor md:text-4xl text-3xl  font-bold'>$ {product?.attributes?.price} </h2>
+          <div className='lg:w-[45%] w-[100%] lg:min-w-[500px] gap-4'>
+            <div className='md:mb-20 w-full '>
+              <Swiper
+                pagination={{
+                  clickable: true,
+                }}
+                zoom={true}
+                navigation={true}
+                modules={[Zoom, Navigation, Pagination]}
+                className="mySwiper"
+              >
+                {
+                  images?.map((image, index) => (
+                    <SwiperSlide key={index}>
+                      <div className='swiper-zoom-container'>
+                        <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full h-auto aspect-square object-contain cursor-zoom-in ' />
+                      </div>
+                    </SwiperSlide>
+                  ))
+                }
+              </Swiper>
+            </div>
           </div>
 
+          <div className='flex-1 min-w-[40%] '>
 
-          {/* BLOCK */}
+            {/* BLOCK */}
+            <div className='w-full  border-b border-black/10 flex flex-col gap-4 product_detaitl_text_block'>
 
-          <div className='flex items-center flex-wrap  gap-20 border-b border-black/10 product_detaitl_text_block'>
+              <h1 className='primaryTitle font-bold md:text-4xl text-3xl '>  {product?.attributes?.title} </h1>
 
-            {/* SIZES */}
-            <div className=''>
-              <h1 className='text-[14px] text-black/80 '>Tailles</h1>
-              <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
-                <select
-                  onChange={handleSelectSizeChange}
-                  id="countries"
-                  className="bg-gray-50 border border-black/25 text-gray-900 text-sm rounded-md px-3 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  <option className='text-sm' value={undefined} selected>Seletionner une taille</option>
-                  {product?.attributes?.sizes?.data.map(item => (
-                    <option value={item?.attributes?.size}  > {item?.attributes?.size} </option>
-                  ))}
-                </select>
-              </div>
+              <p className="w-full max-w-[900px] text-black/70 font-normal text-[14px] text-justify">
+                {product?.attributes?.desc}
+              </p>
+
+              <h2 className='text-primaryColor md:text-4xl text-3xl  font-bold'>$ {product?.attributes?.price} </h2>
             </div>
 
 
+            {/* BLOCK */}
 
-            {/* AJOUT DE QUANTITE */}
-            <div>
-              <h1 className='text-[14px] text-black/80 '>Quantité</h1>
-              <div className='w-fit flex gap-4 mt-3'>
-                <button className='w-[35px] h-[35px] rounded-full border border-black  hover:bg-primaryColor hover:text-white' onClick={reduceQuantity}>-</button>
-                <p className='flex h-[35px] justify-center items-center'>{quantity} </p>
-                <button className='w-[35px] h-[35px] rounded-full border border-black  hover:bg-primaryColor hover:text-white' onClick={addQuantity}>+</button>
+            <div className='flex items-center flex-wrap  gap-20 border-b border-black/10 product_detaitl_text_block'>
+
+              {/* SIZES */}
+              <div className=''>
+                <h1 className='text-[14px] text-black/80 '>Tailles</h1>
+                <div className="flex flex-wrap gap-5 cursor-pointer mt-3">
+                  <select
+                    onChange={handleSelectSizeChange}
+                    id="countries"
+                    className="bg-gray-50 border border-black/25 text-gray-900 text-sm rounded-md px-3 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option className='text-sm' defaultValue={null} >Seletionner une taille</option>
+                    {product?.attributes?.sizes?.data.map((item, index) => (
+                      <option key={index} value={item?.attributes?.size}  > {item?.attributes?.size} </option>
+                    ))}
+                  </select>
+                </div>
               </div>
+
+
+
+              {/* AJOUT DE QUANTITE */}
+              <div>
+                <h1 className='text-[14px] text-black/80 '>Quantité</h1>
+                <div className='w-fit flex gap-4 mt-3'>
+                  <button className='w-[35px] h-[35px] rounded-full border border-black  hover:bg-primaryColor hover:text-white' onClick={reduceQuantity}>-</button>
+                  <p className='flex h-[35px] justify-center items-center'>{quantity} </p>
+                  <button className='w-[35px] h-[35px] rounded-full border border-black  hover:bg-primaryColor hover:text-white' onClick={addQuantity}>+</button>
+                </div>
+              </div>
+
             </div>
 
+
+            {/* BLOCK */}
+            <div className='flex items-center flex-wrap gap-10 product_detaitl_text_block'>
+
+              <Button onClick={handleAddProductToCart} className='bg-primaryColor/95 hover:bg-primaryColor'>
+                <BiCartAdd color='white' size={20} className="mr-3" />
+                Ajouter au panier
+              </Button>
+
+            </div>
+            <Assurance />
           </div>
-
-
-          {/* BLOCK */}
-          <div className='flex items-center flex-wrap gap-10 product_detaitl_text_block'>
-
-            <Button onClick={handleAddProductToCart} className='bg-primaryColor/95 hover:bg-primaryColor'>
-              <BiCartAdd color='white' size={20} className="mr-3" />
-              Ajouter au panier
-            </Button>
-
-          </div>
-          <Assurance />
         </div>
+        <Recommandation categories={product?.attributes?.categories?.data} />
       </div>
-      <Recommandation categories={product?.attributes?.categories?.data} />
-    </div>
+    </>
   )
 }
