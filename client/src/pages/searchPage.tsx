@@ -1,7 +1,6 @@
 import { baseRequest } from '@/axios/baseRequest';
 import { Input } from '@/components/ui/input'
 import { setShowSearchPage } from '@/redux/showSearchPageSlice';
-import { Item } from '@radix-ui/react-dropdown-menu';
 import { useState } from 'react';
 
 import { IoMdClose } from "react-icons/io";
@@ -12,24 +11,22 @@ export default function SearchPage() {
     const [products, setProducts] = useState([])
     const dispath = useDispatch()
     const navigate = useNavigate()
-    let timer = null
 
-    console.log('products', products)
-
+    let timer: null | number | NodeJS.Timeout | undefined = null
 
     products.map(item => {
         item?.attributes?.size?.data.map(size => {
             <p className='text-sm'> </p>
-            console.log(size?.attributes?.size )
+            console.log(size?.attributes?.size)
         })
     })
 
-    const handleClick = (id) => {
+    const handleClick = (id: number) => {
         navigate(`/product/${id}`)
         dispath(setShowSearchPage(false))
     }
 
-    const handleChange = ({ target }) => {
+    const handleChange = ({ target }: { target: HTMLInputElement }) => {
         if (target.value.trim() === '') {
             return
         }
@@ -57,9 +54,6 @@ export default function SearchPage() {
 
                     <div className="flex items-center w-full space-x-2">
                         <Input type="text" onChange={handleChange} placeholder="Recherche" className='h-[50px] bg-white ' />
-                        {/* <Button type="submit" className=" bg-primaryColor/95 hover:bg-primaryColor">
-                            Recherche
-                        </Button> */}
                     </div>
                     {
                         products.length > 1 &&

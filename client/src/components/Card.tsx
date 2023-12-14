@@ -8,32 +8,22 @@ import { BsHeart } from "react-icons/bs";
 import { BsHeartFill } from "react-icons/bs";
 import { baseRequest } from "@/axios/baseRequest";
 import { UserContext } from "@/context/UserContext";
+import { UserContextType } from "@/Layout";
+import { useDispatch } from "react-redux";
+import { fetchFavoris } from "@/redux/favorisSlice";
+import { updateLikeData } from "@/helpers/updateLike";
 
 
 type TypeProps = { product: ProductType }
 const DAY_MINIMIUM_FOR_NEW = 6
 
-const updateLikeData = async (data, productId) => {
-    try {
-        const response = await baseRequest.put(`http://localhost:1337/api/products/${productId}`,
-            JSON.stringify(data),
-            {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
-            }
-        )
 
-    } catch (err: any) {
-        console.log(err)
-    }
-}
 
 export default function Card({ product }: TypeProps) {
     const [likeData, setLikeData] = useState([])
     const [islike, setIsLike] = useState(false)
-    const [likeDataId, setLikeDataId] = useState(null)
-    const { user } = useContext(UserContext)
-
+    const { user }: UserContextType = useContext(UserContext)
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const img2Ref = useRef<HTMLImageElement | null>(null)
     const imgUrl = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img?.data[0]?.attributes?.url
@@ -57,14 +47,17 @@ export default function Card({ product }: TypeProps) {
     const handleLike = () => {
         if (!user) return
         setLikeData(prev => [...prev, product.id])
-        setIsLike(true)
 
         const data = {
             data: {
                 like: JSON.stringify([...likeData, user?.user?.id])
             }
         }
-        updateLikeData(data, product.id)
+        updateLikeData(data, product.id).then(_ => {
+            setIsLike(true)
+            dispatch(fetchFavoris(user?.user?.id))
+
+        })
     }
 
 
@@ -75,31 +68,25 @@ export default function Card({ product }: TypeProps) {
         console.log('filterLikeData', filterLikeData)
 
         setLikeData(filterLikeData)
-        setIsLike(false)
 
         const data = {
             data: {
                 like: JSON.stringify(filterLikeData)
             }
         }
-
-        updateLikeData(data, product.id)
+        updateLikeData(data, product.id).then(_ => {
+            setIsLike(false)
+            dispatch(fetchFavoris(user?.user?.id))
+        })
     }
-
-    // console.log(likeData)
-    // console.log(user?.user?.id)
 
 
     useEffect(() => {
-
         const likeDataParse = JSON.parse(product?.attributes.like) || []
-
         if (likeDataParse.includes(user?.user?.id)) {
             setIsLike(true)
         }
-
         setLikeData(likeDataParse)
-
     }, [])
 
 
@@ -137,9 +124,9 @@ export default function Card({ product }: TypeProps) {
                 {
 
                     !islike ?
-                        <BsHeart size={20} className='text-gray-600  hover:text-pink-400' onClick={handleLike} />
+                        <BsHeart size={20} className='text-gray-600  hover:text-pink-400 cursor-pointer' onClick={handleLike} />
                         :
-                        <BsHeartFill size={20} className='text-pink-400 ' onClick={handleUnLike} />
+                        <BsHeartFill size={20} className='text-pink-400  cursor-pointer' onClick={handleUnLike} />
 
                 }
             </p>

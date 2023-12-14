@@ -11,6 +11,7 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { UserContext } from "@/context/UserContext"
 import { useContext, useState } from "react"
 import { baseRequest } from "@/axios/baseRequest"
+import { UserContextType } from '@/Layout'
 
 
 type Inputs = {
@@ -20,7 +21,7 @@ type Inputs = {
 
 export default function Login() {
   const [message, setMessage] = useState(null)
-  const { setUser } = useContext(UserContext)
+  const { setUser } : UserContextType = useContext(UserContext)
   const navigate = useNavigate()
   const params = useParams()
 
@@ -29,7 +30,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Inputs>()
 
@@ -44,7 +44,6 @@ export default function Login() {
           withCredentials: true
         }
       )
-
       setUser(response?.data)
       sessionStorage.setItem('user', JSON.stringify(response?.data))
       if (params.frompath) {

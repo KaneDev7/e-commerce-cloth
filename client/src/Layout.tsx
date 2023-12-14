@@ -5,6 +5,13 @@ import { UserContext } from './context/UserContext'
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowSearchPage } from './redux/showSearchPageSlice'
 import SearchPage from './pages/searchPage'
+import { fetchFavoris } from './redux/favorisSlice'
+
+
+export type UserContextType =  {
+    user : string | null, 
+    setUser:  React.Dispatch<React.SetStateAction<Object>>
+  }
 
 export default function Layout() {
     const [user, setUser]  = useState<string | null>(null)
@@ -13,7 +20,9 @@ export default function Layout() {
 
     useEffect(() => {
         dispath(setShowSearchPage(false))
-    }, [])
+        dispath(fetchFavoris(user?.user?.id))
+
+    }, [user])
 
     useEffect(() => {
         const newUser : string | null = JSON.parse(sessionStorage.getItem('user')) || null

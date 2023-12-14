@@ -11,6 +11,7 @@ import {selectedFilterSlice } from './SelectedFilterSlice'
 import { customeFilterSlice } from './CustomeFilterSlice'
 import { showSearchPageSlice } from './showSearchPageSlice'
 import { breadCrumbSlice } from './breadCrumbSlice'
+import { favorisSlice } from './favorisSlice'
 
 const persistConfig = {
   key: 'root',
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   customFilters: customeFilterSlice.reducer,
   selectedFilter : selectedFilterSlice.reducer,
   showSearchPage : showSearchPageSlice.reducer,
-  addRoute : breadCrumbSlice.reducer
+  addRoute : breadCrumbSlice.reducer,
+  favoris : favorisSlice.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

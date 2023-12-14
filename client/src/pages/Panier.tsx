@@ -29,6 +29,7 @@ import { Label } from "@/components/ui/label"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useForm } from 'react-hook-form'
+import { UserContextType } from '@/Layout'
 
 
 type Inputs = {
@@ -38,7 +39,7 @@ type Inputs = {
 
 export default function Panier(): JSX.Element {
 
-    const { user } = useContext(UserContext)
+    const { user }: UserContextType = useContext(UserContext)
     const navigate = useNavigate()
     const products = useSelector(state => state.cart.products)
     const [cart, setCart] = useState([])

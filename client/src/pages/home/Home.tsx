@@ -10,7 +10,7 @@ export default function Home() {
     <div>
       <NavbarFixed />
       <Navbar />
-      <div className='px-5'>
+      <div className='"'>
         <Banner />
         <FeatureProducts type='featured' />
         <Category />

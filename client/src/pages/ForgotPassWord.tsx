@@ -1,11 +1,9 @@
 import { baseRequest } from '@/axios/baseRequest'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { UserContext } from '@/context/UserContext'
 import { Label } from '@radix-ui/react-dropdown-menu'
-import React, { useContext, useState } from 'react'
+import  { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 
 import Navbar from '@/components/Navbar'
 import NavbarFixed from '@/components/NavbarFixed'
@@ -16,22 +14,17 @@ type Inputs = {
 }
 
 export default function ForgotPassWord() {
-    const [message, setMessage] = useState(null)
-    const { setUser } = useContext(UserContext)
-    const navigate = useNavigate()
+    const [message, setMessage] = useState<string | null> (null)
+
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         const { email } = data
-        console.log(
-            JSON.stringify({ email })
 
-        )
         try {
             const response = await baseRequest.post('http://localhost:1337/api/auth/forgot-password',
 

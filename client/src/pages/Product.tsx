@@ -32,9 +32,11 @@ import Assurance from '../components/Assurance'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContextType } from '@/Layout'
+
 
 export default function Product() {
-  const { user } = useContext(UserContext)
+  const { user }: UserContextType = useContext(UserContext)
   const [quantity, setQuantity] = useState(1)
   const [selectSize, setSelectSize] = useState(null)
   const cart = useSelector(state => state.cart.products)
@@ -104,8 +106,8 @@ export default function Product() {
       return setSelectSize(null)
     }
     setSelectSize(event.target.value)
-
   }
+
   const addQuantity = () => {
     setQuantity((prev) => prev + 1)
   }
@@ -221,6 +223,7 @@ export default function Product() {
               </Button>
 
             </div>
+
             <Assurance />
           </div>
         </div>

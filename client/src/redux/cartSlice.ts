@@ -9,7 +9,7 @@ interface TypeItem {
     quantity: number,
     size: string[]
 }
-type CartType = { products: Array<TypeItem> }
+export type CartType = { products: Array<TypeItem> }
 
 const initialState: CartType = { products: [] }
 
@@ -18,7 +18,6 @@ export const cartSlice = createSlice({
     initialState,
 
     reducers: {
-
         addItem: (state, action) => {
             const findArticleInCart = state.products.find(item => item.id === action.payload.id && action.payload.username.trim() === item.username.trim())
             let articleUpdated

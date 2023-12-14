@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from "react"
 import Card from "../../../components/Card"
 import useFetch from "../../../hooks/useFetch"
-import { motion, useInView } from 'framer-motion'
 import ProductLoad from "../../../components/ProductLoad"
 
 
@@ -41,15 +39,15 @@ export default function FeatureProducts({ type }: FetureType) {
       <ProductLoad />
     </div>
   }
+
   if (error) return <p>{error} </p>
 
   return (
-    <div className="flex justify-center items-center my-[5rem] mx-20 globalWidth">
+    <div className="flex justify-center items-center my-[5rem] mx-20 globalWidth 2xl:px-0 px-5">
 
       <div className="w-full max-w-[1500px]  ">
         <div className=" flex justify-between items-center lg:gap-20 gap-10 flex-wrap">
-          <h1 className="title text-black/90 font-bold duration-200"> {`${type === 'featured' ? 'Produits populaires' : 'Produits tendance'}`}
-          </h1>
+          <h1 className="title text-black/90 font-bold duration-200"> {`${type === 'featured' ? 'Produits populaires' : 'Produits tendance'}`}</h1>
 
         </div>
 

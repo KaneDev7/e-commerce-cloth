@@ -3,7 +3,7 @@ import useFetch from '../../../hooks/useFetch'
 
 export default function Category() {
 
-    const { data: categories, isLoading, error } = useFetch('/categories?populate=*&')
+    const { data: categories } = useFetch('/categories?populate=*&')
 
     const navigate = useNavigate()
 

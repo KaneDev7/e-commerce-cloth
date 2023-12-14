@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { baseRequest } from '@/axios/baseRequest'
 import Navbar from '@/components/Navbar'
 import NavbarFixed from '@/components/NavbarFixed'
+import { UserContextType } from '@/Layout'
 
 
 const commandsTopBar = [
@@ -40,8 +41,7 @@ const filterOptions = [
 
 export default function Commands() {
 
-    const { user } = useContext(UserContext)
-    const [url, setUrl] = useState<string>('')
+    const { user }: UserContextType = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(true)
     const [filterSelected, setFilterSelected] = useState('tout')
     const [commands, setCommand] = useState([])

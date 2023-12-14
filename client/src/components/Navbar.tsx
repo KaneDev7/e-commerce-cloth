@@ -15,7 +15,6 @@ import { useContext } from 'react'
 import Cart from './Cart'
 import { GlobalContext } from '../context/ContextProvider'
 import { useDispatch, useSelector } from 'react-redux'
-import NavBarMobile from './NavBarMobile'
 import useFetch from '../hooks/useFetch'
 
 import {
@@ -59,6 +58,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { UserContextType } from '@/Layout';
 
 export default function Navbar() {
 
@@ -68,7 +68,7 @@ export default function Navbar() {
   const { data: accessoiresType } = useFetch('/nav-accessoires')
 
   const { showMenuMobile, setShowMenuMobile } = useContext(GlobalContext)
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser }: UserContextType = useContext(UserContext)
   const products = useSelector(state => state.cart.products)
   const [cart, setCart] = useState([])
   const navigate = useNavigate()
@@ -89,7 +89,7 @@ export default function Navbar() {
   }, [products, user])
 
   return (
-    <div className='relative bg-white shadow-sm '>
+    <div className='relative bg-white shadow-sm  '>
       <div className='w-full p-2 flex justify-center text-center bg-[#f9f2e8]  '>
         <div className='items-center text-[13px] '>
           <p> Une Question? Une commande à passer?</p>
@@ -97,13 +97,15 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className='h-[80px] flex justify-between items-center globalWidth px-5 xl:px-0 '>
+      <div className='h-[80px] flex justify-between items-center globalWidth px-5 xs:px-0 '>
 
         {/* LEFT */}
 
         <div className=''>
-          <Link to='/' className='text-3xl font-bold text-primaryColor' >DMRFSTORE</Link>
+          <Link to='/' className='sm:text-3xl text-xl  font-bold text-primaryColor' >DMRFSTORE</Link>
         </div>
+
+
 
 
         {/* CENTER */}
@@ -223,15 +225,17 @@ export default function Navbar() {
 
             <AiOutlineSearch onClick={() => dispatch(setShowSearchPage(true))} size={20} className='text-gray-600' />
 
-            <DropdownMenu  >
+            <DropdownMenu>
               <DropdownMenuTrigger className={`flex justify-center items-center gap-2 ${user && 'border p-2'} `} >
                 <CiUser size={20} className='text-gray-600' />
-                {user &&
-                  <p className='text-sm'>
+                {
+                  user &&
+                  <p className='text-xs md:text-sm'>
                     {user.user.username}
                   </p>
                 }
               </DropdownMenuTrigger>
+              <BsHeart onClick={()=>navigate('/favoris')} size={15} className='text-gray-600' />
 
               {
                 user ?
@@ -241,6 +245,7 @@ export default function Navbar() {
                       Mon Compte
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+
                     <DropdownMenuItem onClick={() => navigate('/infos')}>
                       <p className='flex justify-center items-center gap-1'>
                         <IoIosInformationCircle size={15} className='text-gray-600' />
@@ -286,13 +291,12 @@ export default function Navbar() {
                       <DropdownMenuItem>S'inscrire</DropdownMenuItem>
                     </Link>
                   </DropdownMenuContent>
-
               }
+
 
             </DropdownMenu>
 
             {/* <CiUser size={20} className='text-gray-600' /> */}
-            <BsHeart size={20} className='text-gray-600' />
             {
               !user ?
                 <PiShoppingCartLight onClick={() => !user && navigate('/login')} size={20} className='text-gray-600' /> :
@@ -313,7 +317,11 @@ export default function Navbar() {
                 </div>
             }
 
+
+                
+             
           </div>
+
           <Sheet  >
             <SheetTrigger asChild>
               <AiOutlineMenu size={25} className='lg:hidden block' />

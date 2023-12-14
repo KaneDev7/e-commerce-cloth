@@ -6,15 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@radix-ui/react-dropdown-menu"
@@ -22,6 +14,7 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { useContext, useState } from "react"
 import { baseRequest } from "@/axios/baseRequest"
 import { UserContext } from "@/context/UserContext"
+import { UserContextType } from '@/Layout'
 
 
 type Inputs = {
@@ -32,7 +25,6 @@ type Inputs = {
 export default function ResetPassword() {
     const [isPasswordReset, setIsPasswordreset] = useState(false)
     const [message, setMessage] = useState(null)
-    const { setUser } = useContext(UserContext)
     const { code } = useParams()
     const navigate = useNavigate()
 
@@ -40,7 +32,6 @@ export default function ResetPassword() {
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm<Inputs>()
 

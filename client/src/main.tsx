@@ -18,6 +18,7 @@ import Commands from './pages/commandes'
 import ForgotPassWord from './pages/ForgotPassWord'
 import ResetPassword from './pages/ResetPassword'
 import Informations from './pages/Information'
+import Favoris from './pages/Favoris'
 
 const { store, persistor } = configureStore()
 const router = createBrowserRouter([
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: 'infos',
         element: <Informations/>
+      },
+      {
+        path: 'favoris',
+        element: <Favoris/>
       },
       {
         path: 'login/:frompath/:id',

@@ -134,13 +134,12 @@ export default function Products() {
     <>
       <NavbarFixed />
       <Navbar />
-      <div className="w-full globalWidth mt-20 px-5 ">
-        <div className="w-full flex gap-10 ">
+      <div className="w-full globalWidth mt-20  ">
+        <div className="w-full flex gap-10 lg:px-0 px-5">
           {/* SIDEBAR CATEGORY */}
 
-          <div
-            className="h-full  lg:sticky lg:block hidden  pt-5 translate-x-[0] top-[10px]
-               left-5 px-10 z-20 w-[500px] bg-white border-r">
+          <div className="h-full lg:sticky lg:block hidden  pt-5 translate-x-[0] top-[100px]
+               left-5 px-10 z-20 w-[500px] bg-white">
 
 
             {/* FILTRER */}
@@ -270,7 +269,11 @@ export default function Products() {
           {/* PRODUCT CATEGORY */}
           <div className="lg:w-[100%] w-full ">
 
-            <h1 className="primaryTitle text-center  text-black font-bold uppercase">{categorie?.attributes?.title}S </h1>
+            <h1
+              className="primaryTitle text-center  text-black font-bold uppercase">
+              {categorie?.attributes?.title}
+              {categorie?.attributes?.title && 'S'}
+            </h1>
             {/* SIDE BAR MOBILE */}
 
             <Sheet>
@@ -283,9 +286,10 @@ export default function Products() {
               </SheetTrigger>
               <SheetContent side='left'>
                 <SheetHeader>
-                  <SheetTitle>Edit profile</SheetTitle>
+                  <SheetTitle>Filtre</SheetTitle>
                 </SheetHeader>
                 <div className='mt-10'>
+                  <h1 className="text-primaryColor font-bold">Filtrer par</h1>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="item-1">
                       <AccordionTrigger>Couleurs</AccordionTrigger>
