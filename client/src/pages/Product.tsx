@@ -33,12 +33,17 @@ import Assurance from '../components/Assurance'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContextType } from '@/Layout'
+import { updateRecentlyViewsData } from '@/helpers/updateRecentlyViews'
+import { fetchRececntlyViews } from '@/redux/RececntlyViewsSlice'
+import RecentlyViews from '@/components/RecentlyViews'
 
+const USER_VISIT_TIME = 5000
 
 export default function Product() {
   const { user }: UserContextType = useContext(UserContext)
   const [quantity, setQuantity] = useState(1)
   const [selectSize, setSelectSize] = useState(null)
+
   const cart = useSelector(state => state.cart.products)
 
   const navigate = useNavigate()
@@ -123,6 +128,47 @@ export default function Product() {
   useEffect(() => {
     window.scroll(0, 0)
   }, [id])
+
+  useEffect(()=>{
+    const timer =  setTimeout(() => {
+      if (!user) return
+      console.log('1')
+ 
+      const recentlyViewDataParse = product?.attributes?.recentlyViewed ?
+       JSON.parse(product?.attributes?.recentlyViewed) : []
+
+      console.log('recentlyViewDataParse', recentlyViewDataParse)
+      console.log('userId', user?.user?.id)
+      console.log(recentlyViewDataParse.includes(user?.user?.id))
+
+      if(recentlyViewDataParse.find(item => item?.userId ===  user?.user?.id)) return
+
+      console.log('2')
+
+       const data = {
+         data: {
+           recentlyViewed: JSON.stringify([
+            ...recentlyViewDataParse,
+          {
+           userId: user?.user?.id,
+           date : new Date().getTime()
+          }
+          ])
+         }
+       }
+
+       updateRecentlyViewsData(data, product.id).then(_ => {
+         dispatch(fetchRececntlyViews(user?.user?.id))
+       })
+     }, USER_VISIT_TIME)
+
+     return ()=>{
+      clearTimeout(timer)
+     }
+  },[user, id,  product] )
+
+
+
 
   if (isLoading) {
     return <div className='w-screen h-screen flex justify-center items-center'>
@@ -228,6 +274,7 @@ export default function Product() {
           </div>
         </div>
         <Recommandation categories={product?.attributes?.categories?.data} />
+        {user && <RecentlyViews/>}
       </div>
     </>
   )

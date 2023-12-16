@@ -1,13 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import Card from "../components/Card";
-import { motion } from 'framer-motion'
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import List from "../components/List";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { LuListFilter } from "react-icons/lu";
 
-import { GlobalContext } from "../context/ContextProvider";
 import { useDispatch, useSelector } from "react-redux";
 import { addFilter, resetFilter } from "../redux/filterSlice";
 import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../redux/SelectedFilterSlice";
@@ -31,12 +28,14 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import RecentlyViews from "@/components/RecentlyViews";
+import { UserContext } from "@/context/UserContext";
+import { UserContextType } from "@/Layout";
 
 export default function Products() {
 
@@ -45,10 +44,7 @@ export default function Products() {
   const filters = useSelector(state => state.filter)
   const selectedFilter = useSelector(state => state.selectedFilter)
   const customFilters = useSelector(state => state.customFilters)
-
-  // const [isMobile, setIsMobile] = useState(false)
-
-  // const [showClosefilterBtn, setShowClosefilterBtn] = useState(false)
+  const {user} : UserContextType = useContext(UserContext)
 
   const { data: categorie, isLoading: isLoadingCat, error: catError } = useFetch(`/categories/${catId}?populate=*&`)
   const { data: sizes, isLoading: isSizeLoading, error: sizeError } = useFetch(`/sizes`)
@@ -56,9 +52,6 @@ export default function Products() {
   const { data: colors, isLoading: isColorsLoading, error: colorsError } = useFetch(`/colors`)
 
   const dispatch = useDispatch()
-
-  // const { showFilter, setShowFilter } = useContext(GlobalContext)
-
 
   const handleAddFilter = (option) => {
     const isFilterExist = customFilters.some(item => item.value === option.value)
@@ -84,45 +77,12 @@ export default function Products() {
   const updateFilter = () => {
     const newFilter = customFilters.map(item => `&[filters][${item.type}][${item.field}]=${item.value}`)
     dispatch(addFilter(newFilter))
-    // if (isMobile) setShowFilter(false)
   }
 
   useEffect(() => {
     window.scroll(0, 0)
   }, [])
 
-
-  // useEffect(() => {
-  //   window.addEventListener('resize', () => {
-  //     const lgScreen = window.matchMedia("(max-width : 1024px)").matches
-  //     if (lgScreen) {
-  //       setShowFilter(false)
-  //       setShowClosefilterBtn(true)
-  //       setIsMobile(true)
-  //     } else {
-  //       setShowFilter(true)
-  //       setShowClosefilterBtn(false)
-  //       setIsMobile(false)
-  //     }
-  //   })
-  // })
-
-
-  // useEffect(() => {
-  //   const lgScreen = window.matchMedia("(max-width : 1024px)").matches
-  //   if (lgScreen) {
-  //     setShowFilter(false)
-  //   }
-
-  // }, [])
-
-
-  // useEffect(() => {
-  //   dispatch(resetFilter())
-  //   dispatch(resetCustomeFilter())
-  //   dispatch(resetSelectedFilter())
-
-  // }, [])
 
   if (isLoadingCat || isColorsLoading || isSizeLoading || isSubCategoriesLoading) {
     return <div className='flex justify-center items-center h-[500px] mt[100px] '>
@@ -140,7 +100,6 @@ export default function Products() {
 
           <div className="h-full lg:sticky lg:block hidden  pt-5 translate-x-[0] top-[100px]
                left-5 px-10 z-20 w-[500px] bg-white">
-
 
             {/* FILTRER */}
 
@@ -438,6 +397,8 @@ export default function Products() {
 
           </div>
         </div>
+        {user && <RecentlyViews/>}
+
       </div >
     </>
 

@@ -82,6 +82,10 @@
     "like": {
       "type": "text",
       "default": "[]"
+    },
+    "recentlyViewed": {
+      "type": "text",
+      "default": "[]"
     }
   }
 }

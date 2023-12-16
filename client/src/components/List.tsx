@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Card from './Card'
 import useFetch from '../hooks/useFetch'
 import ProductLoad from './ProductLoad'
-import { useLocation } from 'react-router-dom'
 
-type TypeProps = { catId: number, subCat: Array<string>, maxPrice: number, sort: string }
+type TypeProps = { catId: number, subCat: Array<string>, sort: string }
 
-export default function List({ catId, subCat, maxPrice, sort }: TypeProps) {
+export default function List({ catId, subCat, sort }: TypeProps) {
 
     const [url, setUrl] = useState<string>(`/products?populate=*&[filters][categories][id]=${catId}${subCat.map(item => item).join('')}&sort=price:${sort}`)
 

@@ -124,11 +124,10 @@ export default function Panier(): JSX.Element {
         }
     }, [user, products])
 
+
     if (!user) {
         return navigate('/login')
     }
-
-
 
     return (
         <>

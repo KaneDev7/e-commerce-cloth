@@ -235,7 +235,8 @@ export default function Navbar() {
                   </p>
                 }
               </DropdownMenuTrigger>
-              <BsHeart onClick={()=>navigate('/favoris')} size={15} className='text-gray-600' />
+
+              <BsHeart onClick={() => !user ? navigate('/login') : navigate('/favoris')} size={15} className='text-gray-600' />
 
               {
                 user ?
@@ -293,7 +294,6 @@ export default function Navbar() {
                   </DropdownMenuContent>
               }
 
-
             </DropdownMenu>
 
             {/* <CiUser size={20} className='text-gray-600' /> */}
@@ -317,9 +317,6 @@ export default function Navbar() {
                 </div>
             }
 
-
-                
-             
           </div>
 
           <Sheet  >

@@ -9,6 +9,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { UserContext } from '@/context/UserContext';
 import FavorisCard from '@/components/FavorisCard';
 import ProductLoad from '@/components/ProductLoad';
+import { useNavigate } from 'react-router-dom';
 
 type FetureType = { type: string }
 
@@ -25,18 +26,23 @@ export type ProductType = {
 export default function Favoris() {
 
   const { user }: UserContextType = useContext(UserContext)
-
   const favoris = useSelector((state) => state.favoris.data);
   const loading = useSelector((state) => state.favoris.loading);
+  const navigate = useNavigate()
 
+ 
   if (loading) {
     return <div className='w-screen h-screen flex justify-center items-center'>
       <ProductLoad />
     </div>
   }
+   
+  if(!user){
+    return navigate('/login')
+  }
 
 
-  if (user && favoris.length > 0) {
+  if (favoris.length > 0) {
     return (
       <div>
         <Navbar />

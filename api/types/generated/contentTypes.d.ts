@@ -892,6 +892,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'api::color.color'
     >;
     like: Attribute.Text & Attribute.DefaultTo<'[]'>;
+    recentlyViewed: Attribute.Text & Attribute.DefaultTo<'[]'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

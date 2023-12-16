@@ -108,13 +108,16 @@ export default function Navbar() {
 
   return (
     <div className={`fixed top-0 w-full z-50  bg-white shadow-sm duration-300 ${!showNavFixed && 'opacity-0'} `} >
-      <div className='h-[80px] flex justify-between items-center globalWidth px-5 xl:px-0 '>
+
+      <div className='h-[80px] flex justify-between items-center globalWidth px-5 xs:px-0 '>
 
         {/* LEFT */}
 
         <div className=''>
-          <Link to='/' className='sm:text-3xl text-xl font-bold text-primaryColor' >DMRFSTORE</Link>
+          <Link to='/' className='sm:text-3xl text-xl  font-bold text-primaryColor' >DMRFSTORE</Link>
         </div>
+
+
 
 
         {/* CENTER */}
@@ -234,7 +237,7 @@ export default function Navbar() {
 
             <AiOutlineSearch onClick={() => dispatch(setShowSearchPage(true))} size={20} className='text-gray-600' />
 
-            <DropdownMenu  >
+            <DropdownMenu>
               <DropdownMenuTrigger className={`flex justify-center items-center gap-2 ${user && 'border p-2'} `} >
                 <CiUser size={20} className='text-gray-600' />
                 {
@@ -245,6 +248,8 @@ export default function Navbar() {
                 }
               </DropdownMenuTrigger>
 
+              <BsHeart onClick={() => !user ? navigate('/login') : navigate('/favoris')} size={15} className='text-gray-600' />
+
               {
                 user ?
 
@@ -253,6 +258,7 @@ export default function Navbar() {
                       Mon Compte
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+
                     <DropdownMenuItem onClick={() => navigate('/infos')}>
                       <p className='flex justify-center items-center gap-1'>
                         <IoIosInformationCircle size={15} className='text-gray-600' />
@@ -298,7 +304,6 @@ export default function Navbar() {
                       <DropdownMenuItem>S'inscrire</DropdownMenuItem>
                     </Link>
                   </DropdownMenuContent>
-
               }
 
             </DropdownMenu>
@@ -325,6 +330,7 @@ export default function Navbar() {
             }
 
           </div>
+
           <Sheet  >
             <SheetTrigger asChild>
               <AiOutlineMenu size={25} className='lg:hidden block' />

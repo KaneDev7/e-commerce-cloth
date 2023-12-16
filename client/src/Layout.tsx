@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Footer from './components/Footer'
 import { UserContext } from './context/UserContext'
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowSearchPage } from './redux/showSearchPageSlice'
 import SearchPage from './pages/searchPage'
 import { fetchFavoris } from './redux/favorisSlice'
+import { fetchRececntlyViews } from './redux/RececntlyViewsSlice'
 
 
 export type UserContextType =  {
@@ -17,11 +18,10 @@ export default function Layout() {
     const [user, setUser]  = useState<string | null>(null)
     const showSearchPage = useSelector((state : Boolean): boolean => state.showSearchPage)
     const dispath = useDispatch()
-
+   
     useEffect(() => {
         dispath(setShowSearchPage(false))
         dispath(fetchFavoris(user?.user?.id))
-
     }, [user])
 
     useEffect(() => {
