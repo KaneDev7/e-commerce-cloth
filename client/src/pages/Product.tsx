@@ -129,43 +129,58 @@ export default function Product() {
     window.scroll(0, 0)
   }, [id])
 
-  useEffect(()=>{
-    const timer =  setTimeout(() => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
       if (!user) return
-      console.log('1')
- 
+
       const recentlyViewDataParse = product?.attributes?.recentlyViewed ?
-       JSON.parse(product?.attributes?.recentlyViewed) : []
+        JSON.parse(product?.attributes?.recentlyViewed) : []
 
-      console.log('recentlyViewDataParse', recentlyViewDataParse)
-      console.log('userId', user?.user?.id)
-      console.log(recentlyViewDataParse.includes(user?.user?.id))
+      const findProductIndexOfRecentlyUser = recentlyViewDataParse.findIndex(item => item?.userId === user?.user?.id)
 
-      if(recentlyViewDataParse.find(item => item?.userId ===  user?.user?.id)) return
-
-      console.log('2')
+      if (findProductIndexOfRecentlyUser !== -1) {
+        const updatexistingRecentlyView = [...recentlyViewDataParse].map((item) => {
+          if (item?.userId === user?.user?.id) {
+            return item = {
+              userId: user?.user?.id,
+              date: new Date().getTime()
+            }
+          } else {
+            return item
+          }
+        })
 
        const data = {
-         data: {
-           recentlyViewed: JSON.stringify([
-            ...recentlyViewDataParse,
-          {
-           userId: user?.user?.id,
-           date : new Date().getTime()
+          data: {
+            recentlyViewed: JSON.stringify([...updatexistingRecentlyView])
           }
+        }
+       return updateRecentlyViewsData(data, product.id).then(_ => {
+          dispatch(fetchRececntlyViews(user?.user?.id))
+        })
+      }
+
+     const data = {
+        data: {
+          recentlyViewed: JSON.stringify([
+            ...recentlyViewDataParse,
+            {
+              userId: user?.user?.id,
+              date: new Date().getTime()
+            }
           ])
-         }
-       }
+        }
+      }
 
-       updateRecentlyViewsData(data, product.id).then(_ => {
-         dispatch(fetchRececntlyViews(user?.user?.id))
-       })
-     }, USER_VISIT_TIME)
+      updateRecentlyViewsData(data, product.id).then(_ => {
+        dispatch(fetchRececntlyViews(user?.user?.id))
+      })
+    }, USER_VISIT_TIME)
 
-     return ()=>{
+    return () => {
       clearTimeout(timer)
-     }
-  },[user, id,  product] )
+    }
+  }, [user, id, product])
 
 
 
@@ -274,7 +289,7 @@ export default function Product() {
           </div>
         </div>
         <Recommandation categories={product?.attributes?.categories?.data} />
-        {user && <RecentlyViews/>}
+        {user && <RecentlyViews />}
       </div>
     </>
   )

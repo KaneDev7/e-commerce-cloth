@@ -25,21 +25,18 @@ export default function RecentlyViews() {
   const loading = useSelector((state) => state.rececntlyViews.loading);
   const dispath = useDispatch()
 
-  console.log('products', products )
-
-
   useEffect(() => {
     dispath(fetchRececntlyViews(user?.user?.id))
 }, [user])
 
   if (user && products?.length > 0) {
     return (
-      <div className="flex justify-center items-center my-[5rem] mx-20 globalWidth 2xl:px-0 px-5">
 
+      <div className="flex justify-center items-center my-[5rem] mx-20 globalWidth 2xl:px-0 px-5">
         <div className="w-full max-w-[1500px]  ">
+
           <div className=" flex justify-between items-center lg:gap-20 gap-10 flex-wrap">
             <h1 className="title text-black/90 font-bold duration-200"> Visités récemment  </h1>
-
           </div>
 
 

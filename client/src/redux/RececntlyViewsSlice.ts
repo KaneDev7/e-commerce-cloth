@@ -4,26 +4,32 @@ import { baseRequest } from "@/axios/baseRequest"
 
 
 type InitialStateType = {
-  data: CartType[] ,
+  data: CartType[],
   loading: Boolean,
   error: string | undefined | null,
 }
 
-const initialState  : InitialStateType= {
+const initialState: InitialStateType = {
   data: [],
   loading: false,
   error: null,
 };
 
 export const fetchRececntlyViews = createAsyncThunk('rececntlyViews/fetchRececntlyViews', async (userId: string) => {
-    try {
-      const response = await baseRequest.get(`/products?populate=*&`);
-      
-      const getRececntlyViewsProduct = response?.data?.data?.filter(item => {
-        return item?.attributes?.recentlyViewed
-      });
+  try {
+    const response = await baseRequest.get(`/products?populate=*&`);
 
-      const sortRececntlyViewsProduct = [...getRececntlyViewsProduct].sort((a, b) => {
+    const getRececntlyViewsProduct = response?.data?.data?.filter(item => {
+      return item?.attributes?.recentlyViewed
+    });
+
+
+    const getRececntlyViewsOfCurrentUser = [...getRececntlyViewsProduct].filter(item => {
+      return item?.attributes?.recentlyViewed?.split(',').includes(`[{"userId":${userId}`) ||
+             item?.attributes?.recentlyViewed?.split(',').includes(`{"userId":${userId}`)
+    })
+
+      const sortRececntlyViewsProduct = [...getRececntlyViewsOfCurrentUser].sort((a, b) => {
         return(
           JSON.parse(b?.attributes?.recentlyViewed)
           .filter(item => item.userId === userId)[0].date - 
@@ -34,18 +40,18 @@ export const fetchRececntlyViews = createAsyncThunk('rececntlyViews/fetchRececnt
       })
 
      return sortRececntlyViewsProduct.slice(0, 4)
-    } catch (error) {
-      // Gérer les erreurs ici
-      throw error;
-    }
-  });
-  
-  export const rececntlyViewsSlice = createSlice({
-    name: 'favoris',
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-      builder
+  } catch (error) {
+    // Gérer les erreurs ici
+    throw error;
+  }
+});
+
+export const rececntlyViewsSlice = createSlice({
+  name: 'favoris',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
       .addCase(fetchRececntlyViews.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -58,7 +64,7 @@ export const fetchRececntlyViews = createAsyncThunk('rececntlyViews/fetchRececnt
         state.loading = false;
         state.error = action.error.message;
       });
-    },
-  });
-  
+  },
+});
+
 //   export default favorisSlice.reducer;
