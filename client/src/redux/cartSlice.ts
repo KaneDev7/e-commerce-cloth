@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-interface TypeItem {
+export type TypeItem = {
     id: number
     title: string
     desc: string,
@@ -9,6 +9,7 @@ interface TypeItem {
     quantity: number,
     size: string[]
 }
+
 export type CartType = { products: Array<TypeItem> }
 
 const initialState: CartType = { products: [] }
@@ -48,8 +49,9 @@ export const cartSlice = createSlice({
             state.products = filterState
         },
 
-        reset: (state) => {
-            state.products = []
+        reset: (state, action) => {
+                const filterState = state.products.filter(item => item.username.toLowerCase() !== action.payload.toLowerCase())
+                state.products = filterState
         }
     }
 })

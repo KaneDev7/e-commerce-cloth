@@ -16,9 +16,10 @@ import { UserContext } from '@/context/UserContext'
 import ProductLoad from '@/components/ProductLoad'
 import { Button } from '@/components/ui/button'
 import { baseRequest } from '@/axios/baseRequest'
-import Navbar from '@/components/Navbar'
-import NavbarFixed from '@/components/NavbarFixed'
+import Navbar from '@/components/Navigation/Navbar'
+import NavbarFixed from '@/components/Navigation/NavbarFixed'
 import { UserContextType } from '@/Layout'
+import { TypeItem } from '@/redux/cartSlice'
 
 
 const commandsTopBar = [
@@ -97,7 +98,6 @@ export default function Commands() {
                         <TableCaption>Gestionnaire de commande  </TableCaption>
                         <TableHeader className='w-full bg-gray-100 '>
                             <TableRow >
-
                                 {
                                     commandsTopBar.map(item => (
                                         <TableHead className='font-bold'>{item} </TableHead>
@@ -107,7 +107,7 @@ export default function Commands() {
                         </TableHeader>
                         <TableBody>
                             {
-                                commands?.map(item => (
+                                commands?.map((item : TypeItem) => (
 
                                     <TableRow >
 
@@ -127,9 +127,9 @@ export default function Commands() {
 
                                         <TableCell > {item?.attributes?.size} </TableCell>
 
-                                        <TableCell>{item?.attributes?.price} $</TableCell>
+                                        <TableCell>{item?.attributes?.price} fcfa</TableCell>
                                         <TableCell> {item?.attributes?.quantity} </TableCell>
-                                        <TableCell>{item?.attributes?.price * item?.attributes?.quantity} $</TableCell>
+                                        <TableCell>{item?.attributes?.price * item?.attributes?.quantity} fcfa</TableCell>
                                         <TableCell >
                                             <p style={{
                                                 background: item?.attributes?.statut === 'en attente' ? '#f5a207b1' :

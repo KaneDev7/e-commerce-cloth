@@ -6,8 +6,8 @@ import useFetch from '@/hooks/useFetch'
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaUserCircle } from "react-icons/fa";
 
-import Navbar from '@/components/Navbar'
-import NavbarFixed from '@/components/NavbarFixed'
+import Navbar from '@/components/Navigation/Navbar'
+import NavbarFixed from '@/components/Navigation/NavbarFixed'
 
 import {
     DropdownMenu,

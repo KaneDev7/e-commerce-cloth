@@ -4,9 +4,11 @@ import Footer from './components/Footer'
 import { UserContext } from './context/UserContext'
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowSearchPage } from './redux/showSearchPageSlice'
-import SearchPage from './pages/searchPage'
+import SearchPage from './components/Navigation/searchPage'
 import { fetchFavoris } from './redux/favorisSlice'
 import { fetchRececntlyViews } from './redux/RececntlyViewsSlice'
+import { fetchfeatureProduct } from './redux/featureProductSlice'
+import { fetchMoreLikeProduct } from './redux/moreLikeProductSlice'
 
 
 export type UserContextType =  {
@@ -27,6 +29,8 @@ export default function Layout() {
     useEffect(() => {
         const newUser : string | null = JSON.parse(sessionStorage.getItem('user')) || null
         setUser(newUser)
+        dispath(fetchfeatureProduct())
+        dispath(fetchMoreLikeProduct())
     }, [])
 
 

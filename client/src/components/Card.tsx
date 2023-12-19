@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { ProductType } from "../pages/home/container/FeatureProducts";
+import { ProductType } from "../pages/home/MoreLikeProducts";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import ProductLoad from "./ProductLoad";
@@ -12,6 +12,7 @@ import { UserContextType } from "@/Layout";
 import { useDispatch } from "react-redux";
 import { fetchFavoris } from "@/redux/favorisSlice";
 import { updateLikeData } from "@/helpers/updateLike";
+import { getRating } from "@/helpers/rating";
 
 
 type TypeProps = { product: ProductType }
@@ -25,11 +26,11 @@ export default function Card({ product }: TypeProps) {
     const { user }: UserContextType = useContext(UserContext)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
     const img2Ref = useRef<HTMLImageElement | null>(null)
     const imgUrl = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img?.data[0]?.attributes?.url
     const imgUrl2 = import.meta.env.VITE_API_UPLOAD + product?.attributes?.img2?.data?.attributes?.url
 
-    // console.log(product)
 
     const handleMouseEnter = () => {
         if (!imgUrl2) return
@@ -53,10 +54,10 @@ export default function Card({ product }: TypeProps) {
                 like: JSON.stringify([...likeData, user?.user?.id])
             }
         }
+
         updateLikeData(data, product.id).then(_ => {
             setIsLike(true)
             dispatch(fetchFavoris(user?.user?.id))
-
         })
     }
 
@@ -89,12 +90,10 @@ export default function Card({ product }: TypeProps) {
         setLikeData(likeDataParse)
     }, [])
 
-
-
     const isNew = getDayBetweenTwoDay(product?.attributes?.publishedAt) < DAY_MINIMIUM_FOR_NEW
 
     return (
-        <motion.div className={`relative  duration-500 card bg-white  shadow-md`}
+        <motion.div className={`relative  duration-500 card bg-white  shadow-sm`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
@@ -114,20 +113,22 @@ export default function Card({ product }: TypeProps) {
                     title={product?.attributes.title} className="text-sm text-black/80 font-bold capitalize hover:underline cursor-pointer">
                     {product?.attributes.title}
                 </h2>
-                <div>
-                    <span className="text-black/70 text-md  line-through mr-2 "> $ {product?.attributes.oldPrice || product?.attributes.price + 20} </span>
-                    <span className="text-md font-bold text-primaryColor "> $ {product?.attributes.price} </span>
+
+                <div className="w-full  flex justify-between items-center mt-3">
+                    <p className="text-sm font-bold text-primaryColor ">  {product?.attributes.price} fcfa </p>
+                    <div className="flex items-center gap-3 ">
+                        <img src="/images/star-rating.svg" className="w-[90px]  " alt="" />
+                        <span className="text-sm"> {getRating(product?.attributes?.like)} </span>
+                    </div>
                 </div>
             </div>
+
             <p className="absolute top-2 right-2 z-10 p-2 rounded-full bg-white">
-
                 {
-
                     !islike ?
-                        <BsHeart size={20} className='text-gray-600  hover:text-pink-400 cursor-pointer' onClick={handleLike} />
+                        <BsHeart size={20} className='text-gray-600  hover:text-pink-400 cursor-pointer' onClick={!user ? () => navigate('/login') : handleLike} />
                         :
                         <BsHeartFill size={20} className='text-pink-400  cursor-pointer' onClick={handleUnLike} />
-
                 }
             </p>
 

@@ -1,7 +1,6 @@
-import { FiChevronDown } from 'react-icons/fi'
 import { MdAdminPanelSettings } from "react-icons/md";
 import { IoIosInformationCircle } from 'react-icons/io'
-import { MdLocationOn, MdDateRange } from 'react-icons/md'
+import {MdDateRange } from 'react-icons/md'
 import { BiSolidLogOut } from 'react-icons/bi'
 import { } from 'react-icons/'
 import { AiOutlineSearch } from 'react-icons/ai'
@@ -10,13 +9,11 @@ import { BsHeart } from 'react-icons/bs'
 import { PiShoppingCartLight } from 'react-icons/pi'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
-import Cart from './Cart'
-import { GlobalContext } from '../context/ContextProvider'
+import Cart from '../Cart'
 import { useDispatch, useSelector } from 'react-redux'
-import NavBarMobile from './NavBarMobile'
-import useFetch from '../hooks/useFetch'
+import useFetch from '../../hooks/useFetch'
 
 import {
   DropdownMenu,
@@ -37,12 +34,15 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 
+import { UserContext } from '@/context/UserContext'
+import { Button } from '../ui/button'
+import { setShowSearchPage } from '@/redux/showSearchPageSlice';
+
 
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -55,15 +55,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-
-
-import { UserContext } from '@/context/UserContext'
-import { Button } from './ui/button'
-import { setShowSearchPage } from '@/redux/showSearchPageSlice';
 import { UserContextType } from '@/Layout';
-
-const SCROLL_LIMIT = 400
-
 
 export default function Navbar() {
 
@@ -73,11 +65,8 @@ export default function Navbar() {
   const { data: accessoiresType } = useFetch('/nav-accessoires')
 
   const { user, setUser }: UserContextType = useContext(UserContext)
-
   const products = useSelector(state => state.cart.products)
   const [cart, setCart] = useState([])
-  const [showNavFixed, setShowNavFixed] = useState(false)
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -94,20 +83,14 @@ export default function Navbar() {
     }
   }, [products, user])
 
-
-
-  useEffect(() => {
-    window.addEventListener('scroll', (e) => {
-      if (window.scrollY > SCROLL_LIMIT) {
-        setShowNavFixed(true)
-      } else {
-        setShowNavFixed(false)
-      }
-    })
-  }, [showNavFixed])
-
   return (
-    <div className={`fixed top-0 w-full z-50  bg-white shadow-sm duration-300 ${!showNavFixed && 'opacity-0'} `} >
+    <div className='relative bg-white shadow-sm  '>
+      <div className='w-full p-2 flex justify-center text-center bg-[#f9f2e8]  '>
+        <div className='items-center text-[13px] '>
+          <p> Une Question? Une commande à passer?</p>
+          <p>Appelez nous au <span className='font-bold'>78 137 37 37</span> </p>
+        </div>
+      </div>
 
       <div className='h-[80px] flex justify-between items-center globalWidth px-5 xs:px-0 '>
 
@@ -217,12 +200,12 @@ export default function Navbar() {
               </NavigationMenuItem>
 
               {/* <NavigationMenuItem>
-        <Link to='/'>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-            A propos
-          </NavigationMenuLink>
-        </Link>
-      </NavigationMenuItem> */}
+                <Link to='/'>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    A propos
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem> */}
 
             </NavigationMenuList>
           </NavigationMenu>

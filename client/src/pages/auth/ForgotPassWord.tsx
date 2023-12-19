@@ -5,8 +5,8 @@ import { Label } from '@radix-ui/react-dropdown-menu'
 import  { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import Navbar from '@/components/Navbar'
-import NavbarFixed from '@/components/NavbarFixed'
+import Navbar from '@/components/Navigation/Navbar'
+import NavbarFixed from '@/components/Navigation/NavbarFixed'
 
 type Inputs = {
     example: string

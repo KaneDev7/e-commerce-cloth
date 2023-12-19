@@ -1,13 +1,14 @@
 import { useContext } from 'react';
-import Navbar from '../../components/Navbar'
-import NavbarFixed from '../../components/NavbarFixed'
+import Navbar from '../../components/Navigation/Navbar'
+import NavbarFixed from '../../components/Navigation/NavbarFixed'
 
-import Banner from "./container/Banner";
-import Category from "./container/Category";
-import FeatureProducts from "./container/FeatureProducts";
+import Banner from "./Banner";
+import Category from "./Category";
 import { UserContext } from '@/context/UserContext';
 import { UserContextType } from '@/Layout';
 import RecentlyViews from '@/components/RecentlyViews';
+import MoreLikeProducts from './MoreLikeProducts';
+import FeatureProduct from './FeatureProduct';
 
 export default function Home() {
   const {user}: UserContextType = useContext(UserContext)
@@ -17,9 +18,11 @@ export default function Home() {
       <Navbar />
       <div className='"'>
         <Banner />
-        <FeatureProducts type='featured' />
+        <FeatureProduct/>
         <Category />
-        <FeatureProducts type='tending' />
+        <MoreLikeProducts />
+
+        {/* <FeatureProducts type='tending' /> */}
         {user && <RecentlyViews/>}
       </div>
     </div>

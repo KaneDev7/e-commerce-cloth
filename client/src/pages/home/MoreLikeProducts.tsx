@@ -1,6 +1,5 @@
-import Card from "../../../components/Card"
-import useFetch from "../../../hooks/useFetch"
-import ProductLoad from "../../../components/ProductLoad"
+import Card from "../../components/Card"
+import ProductLoad from "../../components/ProductLoad"
 
 
 // Import Swiper React components
@@ -15,6 +14,7 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
+import { useSelector } from "react-redux";
 
 type FetureType = { type: string }
 
@@ -29,28 +29,27 @@ export type ProductType = {
 }
 
 
-export default function FeatureProducts({ type }: FetureType) {
+export default function MoreLikeProducts() {
 
-  const { data: products, isLoading, error } = useFetch(`/products?populate=*&[filters][type][$eq]=${type}`)
+  // const { data: products, isLoading, error } = useFetch(`/products?populate=*&[filters][type][$eq]=${type}`)
+  const products = useSelector(state => state.moreLikeProduct.data)
+  const loading = useSelector((state) => state.moreLikeProduct.loading);
 
-
-  if (isLoading) {
+  if (loading) {
     return <div className='w-screen h-screen flex justify-center items-center'>
       <ProductLoad />
     </div>
   }
 
-  if (error) return <p>{error} </p>
+  //if (error) return <p>{error}</p>
 
   return (
     <div className="flex justify-center items-center my-[5rem] mx-20 globalWidth 2xl:px-0 px-5">
 
       <div className="w-full max-w-[1500px]  ">
         <div className=" flex justify-between items-center lg:gap-20 gap-10 flex-wrap">
-          <h1 className="title text-black/90 font-bold duration-200"> {`${type === 'featured' ? 'Produits populaires' : 'Produits tendance'}`}</h1>
-
+          <h1 className="title text-black/75 font-bold duration-200"> Les plus aimés</h1>
         </div>
-
 
         <div className="flex ">
           {/* <div className="mt-10"> */}
@@ -74,10 +73,11 @@ export default function FeatureProducts({ type }: FetureType) {
                 spaceBetween: 50,
               },
             }}
+
             slidesPerView={products.length > 3 ? 4 : products.length}
             spaceBetween={30}
             navigation={true}
-            loop={true}
+            // loop={true}
             modules={[Navigation, Pagination]}
             className="mySwiper mt-10"
           >
@@ -88,18 +88,11 @@ export default function FeatureProducts({ type }: FetureType) {
                 </SwiperSlide>
               ))
             }
-
           </Swiper>
 
           {/* </div> */}
         </div>
 
-        {/* 
-            {
-              products.map(product => (
-                <Card key={product.id} product={product} />
-              ))
-            } */}
       </div>
 
 

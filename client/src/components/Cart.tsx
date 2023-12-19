@@ -36,7 +36,7 @@ export default function cart() {
   }, [products])
 
   if (cart.length === 0) {
-    return <p className='mt-5'>Votre panier est vide</p>
+    return <p className='mt-5 text-sm'>Il n'y a plus d'articles dans votre panier</p>
   }
   return (
     <div className='min-w-[300px] '>
@@ -50,7 +50,7 @@ export default function cart() {
               <div className='flex flex-col gap-2 '>
                 <h2 className='text-sm text-black '>{item.title} </h2>
                 {/* <p className='text-sm text-black/60'>{item.desc.substring(0,50)}...  </p> */}
-                <p className='text-primaryColor text-sm'>{item.quantity} x $ {item.price} </p>
+                <p className='text-primaryColor text-sm'>{item.quantity} x {item.price} fcfa </p>
               </div>
             </div>
 
@@ -67,7 +67,7 @@ export default function cart() {
       <div className='space-y-5 mt-10'>
         <div className='flex justify-between text-black text-md font-bold' >
           <h1 className=' font-bold'>TOTAL</h1>
-          <p>$ {totalPrice()} </p>
+          <p>{totalPrice()} fcfa </p>
         </div>
 
         <Link to='/panier'>
@@ -78,7 +78,7 @@ export default function cart() {
           </DropdownMenuItem>
         </Link>
 
-        <p className='text-red-400 text-sm cursor-pointer hover:underline' onClick={() => dispatch(reset())}>Tout supprimeé</p>
+        <p className='text-red-400 text-sm cursor-pointer hover:underline' onClick={() => dispatch(reset(user?.user?.username))}>Tout supprimeé</p>
       </div>
     </div>
   )

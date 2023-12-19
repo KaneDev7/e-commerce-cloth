@@ -4,23 +4,24 @@ import './index.css'
 import Layout from './Layout'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/home/Home'
-import Product from './pages/Product'
-import Products from './pages/Products'
+import Product from './pages/product/Product'
+import Products from './pages/productDetails/Products'
 import ContextProvider from './context/ContextProvider'
 import { Provider } from 'react-redux'
 import configureStore from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Panier from './pages/Panier'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
+import Panier from './pages/cart/Panier'
 import Admin from './pages/admin/admin'
-import Commands from './pages/commandes'
-import ForgotPassWord from './pages/ForgotPassWord'
-import ResetPassword from './pages/ResetPassword'
-import Informations from './pages/Information'
-import Favoris from './pages/Favoris'
+import Commands from './pages/commands/commandes'
+import ForgotPassWord from './pages/auth/ForgotPassWord'
+import ResetPassword from './pages/auth/ResetPassword'
+import Informations from './pages/auth/Information'
+import Favoris from './pages/favoris/Favoris'
 
 const { store, persistor } = configureStore()
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -90,8 +91,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <RouterProvider router={router} />
         </ContextProvider>
       </PersistGate>
-
     </Provider>
-
   </React.StrictMode>,
 )

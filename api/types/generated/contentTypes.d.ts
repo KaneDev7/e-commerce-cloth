@@ -772,6 +772,8 @@ export interface ApiCommandCommand extends Schema.CollectionType {
     adress: Attribute.String;
     phone: Attribute.Integer;
     email: Attribute.Email;
+    productId: Attribute.Integer;
+    numberOfCommand: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -875,7 +877,6 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'manyToMany',
       'api::category.category'
     >;
-    type: Attribute.Enumeration<['normal', 'featured', 'tending']>;
     sizes: Attribute.Relation<
       'api::product.product',
       'manyToMany',

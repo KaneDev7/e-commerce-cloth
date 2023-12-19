@@ -41,6 +41,12 @@
     },
     "email": {
       "type": "email"
+    },
+    "productId": {
+      "type": "integer"
+    },
+    "numberOfCommand": {
+      "type": "integer"
     }
   }
 }

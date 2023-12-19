@@ -13,6 +13,8 @@ import { showSearchPageSlice } from './showSearchPageSlice'
 import { breadCrumbSlice } from './breadCrumbSlice'
 import { favorisSlice } from './favorisSlice'
 import { rececntlyViewsSlice } from './RececntlyViewsSlice'
+import { featureProductSlice } from './featureProductSlice'
+import { moreLikeProductSlice } from './moreLikeProductSlice'
 
 const persistConfig = {
   key: 'root',
@@ -28,7 +30,9 @@ const rootReducer = combineReducers({
   showSearchPage : showSearchPageSlice.reducer,
   addRoute : breadCrumbSlice.reducer,
   favoris : favorisSlice.reducer,
-  rececntlyViews : rececntlyViewsSlice.reducer
+  rececntlyViews : rececntlyViewsSlice.reducer,
+  featureProduct : featureProductSlice.reducer,
+  moreLikeProduct : moreLikeProductSlice.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

@@ -8,8 +8,8 @@ import { MdDelete } from 'react-icons/md'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import Navbar from '@/components/Navbar'
-import NavbarFixed from '@/components/NavbarFixed'
+import Navbar from '@/components/Navigation/Navbar'
+import NavbarFixed from '@/components/Navigation/NavbarFixed'
 
 //dialog
 import {
@@ -30,6 +30,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useForm } from 'react-hook-form'
 import { UserContextType } from '@/Layout'
+import useFetch from '@/hooks/useFetch'
 
 
 type Inputs = {
@@ -40,15 +41,15 @@ type Inputs = {
 export default function Panier(): JSX.Element {
 
     const { user }: UserContextType = useContext(UserContext)
-    const navigate = useNavigate()
     const products = useSelector(state => state.cart.products)
     const [cart, setCart] = useState([])
     const [allArticles, setAllArticle] = useState(0)
     const [total, setTotal] = useState(0)
     const [message, setMessage] = useState(null)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-
+  
     const {
         register,
         handleSubmit,
@@ -56,11 +57,19 @@ export default function Panier(): JSX.Element {
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = async (coordonnes) => {
-        console.log(coordonnes)
+        let numberOfCommand = 1
+        
         for (const item of cart) {
-
+            try {
+                const response = await baseRequest.get(`/commands?[filters][productId]=${item.id}`)
+                console.log('panier number of commande', response?.data?.data)
+                numberOfCommand+=response?.data?.data.length
+            } catch (error) {
+                
+            }
             const data = {
                 data: {
+                    productId: item.id,
                     name: item.title,
                     quantity: item?.quantity?.toString(),
                     price: item?.price?.toString(),
@@ -70,12 +79,14 @@ export default function Panier(): JSX.Element {
                     adress: coordonnes.adress,
                     phone: coordonnes.phone,
                     img: item.img,
+                    numberOfCommand, 
                     statut: 'en attente'
                 }
             }
             console.log(JSON.stringify(data))
+
             try {
-                const response = await baseRequest.post('http://localhost:1337/api/commands',
+                const response = await baseRequest.post('/commands',
                     JSON.stringify(data),
                     {
                         headers: {
@@ -85,7 +96,7 @@ export default function Panier(): JSX.Element {
                         withCredentials: true,
                     })
 
-                dispatch(reset())
+                dispatch(reset(user?.user?.username))
                 navigate('/commands')
                 toast.success("Cmmande effectuée avec succée", {
                     hideProgressBar: true
@@ -93,7 +104,7 @@ export default function Panier(): JSX.Element {
 
             } catch (err: any) {
                 console.log(err)
-                toast.success(err.response.data.error.message, {
+                toast.error(err.response.data.error.message, {
                     hideProgressBar: true
                 })
             }
@@ -156,7 +167,7 @@ export default function Panier(): JSX.Element {
                                         <div className='flex flex-col  '>
                                             <h1 onClick={() => navigate(`/product/${item?.id}`)} className=' text-black text-[16px] hover:underline cursor-pointer'>{item.title} </h1>
                                             {/* <p className='text-sm text-black/60'>{item.desc.substring(0,50)}...  </p> */}
-                                            <p className='text-primaryColor text-md font-bold'> $ {item?.price} </p>
+                                            <p className='text-primaryColor text-md font-bold'> {item?.price} fcfa </p>
                                             <div className='flex'>
                                                 <p className='text-sm'> {item?.size?.toString()} </p>
                                             </div>
@@ -184,12 +195,12 @@ export default function Panier(): JSX.Element {
                             <div className='flex flex-col gap-3  p-5 border-b font-bold text-black/70  '>
                                 <p className='flex justify-between text-sm'>
                                     <span> {allArticles} article{allArticles > 1 && "s"}  </span>
-                                    <span className='text-[16px]  '> {total}  $</span>
+                                    <span className='text-[16px]  '> {total}  fcfa</span>
                                 </p>
 
                                 <p className='flex justify-between text-sm'>
                                     <span> Livraison  </span>
-                                    <span className='font-bold'> 2000 CFA </span>
+                                    <span className='font-bold'> 2000 fcfa </span>
                                 </p>
                             </div>
 
@@ -198,7 +209,7 @@ export default function Panier(): JSX.Element {
                                 <div className='flex flex-col gap-3  font-bold text-black/70  '>
                                     <p className='flex justify-between text-sm'>
                                         <span> Total TTC </span>
-                                        <span className='text-[16px] text-red-400 '> {total + 2000}  $</span>
+                                        <span className='text-[16px] text-red-400 '> {total + 2000} fcfa</span>
                                     </p>
                                 </div>
                             </div>

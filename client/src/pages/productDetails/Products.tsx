@@ -1,20 +1,20 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
-import List from "../components/List";
+import useFetch from "../../hooks/useFetch";
+import List from "../../components/List";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { LuListFilter } from "react-icons/lu";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addFilter, resetFilter } from "../redux/filterSlice";
-import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../redux/SelectedFilterSlice";
-import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../redux/CustomeFilterSlice";
-import { colorCode } from "../helpers/colorsCode";
+import { addFilter, resetFilter } from "../../redux/filterSlice";
+import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../../redux/SelectedFilterSlice";
+import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../../redux/CustomeFilterSlice";
+import { colorCode } from "../../helpers/colorsCode";
 import { Button } from "@/components/ui/button";
 import ProductLoad from "@/components/ProductLoad";
 
-import Navbar from '@/components/Navbar'
-import NavbarFixed from '@/components/NavbarFixed'
+import Navbar from '@/components/Navigation/Navbar'
+import NavbarFixed from '@/components/Navigation/NavbarFixed'
 
 import {
   Accordion,

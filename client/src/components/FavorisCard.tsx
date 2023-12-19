@@ -50,7 +50,6 @@ export default function FavorisCard({ product }) {
 
             return toast.success("Ajouter au panier avec succé", {
                 hideProgressBar: true,
-                autoClose: false
             })
 
         }
@@ -66,7 +65,6 @@ export default function FavorisCard({ product }) {
 
         return toast.success("Ajouter au panier avec succé", {
             hideProgressBar: true,
-            autoClose: false
         })
 
     }
@@ -89,7 +87,7 @@ export default function FavorisCard({ product }) {
                 {isAddToCartClicked && <ToastContainer />}
             </p>
 
-            <div className={`max-w-[700px] w-full relative flex sm:flex-row flex-col  duration-500 card bg-white  shadow-md`}>
+            <div className={`max-w-[700px] w-full relative flex sm:flex-row flex-col  duration-500 card bg-white  shadow-sm`}>
                 <img
                     onClick={() => navigate(`/product/${product.id}`)}
                     src={import.meta.env.VITE_API_UPLOAD + product?.attributes?.img?.data[0]?.attributes?.url}
@@ -101,14 +99,11 @@ export default function FavorisCard({ product }) {
                     <h2
                         onClick={() => navigate(`/product/${product.id}`)}
                         title={product?.attributes.title}
-                        className="text-xl text-black/80 font-medium capitalize hover:underline cursor-pointer">
+                        className=" text-black/80 font-medium capitalize hover:underline cursor-pointer">
                         {product?.attributes.title}
                     </h2>
 
-                    <div>
-                        <span className="text-black/70 text-xl  line-through mr-2 "> $ {product?.attributes.oldPrice || product?.attributes.price + 20} </span>
-                        <span className="text-xl font-medium text-primaryColor "> $ {product?.attributes.price} </span>
-                    </div>
+                        <p className="font-medium text-primaryColor ">  {product?.attributes.price} fcfa </p>
 
                     <div className=''>
 

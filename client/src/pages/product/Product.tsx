@@ -1,14 +1,14 @@
 import { BiCartAdd } from 'react-icons/bi'
 import { useState, useEffect } from 'react'
-import useFetch from '../hooks/useFetch'
+import useFetch from '../../hooks/useFetch'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { addItem } from '../redux/cartSlice'
+import { addItem } from '../../redux/cartSlice'
 import { useContext } from 'react'
-import { UserContext } from '../context/UserContext'
+import { UserContext } from '../../context/UserContext'
 
-import Navbar from '@/components/Navbar'
-import NavbarFixed from '@/components/NavbarFixed'
+import Navbar from '@/components/Navigation/Navbar'
+import NavbarFixed from '@/components/Navigation/NavbarFixed'
 
 // shaadcdn 
 import { Button } from "@/components/ui/button"
@@ -24,9 +24,9 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination, Navigation, Zoom } from 'swiper/modules';
-import ProductLoad from '../components/ProductLoad'
-import Recommandation from '../components/Recommandation'
-import Assurance from '../components/Assurance'
+import ProductLoad from '../../components/ProductLoad'
+import Recommandation from '../../components/Recommandation'
+import Assurance from '../../components/Assurance'
 
 // Toast 
 
@@ -123,6 +123,7 @@ export default function Product() {
 
   useEffect(() => {
     setSelectSize(null)
+    setQuantity(1)
   }, [id])
 
   useEffect(() => {
@@ -236,7 +237,7 @@ export default function Product() {
                 {product?.attributes?.desc}
               </p>
 
-              <h2 className='text-primaryColor md:text-4xl text-3xl  font-bold'>$ {product?.attributes?.price} </h2>
+              <h2 className='text-primaryColor md:text-4xl text-3xl  font-bold'> {product?.attributes?.price} fcfa</h2>
             </div>
 
 

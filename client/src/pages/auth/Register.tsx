@@ -1,7 +1,7 @@
 
 import { useForm, SubmitHandler } from "react-hook-form"
-import Navbar from '@/components/Navbar'
-import NavbarFixed from '@/components/NavbarFixed'
+import Navbar from '@/components/Navigation/Navbar'
+import NavbarFixed from '@/components/Navigation/NavbarFixed'
 import { Button } from "@/components/ui/button"
 
 

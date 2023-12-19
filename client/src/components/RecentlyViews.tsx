@@ -36,7 +36,7 @@ export default function RecentlyViews() {
         <div className="w-full max-w-[1500px]  ">
 
           <div className=" flex justify-between items-center lg:gap-20 gap-10 flex-wrap">
-            <h1 className="title text-black/90 font-bold duration-200"> Visités récemment  </h1>
+            <h1 className="title text-black/75 font-bold duration-200"> Vus récemment  </h1>
           </div>
 
 
