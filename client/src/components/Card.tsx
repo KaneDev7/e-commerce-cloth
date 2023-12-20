@@ -2,11 +2,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ProductType } from "../pages/home/MoreLikeProducts";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import ProductLoad from "./ProductLoad";
-import { getDayBetweenTwoDay } from "@/helpers/date";
+import { DAY_INTERVAL_FOR_NEW_PRODUCT, getDayBetweenTwoDate } from "@/helpers/date";
 import { BsHeart } from "react-icons/bs";
 import { BsHeartFill } from "react-icons/bs";
-import { baseRequest } from "@/axios/baseRequest";
 import { UserContext } from "@/context/UserContext";
 import { UserContextType } from "@/Layout";
 import { useDispatch } from "react-redux";
@@ -16,7 +14,6 @@ import { getRating } from "@/helpers/rating";
 
 
 type TypeProps = { product: ProductType }
-const DAY_MINIMIUM_FOR_NEW = 6
 
 
 
@@ -90,7 +87,7 @@ export default function Card({ product }: TypeProps) {
         setLikeData(likeDataParse)
     }, [])
 
-    const isNew = getDayBetweenTwoDay(product?.attributes?.publishedAt) < DAY_MINIMIUM_FOR_NEW
+    const isNew = getDayBetweenTwoDate(product?.attributes?.publishedAt) 
 
     return (
         <motion.div className={`relative  duration-500 card bg-white  shadow-sm`}
@@ -117,16 +114,16 @@ export default function Card({ product }: TypeProps) {
                 <div className="w-full  flex justify-between items-center mt-3">
                     <p className="text-sm font-bold text-primaryColor ">  {product?.attributes.price} fcfa </p>
                     <div className="flex items-center gap-3 ">
-                        <img src="/images/star-rating.svg" className="w-[90px]  " alt="" />
+                        <img src="/images/star-rating.png" className="w-[90px]  " alt="" />
                         <span className="text-sm"> {getRating(product?.attributes?.like)} </span>
                     </div>
                 </div>
             </div>
 
-            <p className="absolute top-2 right-2 z-10 p-2 rounded-full bg-white">
+            <p title="favoris" className="absolute top-2 right-2 z-10 p-2 rounded-full bg-white">
                 {
                     !islike ?
-                        <BsHeart size={20} className='text-gray-600  hover:text-pink-400 cursor-pointer' onClick={!user ? () => navigate('/login') : handleLike} />
+                        <BsHeart  size={20} className='text-gray-600  hover:text-pink-400 cursor-pointer' onClick={!user ? () => navigate('/login') : handleLike} />
                         :
                         <BsHeartFill size={20} className='text-pink-400  cursor-pointer' onClick={handleUnLike} />
                 }

@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setShowSearchPage } from './redux/showSearchPageSlice'
 import SearchPage from './components/Navigation/searchPage'
 import { fetchFavoris } from './redux/favorisSlice'
-import { fetchRececntlyViews } from './redux/RececntlyViewsSlice'
 import { fetchfeatureProduct } from './redux/featureProductSlice'
 import { fetchMoreLikeProduct } from './redux/moreLikeProductSlice'
+import { fetchNewArriveProduct } from './redux/newArriveProductSlice'
 
 
 export type UserContextType =  {
@@ -31,6 +31,7 @@ export default function Layout() {
         setUser(newUser)
         dispath(fetchfeatureProduct())
         dispath(fetchMoreLikeProduct())
+        dispath(fetchNewArriveProduct())
     }, [])
 
 

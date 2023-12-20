@@ -9,6 +9,7 @@ import { UserContextType } from '@/Layout';
 import RecentlyViews from '@/components/RecentlyViews';
 import MoreLikeProducts from './MoreLikeProducts';
 import FeatureProduct from './FeatureProduct';
+import NewArriveProduct from './NewArriveProduct';
 
 export default function Home() {
   const {user}: UserContextType = useContext(UserContext)
@@ -18,6 +19,7 @@ export default function Home() {
       <Navbar />
       <div className='"'>
         <Banner />
+        <NewArriveProduct/>
         <FeatureProduct/>
         <Category />
         <MoreLikeProducts />

@@ -15,6 +15,7 @@ import { favorisSlice } from './favorisSlice'
 import { rececntlyViewsSlice } from './RececntlyViewsSlice'
 import { featureProductSlice } from './featureProductSlice'
 import { moreLikeProductSlice } from './moreLikeProductSlice'
+import { newArriveProductSlice } from './newArriveProductSlice'
 
 const persistConfig = {
   key: 'root',
@@ -32,7 +33,8 @@ const rootReducer = combineReducers({
   favoris : favorisSlice.reducer,
   rececntlyViews : rececntlyViewsSlice.reducer,
   featureProduct : featureProductSlice.reducer,
-  moreLikeProduct : moreLikeProductSlice.reducer
+  moreLikeProduct : moreLikeProductSlice.reducer,
+  newArriveProduct : newArriveProductSlice.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

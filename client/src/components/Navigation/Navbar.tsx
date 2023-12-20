@@ -101,8 +101,6 @@ export default function Navbar() {
         </div>
 
 
-
-
         {/* CENTER */}
         <div className='lg:flex items-center gap-4 hidden font-bold '>
 
@@ -306,9 +304,7 @@ export default function Navbar() {
                       <Cart />
                     </DropdownMenuContent>
                   </DropdownMenu>
-                  {(cart.length !== 0 && user) &&
                     <span className='w-[20px] h-[20px] flex justify-center items-center rounded-full absolute top-[-10px] right-[-10px] bg-primaryColor text-sm text-white '>{cart.length} </span>
-                  }
                 </div>
             }
 
@@ -348,7 +344,6 @@ export default function Navbar() {
                           {
                             chaussursType.map((chaussure) => (
                               <li key={chaussure?.id} className='mb-1'>
-
                                 <Link to={`/products/${chaussure?.attributes?.categorieId}`}
                                   className='text-sm hover:underline whitespace-nowrap capitalize'>
                                   <small className="text-sm font-medium leading-none">{chaussure?.attributes?.title}</small>

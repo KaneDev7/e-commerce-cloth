@@ -34,9 +34,6 @@ export default function FeatureProduct() {
   // const { data: products, isLoading, error } = useFetch(`/products?populate=*&[filters][type][$eq]=${type}`)
   const products = useSelector(state => state.featureProduct.data)
   const loading = useSelector((state) => state.featureProduct.loading);
-
-  console.log('pipulaire' , products)
-
   
   if (loading) {
     return <div className='w-screen h-screen flex justify-center items-center'>

@@ -20,10 +20,9 @@ export const fetchfeatureProduct = createAsyncThunk('featureProductSlice/fetchfe
     const response = await baseRequest.get(`/commands?populate=*&`);
     const products = [...response?.data?.data]
     
-    console.log(products)
     
-    const moreSellProductids = []
-    let moreSellProduct = []
+    const moreSellProductids  : number[] = []
+    let moreSellProduct : CartType[] = []
 
     const sortByRecent = [...products].sort((a,b) => {
       return new Date(b.attributes?.updatedAt) - new Date(a.attributes?.updatedAt) 
@@ -39,19 +38,10 @@ export const fetchfeatureProduct = createAsyncThunk('featureProductSlice/fetchfe
        const res = await baseRequest.get(`/products?populate=*&[filters][id]=${item}`);
        moreSellProduct = [...moreSellProduct, ...res?.data?.data]
     }
-    // const moreSellProduct = products.filter(item => {
-    //   if(moreSellProductids.includes(item.attributes?.productId)) return item
-    // })
-
-    console.log(
-      'moreSellProduct', moreSellProduct,
-    )
-   
-
 
      return moreSellProduct.slice(0, 4)
+     
   } catch (error) {
-    // Gérer les erreurs ici
     throw error;
   }
 });
