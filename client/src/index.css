@@ -161,7 +161,6 @@ grid-template-columns: repeat(4, 1fr);
 
 }
 .category-card{
-  box-shadow: 0 0 30px #00000025;
   filter: saturate(20%);
   overflow: hidden;
 }
@@ -230,9 +229,17 @@ grid-template-columns: repeat(4, 1fr);
 }
 
 
-@media (max-width: 560px) {
+
+
+@media (max-width:500px) {
 .list{
   grid-template-columns: repeat(1, 1fr);
+
+}
+ .card{
+  max-width: 300px;
+  margin: 0 auto;
+  align-self: center;
 }
 }
 

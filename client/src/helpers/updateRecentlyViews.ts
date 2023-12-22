@@ -1,4 +1,5 @@
-import { baseRequest } from "@/axios/baseRequest"
+import { baseRequest } from "@/services/axios/baseRequest"
+
 
 
 export const updateRecentlyViewsData = async (data, productId) => {

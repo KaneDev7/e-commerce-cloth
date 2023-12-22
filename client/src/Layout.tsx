@@ -1,33 +1,35 @@
 import { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
-import Footer from './components/Footer'
-import { UserContext } from './context/UserContext'
+import { Outlet } from 'react-router-dom'
+import { UserContext } from './services/context/UserContext'
 import { useDispatch, useSelector } from 'react-redux'
-import { setShowSearchPage } from './redux/showSearchPageSlice'
-import SearchPage from './components/Navigation/searchPage'
-import { fetchFavoris } from './redux/favorisSlice'
-import { fetchfeatureProduct } from './redux/featureProductSlice'
-import { fetchMoreLikeProduct } from './redux/moreLikeProductSlice'
-import { fetchNewArriveProduct } from './redux/newArriveProductSlice'
+import { setShowSearchPage } from './domain/use-case/showSearchPageSlice'
+import SearchPage from './ui/components/Navigation/searchPage'
+import Footer from './ui/components/Footer'
+
+import { fetchFavoris } from './domain/use-case/favorisSlice'
+import { fetchfeatureProduct } from './domain/use-case/featureProductSlice'
+import { fetchMoreLikeProduct } from './domain/use-case/moreLikeProductSlice'
+import { fetchNewArriveProduct } from './domain/use-case/newArriveProductSlice'
+import ContextProvider from './services/context/ContextProvider'
 
 
-export type UserContextType =  {
-    user : string | null, 
-    setUser:  React.Dispatch<React.SetStateAction<Object>>
-  }
+export type UserContextType = {
+    user: string | null,
+    setUser: React.Dispatch<React.SetStateAction<Object>>
+}
 
 export default function Layout() {
-    const [user, setUser]  = useState<string | null>(null)
-    const showSearchPage = useSelector((state : Boolean): boolean => state.showSearchPage)
+    const [user, setUser] = useState<string | null>(null)
+    const showSearchPage = useSelector((state: Boolean): boolean => state.showSearchPage)
     const dispath = useDispatch()
-   
+
     useEffect(() => {
         dispath(setShowSearchPage(false))
         dispath(fetchFavoris(user?.user?.id))
     }, [user])
 
     useEffect(() => {
-        const newUser : string | null = JSON.parse(sessionStorage.getItem('user')) || null
+        const newUser: string | null = JSON.parse(sessionStorage.getItem('user')) || null
         setUser(newUser)
         dispath(fetchfeatureProduct())
         dispath(fetchMoreLikeProduct())
@@ -37,12 +39,14 @@ export default function Layout() {
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
-            {/* <BreadCrumb /> */}
-            <div className='py-0  '>
-                {showSearchPage && <SearchPage />}
-                <Outlet />
-            </div>
-            <Footer />
+            <ContextProvider >
+                <div className='py-0  '>
+                    {showSearchPage && <SearchPage />}
+                    <Outlet />
+                </div>
+                <Footer />
+            </ContextProvider>
+
         </UserContext.Provider>
 
     )
