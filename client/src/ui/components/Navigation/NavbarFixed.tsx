@@ -12,7 +12,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import Cart from '../Cart'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetch from '../../../services/hooks/useFetch'
+import useFetch from '../../../infrastructure/hooks/useFetch'
 
 import {
   DropdownMenu,
@@ -69,7 +69,7 @@ export default function Navbar() {
   const { data: accessoiresType } = useFetch('/nav-accessoires')
 
   const { user, setUser }: UserContextType = useContext(UserContext)
-  const {isMobile} = useContext(GlobalContext)
+  const { isMobile } = useContext(GlobalContext)
 
   const products = useSelector(state => state.cart.products)
   const [cart, setCart] = useState([])
@@ -239,6 +239,8 @@ export default function Navbar() {
 
                 {!isMobile && user && <CiUser size={20} className='text-gray-600' />}
                 {isMobile && !user && <CiUser size={20} className='text-gray-600' />}
+                {!isMobile && !user && <CiUser size={20} className='text-gray-600' />}
+
                 {
                   user &&
                   <p className={`${isMobile ? 'text-xl text-white' : 'text-xs'}`} >

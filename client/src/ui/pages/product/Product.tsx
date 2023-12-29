@@ -2,10 +2,10 @@ import { BiCartAdd } from 'react-icons/bi'
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { addItem } from '../../../domain/use-case/cartSlice'
+import { addItem } from '../../../domain/use-case/cart/cartSlice'
 import { useContext } from 'react'
 import { UserContext } from '../../../services/context/UserContext'
-import useFetch from '../../../services/hooks/useFetch'
+import useFetch from '../../../infrastructure/hooks/useFetch'
 
 import Navbar from '@/ui/components/Navigation/Navbar'
 import NavbarFixed from '@/ui/components/Navigation/NavbarFixed'
@@ -34,8 +34,9 @@ import Assurance from '../../components/Assurance'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContextType } from '@/Layout'
-import { updateRecentlyViewsData } from '@/helpers/updateRecentlyViews'
-import { fetchRececntlyViews } from '@/domain/use-case/RececntlyViewsSlice'
+import { updateRecentlyViewsData } from '@/domain/use-case/recentlyReview/updateRecentlyViews'
+import { fetchRececntlyViews } from '@/domain/use-case/recentlyReview/RececntlyViewsSlice'
+import { checkIsArticleHasSameSize, getArticleInCartOfCurrentUser } from '@/domain/use-case/cart/cartItem'
 
 const USER_VISIT_TIME = 5000
 
@@ -43,13 +44,11 @@ export default function Product() {
   const { user }: UserContextType = useContext(UserContext)
   const [quantity, setQuantity] = useState(1)
   const [selectSize, setSelectSize] = useState(null)
-
+  const [isZommIn, setIsZommIn] = useState(false)
   const cart = useSelector(state => state.cart.products)
-
-  const navigate = useNavigate()
   const { id } = useParams()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  // const location = useLocation()
   const { data: product, isLoading, error } = useFetch(`/products/${id}?populate=*`)
 
   let imgUrl, imgUrl2, images
@@ -61,17 +60,16 @@ export default function Product() {
   }
 
   const handleAddProductToCart = () => {
-    if (!user) {
-      return navigate(`/login${location.pathname}`)
-    }
+    if (!user) return navigate(`/login${location.pathname}`)
+    if (!Boolean(selectSize)) return toast.warn("Seletionner d'abord votre taille", { hideProgressBar: true })
 
-    const articleInCartOfCurrentUser = cart.find(item => item.id === product.id && user.user.username.trim() === item.username.trim())
-
-    if (!Boolean(selectSize)) {
-      return toast.warn("Seletionner d'abord votre taille", {
-        hideProgressBar: true
-      })
-    }
+    const articleInCartOfCurrentUser = getArticleInCartOfCurrentUser(
+      cart,
+      {
+        username: user?.user.username,
+        productId: product.id
+      }
+    )
 
     if (!articleInCartOfCurrentUser) {
       dispatch(addItem({
@@ -86,23 +84,18 @@ export default function Product() {
         isNewSize: false
       }))
 
-      return toast.success("Ajouter au panier avec succé", {
-        hideProgressBar: true
-      })
+      return toast.success("Ajouter au panier avec succé", { hideProgressBar: true })
 
     }
-
-    const isArticleHasSameSize = articleInCartOfCurrentUser.size.some(item => item === selectSize)
 
     dispatch(addItem({
       id: product.id,
       username: user.user.username,
       size: [...articleInCartOfCurrentUser.size, selectSize],
-      isNewSize: isArticleHasSameSize
+      isNewSize: checkIsArticleHasSameSize(articleInCartOfCurrentUser, selectSize)
     }))
-    return toast.success("Ajouter au panier avec succé", {
-      hideProgressBar: true
-    })
+
+    return toast.success("Ajouter au panier avec succé", { hideProgressBar: true })
 
   }
 
@@ -124,6 +117,7 @@ export default function Product() {
   useEffect(() => {
     setSelectSize(null)
     setQuantity(1)
+    setIsZommIn(false)
   }, [id])
 
   useEffect(() => {
@@ -151,17 +145,17 @@ export default function Product() {
           }
         })
 
-       const data = {
+        const data = {
           data: {
             recentlyViewed: JSON.stringify([...updatexistingRecentlyView])
           }
         }
-       return updateRecentlyViewsData(data, product.id).then(_ => {
+        return updateRecentlyViewsData(data, product.id).then(_ => {
           dispatch(fetchRececntlyViews(user?.user?.id))
         })
       }
 
-     const data = {
+      const data = {
         data: {
           recentlyViewed: JSON.stringify([
             ...recentlyViewDataParse,
@@ -193,7 +187,6 @@ export default function Product() {
   }
 
 
-
   return (
     <>
       <NavbarFixed />
@@ -209,6 +202,7 @@ export default function Product() {
                   clickable: true,
                 }}
                 zoom={true}
+                onDoubleClick={() => setIsZommIn(!isZommIn)}
                 navigation={true}
                 modules={[Zoom, Navigation, Pagination]}
                 className="mySwiper"
@@ -217,7 +211,8 @@ export default function Product() {
                   images?.map((image, index) => (
                     <SwiperSlide key={index}>
                       <div className='swiper-zoom-container'>
-                        <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt="" className='w-full h-auto sm:aspect-square aspect-auto object-contain cursor-zoom-in ' />
+                        <img src={import.meta.env.VITE_API_UPLOAD + image?.attributes?.url} alt=""
+                          className={`w-full h-auto sm:aspect-square aspect-auto object-contain ${isZommIn ? 'cursor-zoom-out' : 'cursor-zoom-in'} select-none`} />
                       </div>
                     </SwiperSlide>
                   ))

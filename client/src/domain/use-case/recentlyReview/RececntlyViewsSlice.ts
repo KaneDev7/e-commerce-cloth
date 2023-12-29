@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { CartType } from "./cartSlice"
-import { baseRequest } from "@/services/axios/baseRequest"
+import { CartType } from "../cart/cartSlice"
+import { baseRequest } from "@/infrastructure/axios/baseRequest"
 
 
 

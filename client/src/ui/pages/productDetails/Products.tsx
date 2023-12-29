@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import useFetch from "../../../services/hooks/useFetch";
+import useFetch from "../../../infrastructure/hooks/useFetch";
 import List from "../../components/List";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { LuListFilter } from "react-icons/lu";
@@ -18,9 +18,6 @@ import NavbarFixed from '@/ui/components/Navigation/NavbarFixed'
 
 import {
   Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
 } from "@/ui/components/ui/accordion"
 
 
@@ -33,18 +30,19 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/ui/components/ui/sheet"
+
 import RecentlyViews from "@/ui/components/RecentlyViews";
 import { UserContext } from "@/services/context/UserContext";
 import { UserContextType } from "@/Layout";
+import FilterItem from "@/ui/components/FilterItem";
 
 export default function Products() {
 
   const catId = parseInt(useParams().id)
   const [sort, setSort] = useState('desc')
   const filters = useSelector(state => state.filter)
-  const selectedFilter = useSelector(state => state.selectedFilter)
   const customFilters = useSelector(state => state.customFilters)
-  const {user} : UserContextType = useContext(UserContext)
+  const { user }: UserContextType = useContext(UserContext)
 
   const { data: categorie, isLoading: isLoadingCat, error: catError } = useFetch(`/categories/${catId}?populate=*&`)
   const { data: sizes, isLoading: isSizeLoading, error: sizeError } = useFetch(`/sizes`)
@@ -105,96 +103,39 @@ export default function Products() {
 
             <div className="mb-10">
               <h1 className="text-primaryColor font-bold">Filtrer par</h1>
+
               <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>Couleurs</AccordionTrigger>
-                  <AccordionContent>
-                    <div
-                      className="flex flex-wrap gap-2 bg-white cursor-pointer">
-                      {colors?.map((item, index) => (
-                        <div
-                          key={item.id}
-                          style={{
-                            opacity: selectedFilter.includes(item?.attributes?.color) && '1'
-                          }}
-                          onClick={() => handleAddFilter({
-                            id: item.id,
-                            type: 'colors',
-                            field: 'color',
-                            value: item?.attributes?.color
-                          })}
-                          className="w-fit flex items-center gap-2 border p-2  opacity-50 hover:opacity-100"
-                        >
-                          <div
-                            style={{
-                              background: colorCode[item?.attributes?.color],
-                            }}
-                            className={`w-[20px] h-[20px] flex items-center justify-center border 
-                            border-black/30 rounded-full`} >
-                          </div>
-                          <p> {item?.attributes?.color} </p>
+                <FilterItem
+                  title='Couleurs'
+                  handleAddFilter={handleAddFilter}
+                  filterType={{
+                    type: 'colors',
+                    field: 'color',
+                  }}
+                  filterData={colors}
+                />
 
-                        </div>
-
-                      ))}
-                    </div>
-                  </AccordionContent>
-
-                </AccordionItem>
                 {
                   categorie?.attributes?.title !== 'sacs & accessoires' &&
                   <>
-                    <AccordionItem value="item-2">
-                      <AccordionTrigger>Tailles</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="mb-10">
-
-                          <div className="flex flex-wrap gap-5 cursor-pointer">
-                            {sizes?.map(item => (
-                              <div
-                                key={item.id}
-                                style={{
-                                  background: selectedFilter.includes(item?.attributes?.size) && '#001355',
-                                  color: selectedFilter.includes(item?.attributes?.size) && '#fff'
-
-                                }}
-                                onClick={() => handleAddFilter({
-                                  id: item.id,
-                                  type: 'sizes',
-                                  field: 'size',
-                                  value: item?.attributes?.size
-                                })}
-                                className="w-[35px] h-[35px] flex items-center justify-center border hover:bg-primaryColor hover:text-white border-black/10 ">
-                                {item?.attributes?.size}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="item-3">
-                      <AccordionTrigger>Sous catégories</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="mb-10">
-                          <div className="flex flex-wrap gap-5 cursor-pointer">
-                            {subCategories?.map(item => (
-                              <div
-                                key={item.id}
-                                onClick={() => handleAddFilter({
-                                  id: item.id,
-                                  type: 'sub_categories',
-                                  field: 'subCategory',
-                                  value: item?.attributes?.subCategory
-                                })}
-                                className="flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-black/75 text-[14px] py-2 px-4">
-                                {item?.attributes?.subCategory}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
+                    <FilterItem
+                      title='Tailles'
+                      handleAddFilter={handleAddFilter}
+                      filterType={{
+                        type: 'sizes',
+                        field: 'size'
+                      }}
+                      filterData={sizes}
+                    />
+                    <FilterItem
+                      title='Saisons'
+                      handleAddFilter={handleAddFilter}
+                      filterType={{
+                        type: 'sub_categories',
+                        field: 'subCategory'
+                      }}
+                      filterData={subCategories}
+                    />
                   </>
                 }
               </Accordion>
@@ -236,108 +177,55 @@ export default function Products() {
             {/* SIDE BAR MOBILE */}
 
             <Sheet>
+
               <SheetTrigger asChild>
                 <button
-                  // onClick={() => setShowFilter(true)}
                   className="lg:hidden flex items-center gap-2 py-2 px-4 bg-white hover:bg-white shadow-md  cursor-pointer">
                   <LuListFilter /> Filtrer
                 </button>
               </SheetTrigger>
+
               <SheetContent side='left'>
+
                 <SheetHeader>
                   <SheetTitle>Filtre</SheetTitle>
                 </SheetHeader>
+
                 <div className='mt-10'>
                   <h1 className="text-primaryColor font-bold">Filtrer par</h1>
+
                   <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="item-1">
-                      <AccordionTrigger>Couleurs</AccordionTrigger>
-                      <AccordionContent>
-                        <div
-                          className="flex flex-wrap gap-2 bg-white cursor-pointer">
-                          {colors?.map((item, index) => (
-                            <div
-                              key={item.id}
-                              style={{
-                                opacity: selectedFilter.includes(item?.attributes?.color) && '1'
-                              }}
-                              onClick={() => handleAddFilter({
-                                id: item.id,
-                                type: 'colors',
-                                field: 'color',
-                                value: item?.attributes?.color
-                              })}
-                              className="w-fit flex items-center gap-2 border p-2  opacity-50 hover:opacity-100"
-                            >
-                              <div
-                                style={{
-                                  background: colorCode[item?.attributes?.color],
-                                }}
-                                className={`w-[20px] h-[20px] flex items-center justify-center border 
-                                   border-black/30 rounded-full`} >
-                              </div>
-                              <p> {item?.attributes?.color} </p>
-                            </div>
+                    <FilterItem
+                      title='Couleurs'
+                      handleAddFilter={handleAddFilter}
+                      filterType={{
+                        type: 'colors',
+                        field: 'color',
+                      }}
+                      filterData={colors}
+                    />
 
-                          ))}
-                        </div>
-                      </AccordionContent>
-
-                    </AccordionItem>
                     {
                       categorie?.attributes?.title !== 'sacs & accessoires' &&
                       <>
-                        <AccordionItem value="item-2">
-                          <AccordionTrigger>Tailles</AccordionTrigger>
-                          <AccordionContent>
-                            <div className="mb-10">
-
-                              <div className="flex flex-wrap gap-5 cursor-pointer">
-                                {sizes?.map(item => (
-                                  <div
-                                    key={item.id}
-                                    style={{
-                                      background: selectedFilter.includes(item?.attributes?.size) && '#001355',
-                                      color: selectedFilter.includes(item?.attributes?.size) && '#fff'
-
-                                    }}
-                                    onClick={() => handleAddFilter({
-                                      id: item.id,
-                                      type: 'sizes',
-                                      field: 'size',
-                                      value: item?.attributes?.size
-                                    })}
-                                    className="w-[35px] h-[35px] flex items-center justify-center border hover:bg-primaryColor hover:text-white border-black/10 ">
-                                    {item?.attributes?.size}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-
-                        <AccordionItem value="item-3">
-                          <AccordionTrigger>Sous catégories</AccordionTrigger>
-                          <AccordionContent>
-                            <div className="mb-10">
-                              <div className="flex flex-wrap gap-5 cursor-pointer">
-                                {subCategories?.map(item => (
-                                  <div
-                                    key={item.id}
-                                    onClick={() => handleAddFilter({
-                                      id: item.id,
-                                      type: 'sub_categories',
-                                      field: 'subCategory',
-                                      value: item?.attributes?.subCategory
-                                    })}
-                                    className="flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-black/75 text-[14px] py-2 px-4">
-                                    {item?.attributes?.subCategory}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
+                        <FilterItem
+                          title='Tailles'
+                          handleAddFilter={handleAddFilter}
+                          filterType={{
+                            type: 'sizes',
+                            field: 'size'
+                          }}
+                          filterData={sizes}
+                        />
+                        <FilterItem
+                          title='Saisons'
+                          handleAddFilter={handleAddFilter}
+                          filterType={{
+                            type: 'sub_categories',
+                            field: 'subCategory'
+                          }}
+                          filterData={subCategories}
+                        />
                       </>
                     }
                   </Accordion>
@@ -397,7 +285,7 @@ export default function Products() {
 
           </div>
         </div>
-        {user && <RecentlyViews/>}
+        {user && <RecentlyViews />}
 
       </div >
     </>

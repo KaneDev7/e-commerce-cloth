@@ -30,7 +30,7 @@ import {
     HoverCardTrigger,
 } from "@/ui/components/ui/hover-card"
 
-import { baseRequest } from '@/services/axios/baseRequest'
+import { baseRequest } from '@/infrastructure/axios/baseRequest'
 import { ToastContainer, toast } from 'react-toastify'
 import { Button } from '@/ui/components/ui/button'
 import { UserContextType } from '@/Layout'

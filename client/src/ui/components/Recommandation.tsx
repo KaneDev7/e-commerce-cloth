@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import useFetch from '../../services/hooks/useFetch'
+import useFetch from '../../infrastructure/hooks/useFetch'
 import Card from './Card'
 import { useParams } from 'react-router-dom'
 

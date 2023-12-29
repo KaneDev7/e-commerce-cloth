@@ -1,8 +1,12 @@
 import {useEffect, useState} from 'react'
 import { baseRequest } from '../axios/baseRequest'
 
+type Product = {
+      
+}
 
 export default function useFetch(url : string) {
+
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -10,7 +14,7 @@ export default function useFetch(url : string) {
     useEffect(()=>{
         const  fetchData = async ()=> {
          try {
-            setIsLoading(true)
+          setIsLoading(true)
           const response = await baseRequest.get(url)
           setData(response.data.data)
 

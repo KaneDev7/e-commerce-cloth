@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 
 import { MdDelete } from 'react-icons/md'
 import { useSelector } from 'react-redux'
-import { removeItem, reset } from '../../domain/use-case/cartSlice'
+import { removeItem, reset } from '../../domain/use-case/cart/cartSlice'
 import { useDispatch } from 'react-redux'
 
 import {

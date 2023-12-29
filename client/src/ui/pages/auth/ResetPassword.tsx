@@ -10,7 +10,7 @@ import { Input } from "@/ui/components/ui/input"
 import { Label } from "@radix-ui/react-dropdown-menu"
 import { useNavigate, useParams } from "react-router-dom"
 import { useState } from "react"
-import { baseRequest } from "@/services/axios/baseRequest"
+import { baseRequest } from "@/infrastructure/axios/baseRequest"
 
 
 type Inputs = {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Card from './Card'
-import useFetch from '../../services/hooks/useFetch'
+import useFetch from '../../infrastructure/hooks/useFetch'
 import ProductLoad from './ProductLoad'
 
 type TypeProps = { catId: number, subCat: Array<string>, sort: string }
@@ -17,12 +17,12 @@ export default function List({ catId, subCat, sort }: TypeProps) {
 
 
     if (isLoading) {
-        return <div className='flex justify-center items-center h-[500px] mt[100px] '>
+        return <div className='flex justify-center items-center h-[500px] mt[100px]  '>
           <ProductLoad />
         </div>
       }
     return (
-      <div>
+      <div className='mr-4'>
         <p className='mt-4'> {products.length} article{products.length > 1 && 's'}  trouvé{products.length > 1 && 's'}</p>
           <div className="max-w-full  flex items-start gap-10 flex-wrap mt-5 list">
            

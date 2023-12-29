@@ -8,9 +8,9 @@ import { Input } from "@/ui/components/ui/input"
 import { Label } from "@radix-ui/react-dropdown-menu"
 import { Link, useNavigate } from "react-router-dom"
 import { useContext, useState } from "react"
-import { baseRequest } from "@/services/axios/baseRequest"
 import { UserContext } from "@/services/context/UserContext"
 import { UserContextType } from "@/Layout"
+import { registeUser} from "@/domain/use-case/users/auth.useCase"
 
 
 type Inputs = {
@@ -19,40 +19,22 @@ type Inputs = {
 }
 
 export default function Register() {
-    const [message, setMessage] = useState(null)
+    const [message, setMessage] = useState('')
     const { setUser }: UserContextType = useContext(UserContext)
     const navigate = useNavigate()
 
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        if (data.password !== data.confirmPassword) {
-            return setMessage('les mots de passes ne se correspondent pas')
-        }
-        setMessage(null)
-        try {
-            const response = await baseRequest.post('http://localhost:1337/api/auth/local/register',
-                JSON.stringify(data),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                })
-
-            console.log(response?.data)
-
-            setUser(response?.data)
-            sessionStorage.setItem('user', JSON.stringify(response?.data))
-            navigate('/')
-
-        } catch (err: any) {
-            console.log(err)
-            setMessage(err.response.data.error.message)
-        }
+        if (data.password !== data.confirmPassword) return setMessage('les mots de passes ne se correspondent pas')
+        const { userData, error } = await registeUser(data)
+        if (error) return setMessage(error)
+        setUser(userData)
+        navigate(`/`)
     }
 
     return (
@@ -77,7 +59,7 @@ export default function Register() {
                                 {...register("username", { required: true, minLength: 7, maxLength: 25 })} />
                         </div>
                         <div className="text-red-400 text-sm mt-3">
-                            {errors.username && <span className="text-sm">Le nom d'utilisateur doit etre enter 7 et 25 caractères</span>}
+                            {errors.username && <span className="text-sm">Le nom d'utilisateur doit entre enter 7 et 25 caractères</span>}
                         </div>
 
 

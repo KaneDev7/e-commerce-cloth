@@ -1,4 +1,4 @@
-import { baseRequest } from '@/services/axios/baseRequest'
+import { baseRequest } from '@/infrastructure/axios/baseRequest'
 import { Button } from '@/ui/components/ui/button'
 import { Input } from '@/ui/components/ui/input'
 import { Label } from '@radix-ui/react-dropdown-menu'

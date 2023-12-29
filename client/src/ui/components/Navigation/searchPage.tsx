@@ -1,4 +1,4 @@
-import { baseRequest } from '@/services/axios/baseRequest';
+import { baseRequest } from '@/infrastructure/axios/baseRequest';
 import { Input } from '@/ui/components/ui/input'
 import { setShowSearchPage } from '@/domain/use-case/showSearchPageSlice';
 import { useState } from 'react';

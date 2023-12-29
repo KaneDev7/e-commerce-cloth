@@ -2,7 +2,7 @@ import { BiCartAdd } from 'react-icons/bi';
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { addItem } from '../../domain/use-case/cartSlice'
+import { addItem } from '../../domain/use-case/cart/cartSlice'
 import { useContext } from 'react'
 import { UserContext } from '../../services/context/UserContext'
 

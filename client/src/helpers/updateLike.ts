@@ -1,4 +1,4 @@
-import { baseRequest } from "@/services/axios/baseRequest"
+import { baseRequest } from "@/infrastructure/axios/baseRequest"
 
 
 

@@ -14,11 +14,11 @@ import {
 import { UserContext } from '@/services/context/UserContext'
 import ProductLoad from '@/ui/components/ProductLoad'
 import { Button } from '@/ui/components/ui/button'
-import { baseRequest } from '@/services/axios/baseRequest'
+import { baseRequest } from '@/infrastructure/axios/baseRequest'
 import Navbar from '@/ui/components/Navigation/Navbar'
 import NavbarFixed from '@/ui/components/Navigation/NavbarFixed'
 import { UserContextType } from '@/Layout'
-import { TypeItem } from '@/domain/use-case/cartSlice'
+import { TypeItem } from '@/domain/use-case/cart/cartSlice'
 
 
 const commandsTopBar = [

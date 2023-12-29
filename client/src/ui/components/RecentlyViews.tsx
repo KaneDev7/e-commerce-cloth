@@ -16,7 +16,7 @@ import { Pagination, Navigation } from 'swiper/modules';
 import Card from './Card';
 import { UserContext } from '../../services/context/UserContext';
 import { UserContextType } from '@/Layout';
-import { fetchRececntlyViews } from '@/domain/use-case/RececntlyViewsSlice';
+import { fetchRececntlyViews } from '@/domain/use-case/recentlyReview/RececntlyViewsSlice';
 
 
 export default function RecentlyViews() {

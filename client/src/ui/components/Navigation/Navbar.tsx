@@ -13,7 +13,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import Cart from '../Cart'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetch from '../../../services/hooks/useFetch'
+import useFetch from '../../../infrastructure/hooks/useFetch'
 
 import {
   DropdownMenu,
@@ -60,7 +60,6 @@ import { GlobalContext } from "@/services/context/ContextProvider";
 
 export default function Navbar() {
 
-  // const { data: categories, isLoading, error } = useFetch('/categories')
   const { data: vetementsType } = useFetch('/types')
   const { data: chaussursType } = useFetch('/nav-chaussures')
   const { data: accessoiresType } = useFetch('/nav-accessoires')
@@ -227,6 +226,8 @@ export default function Navbar() {
                 
                 {!isMobile && user && <CiUser size={20} className='text-gray-600' />}
                 {isMobile && !user && <CiUser size={20} className='text-gray-600' />}
+                {!isMobile && !user && <CiUser size={20} className='text-gray-600' />}
+
                 {
                   user &&
                   <p className={`${isMobile ? 'text-xl text-white' : 'text-xs'}`} >

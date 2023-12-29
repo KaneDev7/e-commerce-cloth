@@ -9,8 +9,8 @@ import { Label } from "@radix-ui/react-dropdown-menu"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { UserContext } from "@/services/context/UserContext"
 import { useContext, useState } from "react"
-import { baseRequest } from "@/services/axios/baseRequest"
 import { UserContextType } from '@/Layout'
+import { connectUser } from '@/domain/use-case/users/auth.useCase'
 
 
 type Inputs = {
@@ -19,12 +19,10 @@ type Inputs = {
 }
 
 export default function Login() {
-  const [message, setMessage] = useState(null)
-  const { setUser } : UserContextType = useContext(UserContext)
+  const [message, setMessage] = useState('')
+  const { setUser }: UserContextType = useContext(UserContext)
   const navigate = useNavigate()
   const params = useParams()
-
-  // console.log({params})
 
   const {
     register,
@@ -33,27 +31,11 @@ export default function Login() {
   } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-
-    try {
-      const response = await baseRequest.post('http://localhost:1337/api/auth/local',
-
-        JSON.stringify({ identifier: data.email, password: data.password }),
-        {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true
-        }
-      )
-      setUser(response?.data)
-      sessionStorage.setItem('user', JSON.stringify(response?.data))
-      if (params.frompath) {
-        return navigate(`/${params?.frompath}/${params?.id}`)
-      }
-      navigate(`/`)
-
-    } catch (err: any) {
-      console.log(err)
-      setMessage(err.response.data.error.message)
-    }
+    const { userData, error } = await connectUser({ identifier: data.email, password: data.password })
+    if (error) return setMessage(error)
+    setUser(userData)
+    if (params.frompath) return navigate(`/${params?.frompath}/${params?.id}`)
+    navigate(`/`)
   }
 
   return (
