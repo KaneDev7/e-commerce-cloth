@@ -16,3 +16,8 @@ export const checkIsArticleHasSameSize = (article, selectSize) =>{
 
     return isArticleHasSameSize 
 }
+
+
+export const cartDataOfCurrentUser = (cardData, currentUser) =>{
+   return cardData.filter(item => item.username === currentUser)
+}

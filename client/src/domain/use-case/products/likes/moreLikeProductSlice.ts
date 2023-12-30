@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { CartType } from "./cart/cartSlice"
+import { CartType } from "../../cart/cartSlice"
 import { baseRequest } from "@/infrastructure/axios/baseRequest"
 
 
@@ -23,7 +23,6 @@ export const fetchMoreLikeProduct = createAsyncThunk('featureProductSlice/moreLi
     const getLikeProducts = response?.data?.data?.filter(item => {
       return item?.attributes?.like
     });
-
 
       const sortLikeProducts = [...getLikeProducts].sort((a, b) => {
         return(JSON.parse(b?.attributes?.like).length -  JSON.parse(a?.attributes?.like).length)

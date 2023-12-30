@@ -6,9 +6,9 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { LuListFilter } from "react-icons/lu";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addFilter, resetFilter } from "../../../domain/use-case/filterSlice";
-import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../../../domain/use-case/SelectedFilterSlice";
-import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../../../domain/use-case/CustomeFilterSlice";
+import { addFilter, resetFilter } from "../../../domain/use-case/products/filterSlice";
+import { addSelectedFilter, deleteSelectedilter, resetSelectedFilter } from "../../../domain/use-case/products/SelectedFilterSlice";
+import { addCustomeFilter, deletCustomeFilter, resetCustomeFilter } from "../../../domain/use-case/products/CustomeFilterSlice";
 import { colorCode } from "../../../helpers/colorsCode";
 import { Button } from "@/ui/components/ui/button";
 import ProductLoad from "@/ui/components/ProductLoad";
@@ -32,7 +32,7 @@ import {
 } from "@/ui/components/ui/sheet"
 
 import RecentlyViews from "@/ui/components/RecentlyViews";
-import { UserContext } from "@/services/context/UserContext";
+import { UserContext } from "@/ui/context/UserContext";
 import { UserContextType } from "@/Layout";
 import FilterItem from "@/ui/components/FilterItem";
 
@@ -163,8 +163,6 @@ export default function Products() {
             </div>
 
           </div>
-
-
 
           {/* PRODUCT CATEGORY */}
           <div className="lg:w-[100%] w-full ">

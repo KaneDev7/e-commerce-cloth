@@ -4,7 +4,7 @@ import NavbarFixed from '../../components/Navigation/NavbarFixed'
 
 import Banner from "./Banner";
 import Category from "./Category";
-import { UserContext } from '@/services/context/UserContext';
+import { UserContext } from '@/ui/context/UserContext';
 import { UserContextType } from '@/Layout';
 import RecentlyViews from '@/ui/components/RecentlyViews';
 import MoreLikeProducts from './MoreLikeProducts';

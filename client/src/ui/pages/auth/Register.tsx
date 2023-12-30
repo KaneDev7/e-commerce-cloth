@@ -8,7 +8,7 @@ import { Input } from "@/ui/components/ui/input"
 import { Label } from "@radix-ui/react-dropdown-menu"
 import { Link, useNavigate } from "react-router-dom"
 import { useContext, useState } from "react"
-import { UserContext } from "@/services/context/UserContext"
+import { UserContext } from "@/ui/context/UserContext"
 import { UserContextType } from "@/Layout"
 import { registeUser} from "@/domain/use-case/users/auth.useCase"
 

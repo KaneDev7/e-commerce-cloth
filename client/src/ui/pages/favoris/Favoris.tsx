@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 // import required modules
 import { UserContextType } from '@/Layout';
 import { useContext } from 'react';
-import { UserContext } from '@/services/context/UserContext';
+import { UserContext } from '@/ui/context/UserContext';
 import FavorisCard from '@/ui/components/FavorisCard';
 import ProductLoad from '@/ui/components/ProductLoad';
 import { useNavigate } from 'react-router-dom';

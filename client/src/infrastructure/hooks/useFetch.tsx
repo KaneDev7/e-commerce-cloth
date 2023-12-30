@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import { baseRequest } from '../axios/baseRequest'
+import { baseRequest } from '../../infrastructure/axios/baseRequest'
 
 type Product = {
       

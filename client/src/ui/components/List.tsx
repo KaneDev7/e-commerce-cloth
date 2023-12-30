@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Card from './Card'
-import useFetch from '../../infrastructure/hooks/useFetch'
+import useFetch from '@/infrastructure/hooks/useFetch'
 import ProductLoad from './ProductLoad'
 
 type TypeProps = { catId: number, subCat: Array<string>, sort: string }

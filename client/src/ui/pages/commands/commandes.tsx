@@ -11,7 +11,7 @@ import {
 } from "@/ui/components/ui/table"
 
 
-import { UserContext } from '@/services/context/UserContext'
+import { UserContext } from '@/ui/context/UserContext'
 import ProductLoad from '@/ui/components/ProductLoad'
 import { Button } from '@/ui/components/ui/button'
 import { baseRequest } from '@/infrastructure/axios/baseRequest'

@@ -6,17 +6,17 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 
 import { configureStore } from '@reduxjs/toolkit'
 import { cartSlice } from '@/domain/use-case/cart/cartSlice'
-import { filterSlice } from '@/domain/use-case/filterSlice'
-import { customeFilterSlice } from '@/domain/use-case/CustomeFilterSlice'
-import { selectedFilterSlice } from '@/domain/use-case/SelectedFilterSlice'
-import { showSearchPageSlice } from '@/domain/use-case/showSearchPageSlice'
+import { filterSlice } from '@/domain/use-case/products/filterSlice'
+import { customeFilterSlice } from '@/domain/use-case/products/CustomeFilterSlice'
+import { selectedFilterSlice } from '@/domain/use-case/products/SelectedFilterSlice'
+import { showSearchPageSlice } from '@/domain/use-case/products/search/showSearchPageSlice'
 import { breadCrumbSlice } from '@/domain/use-case/breadCrumbSlice'
-import { favorisSlice } from '@/domain/use-case/favorisSlice'
-import { rececntlyViewsSlice } from '@/domain/use-case/recentlyReview/RececntlyViewsSlice'
-import { featureProductSlice } from '@/domain/use-case/featureProductSlice'
-import { moreLikeProductSlice } from '@/domain/use-case/moreLikeProductSlice'
-import { newArriveProductSlice } from '@/domain/use-case/newArriveProductSlice'
-import { strapiServie } from '@/services/apis/strapiService'
+import { favorisSlice } from '@/domain/use-case/products/favorisSlice'
+import { rececntlyViewsSlice } from '@/domain/use-case/products/recentlyReview/RececntlyViewsSlice'
+import { featureProductSlice } from '@/domain/use-case/products/featureProductSlice'
+import { moreLikeProductSlice } from '@/domain/use-case/products/likes/moreLikeProductSlice'
+import { newArriveProductSlice } from '@/domain/use-case/products/newArriveProductSlice'
+import { strapiServie } from '@/infrastructure/services/apis/strapiService'
 
 
 const persistConfig = {

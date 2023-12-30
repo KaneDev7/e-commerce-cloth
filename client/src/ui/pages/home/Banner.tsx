@@ -1,4 +1,4 @@
-import { GlobalContext } from "@/services/context/ContextProvider"
+import { GlobalContext } from "@/ui/context/ContextProvider"
 import { useContext, useEffect, useState } from "react"
 
 

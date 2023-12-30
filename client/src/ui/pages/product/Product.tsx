@@ -4,8 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addItem } from '../../../domain/use-case/cart/cartSlice'
 import { useContext } from 'react'
-import { UserContext } from '../../../services/context/UserContext'
-import useFetch from '../../../infrastructure/hooks/useFetch'
+import { UserContext } from '../../context/UserContext'
 
 import Navbar from '@/ui/components/Navigation/Navbar'
 import NavbarFixed from '@/ui/components/Navigation/NavbarFixed'
@@ -34,9 +33,10 @@ import Assurance from '../../components/Assurance'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContextType } from '@/Layout'
-import { updateRecentlyViewsData } from '@/domain/use-case/recentlyReview/updateRecentlyViews'
-import { fetchRececntlyViews } from '@/domain/use-case/recentlyReview/RececntlyViewsSlice'
+import { updateRecentlyViewsData } from '@/domain/use-case/products/recentlyReview/updateRecentlyViews'
+import { fetchRececntlyViews } from '@/domain/use-case/products/recentlyReview/RececntlyViewsSlice'
 import { checkIsArticleHasSameSize, getArticleInCartOfCurrentUser } from '@/domain/use-case/cart/cartItem'
+import useFetch from '@/infrastructure/hooks/useFetch'
 
 const USER_VISIT_TIME = 5000
 

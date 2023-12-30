@@ -1,4 +1,4 @@
-import { UserContext } from '@/services/context/UserContext'
+import { UserContext } from '@/ui/context/UserContext'
 import  { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HiOutlineDotsHorizontal } from "react-icons/hi";

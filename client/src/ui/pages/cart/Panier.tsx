@@ -1,7 +1,7 @@
 import { baseRequest } from '@/infrastructure/axios/baseRequest'
 import Assurance from '@/ui/components/Assurance'
 import { Button } from '@/ui/components/ui/button'
-import { UserContext } from '@/services/context/UserContext'
+import { UserContext } from '@/ui/context/UserContext'
 import { removeItem, reset } from '@/domain/use-case/cart/cartSlice'
 import { useContext, useEffect, useState } from 'react'
 import { MdDelete } from 'react-icons/md'

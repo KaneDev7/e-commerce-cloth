@@ -1,6 +1,8 @@
+import { UserDataLogin, UserDataResponse, UserDataRgister } from "@/domain/entities/User"
 import { AuthService } from "@/infrastructure/services/authService"
 
-export const registeUser = async (data) =>{
+
+export const registeUser = async (data : UserDataRgister) =>{
     let error, userData 
     const auth = new AuthService()
     const response = await auth.register(data)  
@@ -22,14 +24,15 @@ export const registeUser = async (data) =>{
 }
 
 
-export const connectUser = async (data) =>{
-    let error, userData 
+export const connectUser = async (data: UserDataLogin) =>{
+    let error : string | undefined
+    let userData : UserDataResponse | undefined | null
     const auth = new AuthService()
     const response = await auth.login(data)       
     
     if(response.status === 200){
-        sessionStorage.setItem('user', JSON.stringify(response.data))
         userData = response.data
+        sessionStorage.setItem('user', JSON.stringify(userData))
     }     
 
     const errMessage = response?.data?.error?.message 
@@ -38,5 +41,5 @@ export const connectUser = async (data) =>{
         error = "Identifiant ou mot de passe invalide"
       }
 
-    return {error, userData}
+    return {error, userData} 
 }

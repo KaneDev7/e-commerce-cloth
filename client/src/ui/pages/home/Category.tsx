@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import useFetch from '../../../infrastructure/hooks/useFetch'
+import useFetch from '@/infrastructure/hooks/useFetch'
+
 
 export default function Category() {
 

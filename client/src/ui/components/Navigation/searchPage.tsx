@@ -1,11 +1,14 @@
 import { baseRequest } from '@/infrastructure/axios/baseRequest';
 import { Input } from '@/ui/components/ui/input'
-import { setShowSearchPage } from '@/domain/use-case/showSearchPageSlice';
+import { setShowSearchPage } from '@/domain/use-case/products/search/showSearchPageSlice';
 import { useState } from 'react';
 
 import { IoMdClose } from "react-icons/io";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { searchProduct } from '@/domain/use-case/products/search/searchProdduct';
+
+const DELAY_BEFORE_FETCH_DATA = 3000
 
 export default function SearchPage() {
     const [products, setProducts] = useState([])
@@ -17,7 +20,6 @@ export default function SearchPage() {
     products.map(item => {
         item?.attributes?.size?.data.map(size => {
             <p className='text-sm'> </p>
-            console.log(size?.attributes?.size)
         })
     })
 
@@ -26,25 +28,12 @@ export default function SearchPage() {
         dispath(setShowSearchPage(false))
     }
 
-    const handleChange = ({ target }: { target: HTMLInputElement }) => {
-        if (target.value.trim() === '') {
-            return
-        }
-
-        let value = ''
+    const handleChange = async ({ target }: { target: HTMLInputElement }) => {
         timer = setTimeout(async () => {
-            value = target.value
             clearTimeout(timer)
-
-            try {
-                console.log('value', value)
-                const response = await baseRequest.get(`/products?populate=*&filters[title][$contains]=${value}`)
-                setProducts(response?.data?.data)
-
-            } catch (err: any) {
-                console.log(err)
-            }
-        }, 3000)
+            const result = await searchProduct(target.value)
+            setProducts(result)
+        },DELAY_BEFORE_FETCH_DATA )
     }
 
     return (

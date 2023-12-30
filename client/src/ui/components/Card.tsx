@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 import {getDayBetweenTwoDate } from "@/helpers/date";
 import { BsHeart } from "react-icons/bs";
 import { BsHeartFill } from "react-icons/bs";
-import { UserContext } from "@/services/context/UserContext";
+import { UserContext } from "@/ui/context/UserContext";
 import { UserContextType } from "@/Layout";
 import { useDispatch } from "react-redux";
-import { fetchFavoris } from "@/domain/use-case/favorisSlice";
-import { updateLikeData } from "@/helpers/updateLike";
+import { fetchFavoris } from "@/domain/use-case/products/favorisSlice";
+import { updateLikeData } from "@/domain/use-case/products/likes/updateLike";
 import { getRating } from "@/helpers/rating";
 
 

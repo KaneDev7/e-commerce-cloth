@@ -6,7 +6,7 @@ import { Button } from "@/ui/components/ui/button"
 
 import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
-import { UserContext } from "@/services/context/UserContext"
+import { UserContext } from "@/ui/context/UserContext"
 import { UserContextType } from '@/Layout'
 
 

@@ -7,19 +7,6 @@ type Props = {
 
 export class AuthService {
 
-  async login(data : Object ) {
-    try {
-      const  response = await baseRequest.post('/auth/local', JSON.stringify(data),
-      {
-        headers: { 'Content-Type': 'application/json' },
-      })
-    return response
-      
-    } catch (error) {
-      return error.response
-    }
-  }
-
   async register(data : Object ) {
     try {
        const response = await baseRequest.post('/auth/local/register', JSON.stringify(data),
@@ -33,6 +20,21 @@ export class AuthService {
       return error.response
     }
   }
+
+
+  async login(data : Object ) {
+    try {
+      const  response = await baseRequest.post('/auth/local', JSON.stringify(data),
+      {
+        headers: { 'Content-Type': 'application/json' },
+      })
+    return response
+      
+    } catch (error) {
+      return error.response
+    }
+  }
+
 
 }
 

@@ -10,7 +10,6 @@ export const showSearchPageSlice = createSlice({
         setShowSearchPage : (state : Boolean, action) : boolean =>{
             return action.payload
         },
-
     }
 })
 

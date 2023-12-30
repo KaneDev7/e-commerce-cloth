@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addItem } from '../../domain/use-case/cart/cartSlice'
 import { useContext } from 'react'
-import { UserContext } from '../../services/context/UserContext'
+import { UserContext } from '../context/UserContext'
 
 // Toast 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContextType } from '@/Layout'
+import { checkIsArticleHasSameSize, getArticleInCartOfCurrentUser } from '@/domain/use-case/cart/cartItem';
 
 export default function FavorisCard({ product }) {
     const { user }: UserContextType = useContext(UserContext)
@@ -20,20 +21,17 @@ export default function FavorisCard({ product }) {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-
     const handleAddProductToCart = () => {
+        if (!user) return navigate(`/login${location.pathname}`)
+        if (!Boolean(selectSize)) return toast.warn("Seletionner d'abord votre taille", { hideProgressBar: true })
 
-        setIsAddToCartClicked(true)
-        const articleInCartOfCurrentUser = cart.find(item => item.id === product.id && user.user.username.trim() === item.username.trim())
-
-        if (!Boolean(selectSize)) {
-            return toast.warn("Seletionner d'abord votre taille", {
-                hideProgressBar: true,
-                autoClose: false
-            })
-        }
-
-
+        const articleInCartOfCurrentUser = getArticleInCartOfCurrentUser(
+            cart,
+            {
+                username: user?.user.username,
+                productId: product.id
+            }
+        )
 
         if (!articleInCartOfCurrentUser) {
             dispatch(addItem({
@@ -43,32 +41,25 @@ export default function FavorisCard({ product }) {
                 desc: product?.attributes?.desc,
                 price: product?.attributes?.price,
                 img: product?.attributes?.img?.data[0]?.attributes?.url,
-                quantity: 1,
+                quantity: quantity,
                 size: [selectSize],
                 isNewSize: false
             }))
 
-            return toast.success("Ajouter au panier avec succé", {
-                hideProgressBar: true,
-            })
+            return toast.success("Ajouter au panier avec succé", { hideProgressBar: true })
 
         }
-
-        const isArticleHasSameSize = articleInCartOfCurrentUser.size.some(item => item === selectSize)
 
         dispatch(addItem({
             id: product.id,
             username: user.user.username,
             size: [...articleInCartOfCurrentUser.size, selectSize],
-            isNewSize: isArticleHasSameSize
+            isNewSize: checkIsArticleHasSameSize(articleInCartOfCurrentUser, selectSize)
         }))
 
-        return toast.success("Ajouter au panier avec succé", {
-            hideProgressBar: true,
-        })
+        return toast.success("Ajouter au panier avec succé", { hideProgressBar: true })
 
     }
-
     const handleSelectSizeChange = (event) => {
         if (event.target.value === 'Seletionner une taille') {
             return setSelectSize(null)
@@ -103,7 +94,7 @@ export default function FavorisCard({ product }) {
                         {product?.attributes.title}
                     </h2>
 
-                        <p className="font-medium text-primaryColor ">  {product?.attributes.price} fcfa </p>
+                    <p className="font-medium text-primaryColor ">  {product?.attributes.price} fcfa </p>
 
                     <div className=''>
 

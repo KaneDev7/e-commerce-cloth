@@ -13,7 +13,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import Cart from '../Cart'
 import { useDispatch, useSelector } from 'react-redux'
-import useFetch from '../../../infrastructure/hooks/useFetch'
+import useFetch from '@/infrastructure/hooks/useFetch'
 
 import {
   DropdownMenu,
@@ -34,9 +34,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/ui/components/ui/navigation-menu"
 
-import { UserContext } from '@/services/context/UserContext'
+import { UserContext } from '@/ui/context/UserContext'
 import { Button } from '../ui/button'
-import { setShowSearchPage } from '@/domain/use-case/showSearchPageSlice';
+import { setShowSearchPage } from '@/domain/use-case/products/search/showSearchPageSlice';
 
 
 import {
@@ -56,7 +56,8 @@ import {
   AccordionTrigger,
 } from "@/ui/components/ui/accordion"
 import { UserContextType } from '@/Layout';
-import { GlobalContext } from "@/services/context/ContextProvider";
+import { GlobalContext } from "@/ui/context/ContextProvider";
+import { cartDataOfCurrentUser } from "@/domain/use-case/cart/cartItem";
 
 export default function Navbar() {
 
@@ -80,8 +81,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (user) {
-      const filterCart = products.filter(item => item.username === user.user.username)
-      setCart(filterCart)
+      setCart(cartDataOfCurrentUser(products,user.user.username))
     }
   }, [products, user])
 

@@ -11,9 +11,9 @@ import {
 
 import { Button } from './ui/button'
 import { Link } from 'react-router-dom'
-import { UserContext } from '@/services/context/UserContext'
+import { UserContext } from '@/ui/context/UserContext'
 import { UserContextType } from '@/Layout'
-
+import { cartDataOfCurrentUser } from '@/domain/use-case/cart/cartItem'
 
 
 export default function cart() {
@@ -23,15 +23,12 @@ export default function cart() {
 
   const dispatch = useDispatch()
 
-
   const totalPrice = () => {
     return cart.reduce((acc, item) => acc += (item.price * item.quantity), 0).toFixed(2)
   }
 
   useEffect(() => {
-    const filterCart = products.filter(item => item.username.trim() === user.user.username.trim())
-    setCart(filterCart)
-
+    setCart(cartDataOfCurrentUser(products,user.user.username))
   }, [products])
 
   if (cart.length === 0) {

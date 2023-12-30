@@ -7,10 +7,11 @@ import { Button } from "@/ui/components/ui/button"
 import { Input } from "@/ui/components/ui/input"
 import { Label } from "@radix-ui/react-dropdown-menu"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { UserContext } from "@/services/context/UserContext"
-import { useContext, useState } from "react"
+import { UserContext } from "@/ui/context/UserContext"
+import { SetStateAction, useContext, useState } from "react"
 import { UserContextType } from '@/Layout'
 import { connectUser } from '@/domain/use-case/users/auth.useCase'
+import { UserDataResponse } from '@/domain/entities/User'
 
 
 type Inputs = {
@@ -20,7 +21,7 @@ type Inputs = {
 
 export default function Login() {
   const [message, setMessage] = useState('')
-  const { setUser }: UserContextType = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
   const navigate = useNavigate()
   const params = useParams()
 
@@ -32,6 +33,7 @@ export default function Login() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { userData, error } = await connectUser({ identifier: data.email, password: data.password })
+    console.log(userData)
     if (error) return setMessage(error)
     setUser(userData)
     if (params.frompath) return navigate(`/${params?.frompath}/${params?.id}`)
