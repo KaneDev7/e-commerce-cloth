@@ -31,7 +31,6 @@ export type ProductType = {
 
 export default function FeatureProduct() {
 
-  // const { data: products, isLoading, error } = useFetch(`/products?populate=*&[filters][type][$eq]=${type}`)
   const products = useSelector(state => state.featureProduct.data)
   const loading = useSelector((state) => state.featureProduct.loading);
   
@@ -40,9 +39,9 @@ export default function FeatureProduct() {
       <ProductLoad />
     </div>
   }
-
-  //if (error) return <p>{error}</p>
-
+  console.log('morsell', products)
+  if(products.length > 2)
+  
   return (
     <div className="flex justify-center items-center my-[5rem] mx-20 globalWidth 2xl:px-0 px-5">
 

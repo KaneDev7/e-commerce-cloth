@@ -11,6 +11,7 @@ import { Label } from "@radix-ui/react-dropdown-menu"
 import { useNavigate, useParams } from "react-router-dom"
 import { useState } from "react"
 import { baseRequest } from "@/infrastructure/axios/baseRequest"
+import { AuthService } from '@/infrastructure/services/authService'
 
 
 type Inputs = {
@@ -36,28 +37,12 @@ export default function ResetPassword() {
             return setMessage('les mots de passes ne se correspondent pas')
         }
         setMessage(null)
-        console.log(
-
-        )
-        try {
-            const response = await baseRequest.post('http://localhost:1337/api/auth/reset-password',
-                JSON.stringify({
-                    code,
-                    password: data.password,
-                    passwordConfirmation: data.confirmPassword
-                }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                })
-
-            console.log(response?.data)
-            setIsPasswordreset(true)
-
-        } catch (err: any) {
-            console.log(err)
-            setMessage(err.response.data.error.message)
-        }
+        const auth = new AuthService()
+        await auth.resetPassword(code, {
+            password: data.password,
+            passwordConfirmation: data.confirmPassword
+        })
+        setIsPasswordreset(true)
     }
 
     if (isPasswordReset) {

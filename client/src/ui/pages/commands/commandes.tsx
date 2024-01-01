@@ -13,12 +13,13 @@ import {
 
 import { UserContext } from '@/ui/context/UserContext'
 import ProductLoad from '@/ui/components/ProductLoad'
-import { Button } from '@/ui/components/ui/button'
-import { baseRequest } from '@/infrastructure/axios/baseRequest'
 import Navbar from '@/ui/components/Navigation/Navbar'
 import NavbarFixed from '@/ui/components/Navigation/NavbarFixed'
+import { Button } from '@/ui/components/ui/button'
 import { UserContextType } from '@/Layout'
 import { TypeItem } from '@/domain/use-case/cart/cartSlice'
+import { CommandService } from '@/infrastructure/services/commandService'
+import { commandsOfSelectedFilter } from '@/domain/use-case/command/command.useCase'
 
 
 const commandsTopBar = [
@@ -48,22 +49,22 @@ export default function Commands() {
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await baseRequest.get(`http://localhost:1337/api/commands?populate=*&[filters][username]=${user?.user?.username}`)
-                if (filterSelected === 'tout') {
-                    setCommand(response?.data?.data)
-                } else {
-                    const dataFilter = response?.data?.data?.filter(item => item.attributes.statut === filterSelected.toLowerCase())
-                    setCommand(dataFilter)
-                }
-                setIsLoading(false)
+        (async function () {
+            const commandsOfCurrentUser = await new CommandService()
+                .getCommandsOfCurrentUser(user?.user?.username)
 
-            } catch (err: any) {
-                console.log(err)
+            if (filterSelected === 'tout') {
+                setCommand(commandsOfCurrentUser)
+            } else {
+                const dataFilter = commandsOfSelectedFilter(
+                    commandsOfCurrentUser,
+                    filterSelected
+                )
+                setCommand(dataFilter)
             }
-        }
-        fetchData()
+            setIsLoading(false)
+        }())
+
     }, [filterSelected, user]);
 
     if (isLoading) {
@@ -106,7 +107,7 @@ export default function Commands() {
                         </TableHeader>
                         <TableBody>
                             {
-                                commands?.map((item : TypeItem) => (
+                                commands?.map((item: TypeItem) => (
 
                                     <TableRow >
 

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { CartType } from "../cart/cartSlice"
 import { baseRequest } from "@/infrastructure/axios/baseRequest"
+import { CommandService } from "@/infrastructure/services/commandService";
 
 
 type InitialStateType = {
@@ -15,36 +16,49 @@ const initialState: InitialStateType = {
   error: null,
 };
 
+const sortByQuantityofNumberOfCommandFn = (products) =>{
+  return [...products].sort((a,b) => {
+    return (b.attributes?.numberOfCommand * Number(b.attributes?.quantity)) -
+    (a.attributes?.numberOfCommand * Number(b.attributes?.quantity) )
+  })
+}
+
+const sortByRecentFn = (products) =>{
+  return [...products].sort((a,b) => {
+    return new Date(b.attributes?.createdAt) - new Date(a.attributes?.createdAt) 
+  })
+}
+
+const getMoreSellProduct = async (moreSellProductids) =>{
+  let moreSellProduct : CartType[] = []
+  for(const item of moreSellProductids ){
+    const res = await baseRequest.get(`/products?populate=*&[filters][id]=${item}`);
+    moreSellProduct = [...moreSellProduct, ...res?.data?.data]
+ }
+ return moreSellProduct
+}
+
+
+
 export const fetchfeatureProduct = createAsyncThunk('featureProductSlice/fetchfeatureProduct', async () => {
   try {
-    const response = await baseRequest.get(`/commands?populate=*&`);
-    const products = [...response?.data?.data]
-    
-    
+    const products = await new CommandService().getCommands()
     const moreSellProductids  : number[] = []
-    let moreSellProduct : CartType[] = []
+    const sortByRecent = sortByRecentFn(products)  
+    const sortByQuantityofNumberOfCommand = sortByQuantityofNumberOfCommandFn(sortByRecent) 
 
-    const sortByRecent = [...products].sort((a,b) => {
-      return new Date(b.attributes?.updatedAt) - new Date(a.attributes?.updatedAt) 
-    })
-
-    for(const item of sortByRecent ){
+    for(const item of sortByQuantityofNumberOfCommand){
       if(!moreSellProductids.includes(item.attributes?.productId)){
         moreSellProductids.push(item.attributes?.productId)
       } 
     }
-
-    for(const item of moreSellProductids ){
-       const res = await baseRequest.get(`/products?populate=*&[filters][id]=${item}`);
-       moreSellProduct = [...moreSellProduct, ...res?.data?.data]
-    }
-
-     return moreSellProduct.slice(0, 4).reverse()
+     return getMoreSellProduct(moreSellProductids)
      
   } catch (error) {
     throw error;
   }
 });
+
 
 export const featureProductSlice = createSlice({
   name: 'featureProduct',
@@ -66,5 +80,3 @@ export const featureProductSlice = createSlice({
       });
   },
 });
-
-//   export default favorisSlice.reducer;

@@ -35,7 +35,7 @@ export default function Layout() {
         dispath(fetchfeatureProduct())
         dispath(fetchMoreLikeProduct())
         dispath(fetchNewArriveProduct())
-    }, [])
+    }, [fetchNewArriveProduct,fetchMoreLikeProduct,fetchfeatureProduct])
 
 
     return (

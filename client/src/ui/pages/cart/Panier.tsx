@@ -29,6 +29,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useForm } from 'react-hook-form'
 import { UserContextType } from '@/Layout'
+import { cartDataOfCurrentUser } from '@/domain/use-case/cart/cartItem'
+import { CommandService } from '@/infrastructure/services/commandService'
 
 
 type Inputs = {
@@ -47,7 +49,7 @@ export default function Panier(): JSX.Element {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-  
+
     const {
         register,
         handleSubmit,
@@ -55,57 +57,12 @@ export default function Panier(): JSX.Element {
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = async (coordonnes) => {
-        let numberOfCommand = 1
-        
         for (const item of cart) {
-            try {
-                const response = await baseRequest.get(`/commands?[filters][productId]=${item.id}`)
-                console.log('panier number of commande', response?.data?.data)
-                numberOfCommand+=response?.data?.data.length
-            } catch (error) {
-                
-            }
-            const data = {
-                data: {
-                    productId: item.id,
-                    name: item.title,
-                    quantity: item?.quantity?.toString(),
-                    price: item?.price?.toString(),
-                    size: item?.size?.toString(),
-                    username: item.username,
-                    email: user.user.email,
-                    adress: coordonnes.adress,
-                    phone: coordonnes.phone,
-                    img: item.img,
-                    numberOfCommand, 
-                    statut: 'en attente'
-                }
-            }
-            console.log(JSON.stringify(data))
-
-            try {
-                const response = await baseRequest.post('/commands',
-                    JSON.stringify(data),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${user.jwt}`,
-                        },
-                        withCredentials: true,
-                    })
-
-                dispatch(reset(user?.user?.username))
-                navigate('/commands')
-                toast.success("Cmmande effectuée avec succée", {
-                    hideProgressBar: true
-                })
-
-            } catch (err: any) {
-                console.log(err)
-                toast.error(err.response.data.error.message, {
-                    hideProgressBar: true
-                })
-            }
+            const commandService = new CommandService(item, coordonnes)
+            const data = await commandService.createCommandData(user?.user?.email)
+            await commandService.setCommande(data, user?.jwt)
+            dispatch(reset(user?.user?.username))
+            navigate('/commands')
         }
     }
 
@@ -128,8 +85,7 @@ export default function Panier(): JSX.Element {
 
     useEffect(() => {
         if (user) {
-            const filterCart = products.filter(item => item.username === user.user.username)
-            setCart(filterCart)
+            setCart(cartDataOfCurrentUser(products, user?.user?.username))
         }
     }, [user, products])
 

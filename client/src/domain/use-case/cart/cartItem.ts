@@ -4,7 +4,6 @@ export const  getArticleInCartOfCurrentUser = (cart, cartInfos) =>{
       return  item.id === cartInfos.productId && 
       cartInfos.username.trim() === item.username.trim()
     })
-
     return articleInCartOfCurrentUser
 }
 
@@ -13,7 +12,6 @@ export const checkIsArticleHasSameSize = (article, selectSize) =>{
     const isArticleHasSameSize = article.size.some(item =>{
         return item === selectSize
     } )
-
     return isArticleHasSameSize 
 }
 
@@ -21,3 +19,5 @@ export const checkIsArticleHasSameSize = (article, selectSize) =>{
 export const cartDataOfCurrentUser = (cardData, currentUser) =>{
    return cardData.filter(item => item.username === currentUser)
 }
+
+

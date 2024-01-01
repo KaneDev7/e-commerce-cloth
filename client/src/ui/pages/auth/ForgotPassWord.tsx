@@ -1,13 +1,11 @@
-import { baseRequest } from '@/infrastructure/axios/baseRequest'
 import { Button } from '@/ui/components/ui/button'
 import { Input } from '@/ui/components/ui/input'
 import { Label } from '@radix-ui/react-dropdown-menu'
-
-import  { useState } from 'react'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-
 import Navbar from '@/ui/components/Navigation/Navbar'
 import NavbarFixed from '@/ui/components/Navigation/NavbarFixed'
+import { AuthService } from '@/infrastructure/services/authService'
 
 type Inputs = {
     example: string
@@ -15,7 +13,7 @@ type Inputs = {
 }
 
 export default function ForgotPassWord() {
-    const [message, setMessage] = useState<string | null> (null)
+    const [message, setMessage] = useState<string | null>(null)
 
     const {
         register,
@@ -25,25 +23,13 @@ export default function ForgotPassWord() {
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         const { email } = data
-
-        try {
-            const response = await baseRequest.post('http://localhost:1337/api/auth/forgot-password',
-
-                JSON.stringify({ email }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            )
-
-            if (response.data.ok) {
-                setMessage('Veuillez consulter votre e-mail pour les instructions permettant de réinitialiser votre mot de passe')
-            }
-
-        } catch (err: any) {
-            console.log(err)
-        }
+        const sendLinkToMail = await new AuthService().forgotPassword(email)
+        if (sendLinkToMail) setMessage(
+            `Veuillez consulter votre e-mail pour les instructions 
+            permettant de réinitialiser votre mot de passe`
+        )
     }
+
     return (
         <>
             <NavbarFixed />
@@ -58,7 +44,6 @@ export default function ForgotPassWord() {
                             Veuillez renseigner l'adresse e-mail que vous avez utilisée à la création de votre compte.
                             Vous recevrez un lien temporaire pour réinitialiser votre mot de passe.
                         </p>
-
                     }
 
                     <form onSubmit={handleSubmit(onSubmit)}>

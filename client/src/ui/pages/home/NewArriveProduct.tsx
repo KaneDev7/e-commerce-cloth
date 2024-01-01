@@ -30,7 +30,6 @@ export type ProductType = {
 
 export default function NewArriveProduct() {
 
-  // const { data: products, isLoading, error } = useFetch(`/products?populate=*&[filters][type][$eq]=${type}`)
   const products = useSelector(state => state.newArriveProduct.data)
   const loading = useSelector((state) => state.newArriveProduct.loading);
 

@@ -41,8 +41,6 @@ export default function MoreLikeProducts() {
     </div>
   }
 
-  //if (error) return <p>{error}</p>
-
   return (
     <div className="flex justify-center items-center my-[5rem] mx-20 globalWidth 2xl:px-0 px-5">
 

@@ -21,10 +21,8 @@ export default function Home() {
         <Banner />
         <NewArriveProduct/>
         <FeatureProduct/>
-        <Category />
         <MoreLikeProducts />
-
-        {/* <FeatureProducts type='tending' /> */}
+        <Category />
         {user && <RecentlyViews/>}
       </div>
     </div>

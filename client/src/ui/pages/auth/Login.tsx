@@ -8,11 +8,8 @@ import { Input } from "@/ui/components/ui/input"
 import { Label } from "@radix-ui/react-dropdown-menu"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { UserContext } from "@/ui/context/UserContext"
-import { SetStateAction, useContext, useState } from "react"
-import { UserContextType } from '@/Layout'
+import {useContext, useState } from "react"
 import { connectUser } from '@/domain/use-case/users/auth.useCase'
-import { UserDataResponse } from '@/domain/entities/User'
-
 
 type Inputs = {
   example: string
@@ -30,6 +27,7 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>()
+
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { userData, error } = await connectUser({ identifier: data.email, password: data.password })

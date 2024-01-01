@@ -20,9 +20,9 @@ export const fetchNewArriveProduct = createAsyncThunk('fetchNewArriveProductSlic
   try {
     const response = await baseRequest.get(`/products?populate=*&`);
     const products = [...response?.data?.data]
-
+    console.log('new', products)
     const sortByRecent = [...products].sort((a,b) => {
-      return new Date(b.attributes?.updatedAt) - new Date(a.attributes?.updatedAt) 
+      return new Date(b.attributes?.createdAt) - new Date(a.attributes?.createdAt) 
     })
 
     const newArrivageProduct = products.filter(item => getDayBetweenTwoDate(item?.attributes?.publishedAt)).reverse()
