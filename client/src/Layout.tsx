@@ -12,6 +12,7 @@ import { fetchMoreLikeProduct } from './domain/use-case/products/likes/moreLikeP
 import { fetchNewArriveProduct } from './domain/use-case/products/newArriveProductSlice'
 import ContextProvider from './ui/context/ContextProvider'
 import { UserDataResponse } from './domain/entities/User'
+import { UsersService } from './infrastructure/services/UsersService'
 
 
 // export type UserContextType = {
@@ -23,6 +24,7 @@ export default function Layout() {
     const [user, setUser] = useState<UserDataResponse | null>(null)
     const showSearchPage = useSelector((state: Boolean): boolean => state.showSearchPage)
     const dispath = useDispatch()
+
 
     useEffect(() => {
         dispath(setShowSearchPage(false))
@@ -37,6 +39,14 @@ export default function Layout() {
         dispath(fetchNewArriveProduct())
     }, [fetchNewArriveProduct,fetchMoreLikeProduct,fetchfeatureProduct])
 
+   useEffect(()=>{
+    (async function (){
+    const newUser: string | null = JSON.parse(sessionStorage.getItem('user')) || null
+    if(newUser){
+            await new UsersService().toggleUserStatut(newUser?.user.id, true)
+        }
+    }())
+   },[user])
 
     return (
         <UserContext.Provider value={{ user, setUser }}>

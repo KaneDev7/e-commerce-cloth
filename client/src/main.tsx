@@ -13,12 +13,15 @@ import { PersistGate } from 'redux-persist/integration/react'
 import Login from './ui/pages/auth/Login'
 import Register from './ui/pages/auth/Register'
 import Panier from './ui/pages/cart/Panier'
-import Admin from './ui/pages/admin/admin'
 import Commands from './ui/pages/commands/commandes'
 import ForgotPassWord from './ui/pages/auth/ForgotPassWord'
 import ResetPassword from './ui/pages/auth/ResetPassword'
 import Informations from './ui/pages/auth/Information'
 import Favoris from './ui/pages/favoris/Favoris'
+import AdminLayout from './ui/pages/admin/adminLayout'
+import AdminCommand from './ui/pages/admin/Admin.comamand'
+import AdminProduct from './ui/pages/admin/Admin.product'
+import AdminUsers from './ui/pages/admin/users/Admin.users'
 
 const { store, persistor } = configureStore()
 
@@ -40,10 +43,6 @@ const router = createBrowserRouter([
         element: <Product />
       },
       {
-        path: 'admin',
-        element: <Admin />
-      },
-      {
         path: 'panier',
         element: <Panier />
       },
@@ -53,11 +52,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'infos',
-        element: <Informations/>
+        element: <Informations />
       },
       {
         path: 'favoris',
-        element: <Favoris/>
+        element: <Favoris />
       },
       {
         path: 'login/:frompath/:id',
@@ -73,14 +72,35 @@ const router = createBrowserRouter([
       },
       {
         path: 'forgotpassword',
-        element: <ForgotPassWord/>
+        element: <ForgotPassWord />
       },
       {
         path: 'resetpassword/:code',
         element: <ResetPassword />
-      }
+      },
+
+      //ADMIN
+      {
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [
+          {
+            path: '/admin',
+            element: <AdminCommand />
+          },
+          {
+            path: '/admin/products',
+            element: <AdminProduct />
+          },
+          {
+            path: '/admin/users',
+            element: <AdminUsers />
+          },
+        ]
+      },
     ]
-  }
+  },
+
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

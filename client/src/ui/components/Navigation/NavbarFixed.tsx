@@ -88,7 +88,6 @@ export default function Navbar() {
   useEffect(() => {
     if (user) {
       setCart(cartDataOfCurrentUser(products,user.user.username))
-
     }
   }, [products, user])
 

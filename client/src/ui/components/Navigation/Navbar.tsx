@@ -58,6 +58,7 @@ import {
 import { UserContextType } from '@/Layout';
 import { GlobalContext } from "@/ui/context/ContextProvider";
 import { cartDataOfCurrentUser } from "@/domain/use-case/cart/cartItem";
+import { UsersService } from "@/infrastructure/services/UsersService";
 
 export default function Navbar() {
 
@@ -73,9 +74,11 @@ export default function Navbar() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     setUser(null)
     sessionStorage.removeItem('user')
+    const userStatut = false 
+    await new UsersService().toggleUserStatut(user?.user?.id, userStatut)
     navigate('/login')
   }
 

@@ -20,7 +20,6 @@ export default function cart() {
   const { user } : UserContextType = useContext(UserContext)
   const products = useSelector(state => state.cart.products)
   const [cart, setCart] = useState([])
-
   const dispatch = useDispatch()
 
   const totalPrice = () => {

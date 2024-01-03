@@ -20,14 +20,11 @@ export const fetchNewArriveProduct = createAsyncThunk('fetchNewArriveProductSlic
   try {
     const response = await baseRequest.get(`/products?populate=*&`);
     const products = [...response?.data?.data]
-    console.log('new', products)
     const sortByRecent = [...products].sort((a,b) => {
       return new Date(b.attributes?.createdAt) - new Date(a.attributes?.createdAt) 
     })
-
     const newArrivageProduct = products.filter(item => getDayBetweenTwoDate(item?.attributes?.publishedAt)).reverse()
-   
-      return newArrivageProduct.length > 2 ? newArrivageProduct : sortByRecent.slice(0, 4)
+    return newArrivageProduct.length > 2 ? newArrivageProduct : sortByRecent.slice(0, 4)
      
   } catch (error) {
     throw error;

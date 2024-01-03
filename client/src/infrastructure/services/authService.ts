@@ -33,6 +33,8 @@ export class AuthService {
     }
   }
 
+
+
   async forgotPassword(email: string) {
     try {
       const response = await baseRequest.post('/auth/forgot-password',
@@ -63,6 +65,9 @@ export class AuthService {
      console.log(error)
     }
   }
+
+
+ 
 }
 
 

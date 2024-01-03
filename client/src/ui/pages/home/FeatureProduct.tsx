@@ -39,7 +39,6 @@ export default function FeatureProduct() {
       <ProductLoad />
     </div>
   }
-  console.log('morsell', products)
   if(products.length > 2)
   
   return (
