@@ -25,6 +25,8 @@ export default function Layout() {
     const showSearchPage = useSelector((state: Boolean): boolean => state.showSearchPage)
     const dispath = useDispatch()
 
+    const newUser: string | null = JSON.parse(sessionStorage.getItem('user')) || null
+
 
     useEffect(() => {
         dispath(setShowSearchPage(false))
@@ -32,21 +34,31 @@ export default function Layout() {
     }, [user])
 
     useEffect(() => {
-        const newUser: string | null = JSON.parse(sessionStorage.getItem('user')) || null
         setUser(newUser)
         dispath(fetchfeatureProduct())
         dispath(fetchMoreLikeProduct())
         dispath(fetchNewArriveProduct())
-    }, [fetchNewArriveProduct,fetchMoreLikeProduct,fetchfeatureProduct])
+    }, [fetchNewArriveProduct, fetchMoreLikeProduct, fetchfeatureProduct])
 
-   useEffect(()=>{
-    (async function (){
-    const newUser: string | null = JSON.parse(sessionStorage.getItem('user')) || null
-    if(newUser){
-            await new UsersService().toggleUserStatut(newUser?.user.id, true)
-        }
-    }())
-   },[user])
+    useEffect(() => {
+        (async function () {
+            const userStatut = true 
+            if (newUser)
+                await new UsersService().toggleUserStatut(newUser?.user.id, userStatut)
+        }())
+    }, [user])
+
+
+    useEffect(()=>{
+        window.addEventListener('beforeunload', async (e) =>{
+            e.preventDefault();
+            e.returnValue = '';
+            const userStatut = false 
+            await new UsersService().toggleUserStatut(newUser?.user?.id, userStatut)
+     
+            console.log('hello')
+        })
+    },[])
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
