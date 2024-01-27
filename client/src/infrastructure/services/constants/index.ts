@@ -1,0 +1,1 @@
+export  const DELAY_BEFORE_FETCH_DATA = 2000

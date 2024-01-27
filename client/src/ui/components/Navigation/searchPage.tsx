@@ -1,4 +1,3 @@
-import { baseRequest } from '@/infrastructure/axios/baseRequest';
 import { Input } from '@/ui/components/ui/input'
 import { setShowSearchPage } from '@/domain/use-case/products/search/showSearchPageSlice';
 import { useState } from 'react';
@@ -6,9 +5,10 @@ import { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { searchProduct } from '@/domain/use-case/products/search/searchProdduct';
+import { Search } from '@/domain/use-case/products/search/search.useCase';
+import { DELAY_BEFORE_FETCH_DATA } from '@/infrastructure/services/constants';
 
-const DELAY_BEFORE_FETCH_DATA = 3000
+
 
 export default function SearchPage() {
     const [products, setProducts] = useState([])
@@ -31,7 +31,7 @@ export default function SearchPage() {
     const handleChange = async ({ target }: { target: HTMLInputElement }) => {
         timer = setTimeout(async () => {
             clearTimeout(timer)
-            const result = await searchProduct(target.value)
+            const result = await new Search().searchProduct(target.value)
             setProducts(result)
         },DELAY_BEFORE_FETCH_DATA )
     }
@@ -64,12 +64,10 @@ export default function SearchPage() {
                                                             item?.attributes?.size?.data.map(size => (
                                                                 <p className='text-sm'> {size?.attributes?.size} </p>
                                                             ))
-
                                                         }
 
                                                     </div>
                                                 </div>
-
                                             </div>
 
                                         </div>

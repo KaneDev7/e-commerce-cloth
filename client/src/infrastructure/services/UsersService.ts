@@ -53,6 +53,19 @@ export class UsersService {
      console.log('toggleUserStatutErro', error)
     }
   }
+
+  searchUsers = async (value: string) => {
+    if (value.trim() === '') return []
+    console.log(value)
+    try {
+        const response = await baseRequest.get(`/users?filters[username][$contains]=${value}`)
+       console.log(response?.data )
+        return response?.data
+
+    } catch (err: any) {
+        console.log(err)
+    }
+}
 }
 
 

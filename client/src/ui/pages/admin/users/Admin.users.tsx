@@ -2,19 +2,35 @@ import { UsersService } from '@/infrastructure/services/UsersService'
 import { useEffect, useState } from 'react'
 import { FiChevronDown } from "react-icons/fi";
 import UserRow from './components/userRow';
+import { DELAY_BEFORE_FETCH_DATA } from '@/infrastructure/services/constants';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([])
+
+  const usersService = new UsersService()
+  let timer: null | number | NodeJS.Timeout | undefined = null
   
   useEffect(() => {
     (async function () {
-      const usersService = new UsersService()
       const usersData = await usersService.getUsers()
       setUsers(usersData)
     }())
   }, [])
+
+  const handleChange = async ({ target }: { target: HTMLInputElement }) => {
+    timer = setTimeout(async () => {
+        clearTimeout(timer)
+        const result = await usersService.searchUsers(target.value)
+        if(result.length < 1){
+          const usersData = await usersService.getUsers()
+          return setUsers(usersData)
+        }
+        setUsers(result) 
+    },DELAY_BEFORE_FETCH_DATA)
+}
   return (
     <div className='flex-1 bg-white p-5'>
+      <h1 className='text-2xl font-medium my-5'>Utilsateurs</h1>
       <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
         <div>
           <button
@@ -88,6 +104,7 @@ export default function AdminUsers() {
             id="table-search-users"
             className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search for users"
+            onChange={handleChange}
           />
         </div>
       </div>

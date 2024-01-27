@@ -15,10 +15,6 @@ import { UserDataResponse } from './domain/entities/User'
 import { UsersService } from './infrastructure/services/UsersService'
 
 
-// export type UserContextType = {
-//     user: string | null,
-//     setUser: React.Dispatch<React.SetStateAction<UserDataResponse>>
-// }
 
 export default function Layout() {
     const [user, setUser] = useState<UserDataResponse | null>(null)
@@ -51,12 +47,9 @@ export default function Layout() {
 
     useEffect(()=>{
         window.addEventListener('beforeunload', async (e) =>{
-            e.preventDefault();
-            e.returnValue = '';
+            e.preventDefault
             const userStatut = false 
-            await new UsersService().toggleUserStatut(newUser?.user?.id, userStatut)
-     
-            console.log('hello')
+            await new UsersService().toggleUserStatut(newUser?.user?.id, userStatut)     
         })
     },[])
 
